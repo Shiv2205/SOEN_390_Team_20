@@ -4,5 +4,11 @@
     "email": "smth@smth.com",
     "password": "qwerty123",
     "confirmPassword": "qwerty123"
+  },
+  {
+    "fullname": "John Doe",
+    "email": "johndoe@gmail.com",
+    "password": "hyQkiz-dowji3-wygbes",
+    "confirmPassword": "hyQkiz-dowji3-wygbes"
   }
 ]
