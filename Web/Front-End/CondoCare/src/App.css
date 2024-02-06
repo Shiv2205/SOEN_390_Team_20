@@ -8,6 +8,7 @@ body {
   height: 100vh;
 }
 
+
 .signup-container {
   background-color: #fff;
   padding: 30px;
@@ -49,12 +50,74 @@ body {
   cursor: pointer;
 }
 
+.navigation button {
+  color: #4caf50;
+  text-decoration: none;
+}
+
 .signup-container p {
   margin-top: 15px;
   color: #555;
 }
 
 .signup-container a {
+  color: #4caf50;
+  text-decoration: none;
+}
+
+.error-message {
+  color: #ff0000;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.login-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-container h2 {
+  color: #333;
+}
+
+.login-container form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.login-container label {
+  display: block;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-container button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-container p {
+  margin-top: 15px;
+  color: #555;
+}
+
+.login-container a {
   color: #4caf50;
   text-decoration: none;
 }
