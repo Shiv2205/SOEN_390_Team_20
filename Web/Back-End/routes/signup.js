@@ -9,19 +9,23 @@ const log = console.log;
 
 router.post('/', async (req, res, next) => {
     let formData = req.body;
-    
-    if(!formData)
-        res.send({response: "Data not received"});
+
+    if(Object.keys(formData).length === 0){
+        res.status(400).send({response: "Data not received"});
+        return;
+    }
+
+    let currentDBPath = 'test_user_data.json' //user_data.json
 
     try {
-        let dataFilePath = path.join(process.cwd(), "data/user_data.json");
+        let dataFilePath = path.join(process.cwd(), `data/${currentDBPath}`);
         // Read existing data from the file
         const existingData = await fs.readFile(dataFilePath, 'utf-8');
         const userData = JSON.parse(existingData);
 
         userData.map((data, index) => {
             if(data.email === formData.email)
-                throw new error('This email address is already in use');
+                throw new Error('This email address is already in use');
         })
         // Add the new user
         userData.push(formData);

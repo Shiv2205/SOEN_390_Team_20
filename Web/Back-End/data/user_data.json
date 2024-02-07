@@ -16,5 +16,26 @@
     "email": "janedoe@gmail.com",
     "password": "qwerty123",
     "confirmPassword": "qwerty123"
+  },
+  {
+    "email": "newuser@example.com",
+    "password": "password123"
+  },
+  {},
+  {
+    "email": "existing@example.com",
+    "password": "newpassword"
+  },
+  {
+    "fullname": "John Doe",
+    "email": "johndoe@example.com",
+    "password": "qwerty123",
+    "confirmPassword": "qwerty123"
+  },
+  {
+    "fullname": "Jane Doe",
+    "email": "janedoe@example.com",
+    "password": "qwerty123",
+    "confirmPassword": "qwerty123"
   }
 ]
