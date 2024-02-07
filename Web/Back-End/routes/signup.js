@@ -9,7 +9,7 @@ const log = console.log;
 
 router.post('/', async (req, res, next) => {
     let formData = req.body;
-    log(formData);
+    
     if(!formData)
         res.send({response: "Data not received"});
 
