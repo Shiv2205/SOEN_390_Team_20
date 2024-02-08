@@ -17,9 +17,11 @@ router.post("/", async (req, res, next) => {
   }
 
   try {
-    let currentDBPath = "user_data.json"; //test_user_data.json
+    let currentDBPath = "test_user_data.json"; //user_data.json
     let dataFilePath = path.join(process.cwd(), `data/${currentDBPath}`);
-    const userData = getUserData();
+    // Read existing data from the file
+    const existingData = await fs.readFile(dataFilePath, "utf-8");
+    const userData = JSON.parse(existingData);
 
     userData.map((data, index) => {
       if (data.email === formData.email)

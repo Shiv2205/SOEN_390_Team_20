@@ -3,7 +3,7 @@ const path = require("path");
 
 async function getUserData() {
 
-  let currentDBPath = "user_data.json"; //test_user_data.json
+  let currentDBPath = "test_user_data.json"; //user_data.json
 
   try {
     let dataFilePath = path.join(process.cwd(), `data/${currentDBPath}`);
