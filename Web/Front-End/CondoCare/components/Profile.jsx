@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blank from "../src/assets/blank.webp"
 
-function Profile( {email} ) {
+function Profile( {userData} ) {
 
     const [copyText, setCopyText] = useState('');
 
@@ -18,10 +18,10 @@ function Profile( {email} ) {
             <div className="profile-info">
                 <img src={blank} alt='Profile' />
                 <div className="information" style={{marginTop:"-40px"}}>
-                    <h2 style={{borderBottomStyle:"None", fontSize:"40px"}}> John Doe </h2>
+                    <h2 style={{borderBottomStyle:"None", fontSize:"40px"}}> {userData.fullname} </h2>
                     <h4 style={{marginTop:"-40px"}}> <i>Property Manager</i> </h4>
                     <h3 style={{marginTop:"0px"}}><u>Contact</u></h3>
-                    <h3 ><i>Email:</i> <u>{email}</u></h3>
+                    <h3 ><i>Email:</i> <u>{userData.email}</u></h3>
                     <h3><i>Number:</i> <u>(514) 123-4567</u></h3>
                 </div>
             </div>

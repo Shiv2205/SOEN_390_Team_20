@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Login = ({ views, setView }) => {
+const Login = ({ views, setView, setUserData }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errMessage, setErrMessage] = useState('');
@@ -9,12 +9,18 @@ const Login = ({ views, setView }) => {
   const handleLogin = () => {
     let formData = { email, password };
     let formErrors = validateFormData(formData);
+    let userData = getUserData(formData, setUserData);
+
+    if (!userData)formErrors.push("Email or password is incorrect");
     if (formErrors.length > 0) {
       let tempError = 'Please fix the following to continue:\n';
       formErrors.forEach((err, index) => {
         tempError += `  ${index + 1}. ${err}\n`;
       });
       setErrMessage(tempError);
+    }
+    else {
+      setView(views.PROFILE);
     }
   };
 
@@ -75,6 +81,30 @@ const Login = ({ views, setView }) => {
     </View>
   );
 };
+
+
+function getUserData(formData, setUserData) {
+  let userData = {};
+  fetch("http://10.0.0.39:3000/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Add any other headers you need
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Handle the response from the server
+      setUserData(data.loginData); 
+      if (data.response === "Email or password is incorrect") throw new Error(data.response);
+    })
+    .catch((error) => {
+      // Handle error
+      console.error("Error:", error);
+    });
+    return userData;
+}
 
 const styles = StyleSheet.create({
   loginContainer: {

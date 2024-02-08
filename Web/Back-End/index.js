@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const fs = require("fs/promises");
 
-const indexRouter = require("./routes/index");
+const loginRouter = require("./routes/login");
 const usersRouter = require("./routes/users");
 const signUpRouter = require("./routes/signup");
 
@@ -36,8 +36,8 @@ const initializeDB = async () => {
 
 initializeDB();
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/", usersRouter);
+app.use("/login", loginRouter);
 app.use("/signup", signUpRouter);
 
 // catch 404 and forward to error handler

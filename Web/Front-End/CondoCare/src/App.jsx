@@ -15,16 +15,16 @@ function App() {
     SIGNUP: 0,
   };
   const [view, setView] = useState(views.SIGNUP);
-  const [email, setEmail] = useState(""); 
+  const [userData, setUserData] = useState({}); 
 
   return (
     <>
       {view === views.SIGNUP ? (
         <SignUp setView={setView} views={views} />
       ) : view === views.LOGIN ? (
-        <Login setView={setView} views={views} setEmail={setEmail} />
+        <Login setView={setView} views={views} setUserData={setUserData} />
       ) : (
-        <Profile email={email}/>
+        <Profile userData={userData}/>
       )}
     </>
   );
