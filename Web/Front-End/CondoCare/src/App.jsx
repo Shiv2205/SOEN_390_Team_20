@@ -1,23 +1,31 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
+import Profile from "../components/Profile"
 
 //#################################### For testing Need to remove ##################################################
 const log = console.log;
 
 function App() {
   const views = {
+    PROFILE: 2,
     LOGIN: 1,
-    SIGNUP: 0
-  }
+    SIGNUP: 0,
+  };
   const [view, setView] = useState(views.SIGNUP);
+  const [email, setEmail] = useState(""); 
 
   return (
     <>
-      {view === 0 ? <SignUp setView={setView} views={views}/> : <Login setView={setView} views={views}/>}
+      {view === views.SIGNUP ? (
+        <SignUp setView={setView} views={views} />
+      ) : view === views.LOGIN ? (
+        <Login setView={setView} views={views} setEmail={setEmail} />
+      ) : (
+        <Profile email={email}/>
+      )}
     </>
   );
 }
