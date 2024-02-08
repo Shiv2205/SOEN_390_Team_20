@@ -127,3 +127,63 @@ body {
   margin: 10px 0;
   font-size: 14px;
 }
+
+.profile-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  display:grid;
+}
+
+.profile-container h2 {
+  color: #333;
+  text-align: left;
+  border-bottom-style: solid;
+}
+
+.profile-container h3 {
+  margin-top: -20px;
+  color: #333;
+  text-align: left;
+}
+
+.profile-container h4 {
+  color: #6b6767;
+  text-align: left;
+}
+
+.profile-container img {
+  max-width: 20%;
+  padding: 3px;
+  border-color: #333;
+  border-style: solid;
+  border-radius: 8px;
+}
+
+.profile-container .profile-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-container .information {
+  margin-left: 50px;
+  align-self: flex-start;
+}
+
+.profile-container .registration-keys {
+  display: flex;
+  align-items: center;
+}
+
+.profile-container .registration-keys h3{
+  margin-top:0px;
+}
+
+.profile-container .registration-keys .info{
+  margin-left: 5px;
+}
+
+.profile-container button{
+  background-color: #4caf50;
+}

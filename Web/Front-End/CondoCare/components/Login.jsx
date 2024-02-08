@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Login({ views, setView }) {
+function Login({ views, setView, setEmail }) {
   const [errMessage, setErrMessage] = useState("");
 
   const handleLogin = (event) => {
@@ -16,6 +16,9 @@ function Login({ views, setView }) {
         tempError += `  ${index + 1}. ${err}\n`;
       });
       setErrMessage(tempError);
+    } else {
+      setEmail(formData.email)
+      setView(views.PROFILE)
     }
   };
 
