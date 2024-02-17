@@ -1,13 +1,9 @@
-const { error } = require("console");
 const express = require("express");
 const router = express.Router();
-const fs = require("fs/promises");
-const path = require("path");
-const getUserData = require("../util/getUserData");
+const accountsMaster = require('../repo/accountsMaster');
 
-//#################################### For testing Need to remove ##################################################
-const log = console.log;
-
+/* The code block `router.post("/", async (req, res, next) => { ... })` is defining a route handler for
+a POST request to the URL ("/signup") of the server. */
 router.post("/", async (req, res, next) => {
   let formData = req.body;
 
@@ -17,26 +13,15 @@ router.post("/", async (req, res, next) => {
   }
 
   try {
-    let currentDBPath = "test_user_data.json"; //user_data.json
-    let dataFilePath = path.join(process.cwd(), `data/${currentDBPath}`);
-    // Read existing data from the file
-    const existingData = await fs.readFile(dataFilePath, "utf-8");
-    const userData = JSON.parse(existingData);
-
-    userData.map((data, index) => {
-      if (data.email === formData.email)
-        throw new Error("This email address is already in use");
-    });
-    // Add the new user
-    userData.push(formData);
-
-    // Write the updated data back to the file
-    await fs.writeFile(dataFilePath, JSON.stringify(userData, null, 2));
-
-    res.status(201).send({ response: "User added successfully!" });
-  } catch (error) {
+    let dbExpert = new accountsMaster();
+    if(dbExpert.registerUser(formData)) 
+      res.status(201).send({ response: "User added successfully!" });
+    dbExpert.close();
+  } 
+  catch (error) {
     res.status(500).send({ response: error.message });
   }
+  
 });
 
 module.exports = router;

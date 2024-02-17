@@ -1,41 +1,27 @@
 const createError = require("http-errors");
 const express = require("express");
-const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const fs = require("fs/promises");
 
 const loginRouter = require("./routes/login");
 const usersRouter = require("./routes/users");
 const signUpRouter = require("./routes/signup");
 
+//express app
 const app = express();
 
-
+//Handle CORS
 const corsOptions = {
   origin: "http://localhost:5173"
 };
 
+//Utils
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const initializeDB = async () => {
-  const dataFilePath = path.join(__dirname, "data/user_data.json");
-  try {
-    // Check if the file exists
-    await fs.access(dataFilePath);
-
-    // File exists, no need to initialize
-  } catch (error) {
-    // File doesn't exist, initialize it with an empty array
-    await fs.writeFile(dataFilePath, "[]");
-  }
-};
-
-initializeDB();
-
+//Routes
 app.use("/", usersRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signUpRouter);

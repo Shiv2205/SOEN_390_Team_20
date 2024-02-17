@@ -10,6 +10,8 @@ function SignUp({ views, setView }) {
       email: event.target.email.value,
       password: event.target.password.value,
       confirmPassword: event.target.confirmPassword.value,
+      phoneNumber: event.target.phone.value || "", // Optional phone
+      profilePicture: event.target.profilePicture.files[0] || null, // Optional picture
     };
     let formErrors = validateFormData(formData);
     if (formErrors.length > 0) {
@@ -45,11 +47,23 @@ function SignUp({ views, setView }) {
           required
         />
 
+        <label htmlFor="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" />
+
+        <label htmlFor="profilePicture">Profile Picture:</label>
+        <input type="file" id="profilePicture" name="profilePicture" />
+
         <button type="submit">Sign Up</button>
       </form>
       <p>
         Already have an account?{" "}
-       <a href="" onClick={(e) => {e. preventDefault(); setView(views.LOGIN)}}>
+        <a
+          href=""
+          onClick={(e) => {
+            e.preventDefault();
+            setView(views.LOGIN);
+          }}
+        >
           Log in
         </a>
       </p>

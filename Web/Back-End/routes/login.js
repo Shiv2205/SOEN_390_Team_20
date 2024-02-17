@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const getUserData = require("../util/getUserData");
+const accountsMaster = require('../repo/accountsMaster');
 
-/* GET home page. */
+/* The code you provided is a route handler for a POST request to the URL ("/login"). */
 router.post("/", async function (req, res, next) {
   let formData = req.body;
 
@@ -12,25 +12,16 @@ router.post("/", async function (req, res, next) {
   }
 
   try {
-    const userData = await getUserData();
-
-    let userExists = false;
-    let userDetails = {};
-    userData.map((data, index) => {
-      if (data.email === formData.email && data.password === formData.password){
-        userExists = true;
-        userDetails = data;
-      }
-    });
-
-    if (!userExists) throw new Error("Email or password is incorrect");
-
-    res
-      .status(201)
-      .send({ response: "User logged in successfully!", loginData: userDetails });
-  } catch (error) {
+    let dbExpert = new accountsMaster();
+    let userDetails = await dbExpert.getUserDetails(formData.email, formData.password);
+    if(userDetails) 
+      res.status(201).send({ response: "User logged in successfully!", loginData: userDetails });
+    dbExpert.close();
+  } 
+  catch (error) {
     res.status(500).send({ response: error.message });
   }
+  
 });
 
 module.exports = router;

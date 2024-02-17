@@ -15,6 +15,14 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   text-align: center;
+  height: auto; /* Remove fixed height */
+  max-width: 400px; /* Adjusted max-width for better fit */
+  width: 90%; /* Set width to 90% of the viewport */
+  margin: auto; /* Center horizontally */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Arrange children vertically */
+  justify-content: center; /* Center vertically */
+  overflow: hidden; /* Hide any overflowing content */
 }
 
 .signup-container h2 {
@@ -23,19 +31,20 @@ body {
 
 .signup-container form {
   max-width: 300px;
-  margin: 0 auto;
+  max-height: 100vh;
+  margin: auto 0; /* Adjusted margin for form */
 }
 
 .signup-container label {
   display: block;
-  margin: 10px 0 5px;
+  margin: 5px 0 5px;
   color: #555;
 }
 
 .signup-container input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
