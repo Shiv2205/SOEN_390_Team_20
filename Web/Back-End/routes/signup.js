@@ -12,15 +12,19 @@ router.post("/", async (req, res, next) => {
     return;
   }
 
+  let dbExpert = new accountsMaster();
   try {
-    let dbExpert = new accountsMaster();
-    if(dbExpert.registerUser(formData)) 
+    if(await dbExpert.registerUser(formData)) 
       res.status(201).send({ response: "User added successfully!" });
-    dbExpert.close();
+    else
+      res.status(500).send({ response: "User registration failed" });
   } 
   catch (error) {
     res.status(500).send({ response: error.message });
   }
+  // finally{
+  //   dbExpert.close();
+  // }
   
 });
 

@@ -9,7 +9,7 @@ class accountsMaster {
       try {
         return await this.dbController.getPublicUser(email, password);
       } catch (error) {
-        throw new Error("Failed to get user from the database.");
+        console.log("Failed to get user from the database.");
       }
     }
   
@@ -17,8 +17,12 @@ class accountsMaster {
       try {
         return this.dbController.createNewPublicUser(userData);
       } catch (error) {
-        throw new Error("Failed to create a new user in the database.");
+        console.log("Failed to create a new user in the database.");
       }
+    }
+
+    close() {
+      this.dbController.close();
     }
   }
   

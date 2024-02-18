@@ -14,13 +14,13 @@ CREATE TABLE IF NOT EXISTS property (
     locker_count INTEGER,
     parking_count INTEGER,
     address TEXT,
-    picture BLOB
+    picture TEXT
 );
 
 CREATE TABLE IF NOT EXISTS file (
     file_id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
-    content BLOB NOT NULL,
+    content TEXT NOT NULL,
     property_id TEXT NOT NULL,
     FOREIGN KEY (property_id) REFERENCES property (property_id)
 );
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS account (
     password TEXT NOT NULL,
     email TEXT NOT NULL,
     phone_number TEXT,
-    profile_picture BLOB,
+    profile_picture TEXT,
     created_at TIMESTAMP
 );
 

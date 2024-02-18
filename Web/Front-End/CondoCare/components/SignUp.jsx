@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import UploadWidget from "./UploadWidget";
 
 function SignUp({ views, setView }) {
   const [errMessage, setErrMessage] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
 
   const handleSignUp = (event) => {
+    /* `event.preventDefault();` is used to prevent the default form submission.*/
     event.preventDefault();
-    let formData = {
-      fullname: event.target.fullname.value,
-      email: event.target.email.value,
-      password: event.target.password.value,
-      confirmPassword: event.target.confirmPassword.value,
-      phoneNumber: event.target.phone.value || "", // Optional phone
-      profilePicture: event.target.profilePicture.files[0] || null, // Optional picture
-    };
+
+    /* Extracting form data from the event.target and adding the `profilePicture` property to the formData object. */
+    let data = new FormData(event.target);
+    let formData = Object.fromEntries(data.entries());
+    formData.profilePicture = profilePic;
+
+    /* This part of the code in the `handleSignUp` function is performing form validation. */
     let formErrors = validateFormData(formData);
     if (formErrors.length > 0) {
       let tempError = "The fix the following to continue: {\n}";
@@ -47,12 +50,23 @@ function SignUp({ views, setView }) {
           required
         />
 
-        <label htmlFor="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" />
+        <label htmlFor="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" />
 
-        <label htmlFor="profilePicture">Profile Picture:</label>
-        <input type="file" id="profilePicture" name="profilePicture" />
+        <div className="profile-picture-wrapper">
+          <label htmlFor="profilePicture">Profile Picture:</label>
+          {!thumbnail ? (
+            <UploadWidget
+              setProfilePic={setProfilePic}
+              setThumbnail={setThumbnail}
+            />
+          ) : (
+            <img src={thumbnail} />
+          )}
+        </div>
 
+        <br />
+        <br />
         <button type="submit">Sign Up</button>
       </form>
       <p>
@@ -75,23 +89,23 @@ function validateFormData(formData) {
   const errors = [];
 
   // Check if fullname is not empty
-  if (!formData.fullname.trim()) {
+  if (!formData["fullname"].trim()) {
     errors.push("Full name is required");
   }
 
   // Check if email is not empty and has a valid email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!formData.email.trim() || !emailRegex.test(formData.email.trim())) {
+  if (!formData["email"].trim() || !emailRegex.test(formData["email"].trim())) {
     errors.push("Email address is invalid");
   }
 
   // Check if password is not empty and has a minimum length
-  if (!formData.password.trim() || formData.password.trim().length < 8) {
-    errors.push("Password must be at least 6 characters");
+  if (!formData["password"].trim() || formData["password"].trim().length < 8) {
+    errors.push("Password must be at least 8 characters");
   }
 
   // Check if confirmPassword matches the password
-  if (formData.password.trim() !== formData.confirmPassword.trim()) {
+  if (formData["password"].trim() !== formData["confirmPassword"].trim()) {
     errors.push("Passwords do not match");
   }
 
@@ -102,6 +116,7 @@ function validateFormData(formData) {
 }
 
 function sendFormData(formData) {
+  console.log(formData);
   fetch("http://localhost:3000/signup", {
     method: "POST",
     headers: {
@@ -122,3 +137,10 @@ function sendFormData(formData) {
 }
 
 export default SignUp;
+
+// formData.append("fullname", event.target.fullname.value);
+// formData.append("email", event.target.email.value);
+// formData.append("password", event.target.password.value);
+// formData.append("confirmPassword", event.target.confirmPassword.value);
+// formData.append("phoneNumber", event.target.phone.value || "");
+// formData.append("profilePicture", profilePic || null);
