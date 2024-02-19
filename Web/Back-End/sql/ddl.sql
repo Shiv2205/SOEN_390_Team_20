@@ -4,17 +4,20 @@ CREATE TABLE IF NOT EXISTS request (
     property_id INTEGER NOT NULL,
     type TEXT CHECK (type IN ("daily_operations", "move_in", "intercom_change", "access", "common_area_report", "question")),
     description TEXT,
+    status TEXT CHECK (status IN ("Received", "In progress", "Completed"))
     FOREIGN KEY (staff_id) REFERENCES employee (employee_id),
     FOREIGN KEY (property_id) REFERENCES property (property_id)
 );
 
 CREATE TABLE IF NOT EXISTS property (
     property_id TEXT PRIMARY KEY,
+    admin_id TEXT,
     unit_count INTEGER,
     locker_count INTEGER,
     parking_count INTEGER,
     address TEXT,
     picture TEXT
+    FOREIGN KEY (admin_id) REFERENCES employee (employee_id)
 );
 
 CREATE TABLE IF NOT EXISTS file (
@@ -29,11 +32,13 @@ CREATE TABLE IF NOT EXISTS unit (
     unit_id TEXT PRIMARY KEY,
     property_id TEXT NOT NULL,
     size INTEGER,
+    monthly_rent REAL,
     condo_fee REAL,
+    condo_balance REAL,
     owner_id INTEGER,
-    occupant_id INTEGER,
+    renter_id INTEGER,
     owner_registration_key TEXT,
-    occupant_registration_key TEXT,
+    renter_registration_key TEXT,
     FOREIGN KEY (property_id) REFERENCES property (property_id),
     FOREIGN KEY (owner_id) REFERENCES account (account_id),
     FOREIGN KEY (occupant_id) REFERENCES account (account_id)
@@ -58,15 +63,20 @@ CREATE TABLE IF NOT EXISTS account (
     email TEXT NOT NULL,
     phone_number TEXT,
     profile_picture TEXT,
+    registration_key TEXT,
+    account_type TEXT CHECK (account_type IN ("Public", "Owner", "Renter", "Employee")) NOT NULL,
     created_at TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS employee (
     employee_id TEXT PRIMARY KEY,
     property_id TEXT,
-    type TEXT CHECK (type IN ("admin", "manager", "accountant", "daily_operator")),
+    type TEXT CHECK (type IN ("admin", "manager", "accountant", "daily_operator")) NOT NULL,
     FOREIGN KEY (property_id) REFERENCES property (property_id),
     FOREIGN KEY (employee_id) REFERENCES account (account_id)
 );
 
-
+CREATE VIEW employee_data AS
+    SELECT *
+    FROM employee
+    JOIN account ON employee.employee_id = account.account_id

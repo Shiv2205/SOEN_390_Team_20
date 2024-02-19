@@ -1,9 +1,10 @@
 const sqlite3 = require("sqlite3").verbose();
 const fs = require("fs");
 const uuid = require("uuid");
-const path = require('path');
+const path = require("path");
+const { rejects } = require("assert");
 
-const filePath = path.join(process.cwd() + "/sql/ddl.sql");
+const ddlPath = path.join(process.cwd() + "/sql/ddl.sql");
 const currentDBPath = path.join(process.cwd() + "/data/test_data.txt");
 
 let instance = null;
@@ -20,55 +21,138 @@ class DBController {
     return instance;
   }
 
+  /**
+   * The `initialize` function checks if a database exists, and if not, creates tables based on a
+   * provided DDL file.
+   */
   initialize() {
     fs.access(currentDBPath, fs.constants.F_OK, (err) => {
       if (err) {
-          console.error('Database does not exist');
-          this.db.serialize(() => {
-            let ddl = fs.readFileSync(filePath, "utf8");
-            let tables = ddl.split(";");
-            tables.map((createTable) => {
-              if (createTable) this.db.run(createTable.trim() + ";"); // DDL to create table
-            });
+        console.error("Database does not exist");
+        this.db.serialize(() => {
+          let ddl = fs.readFileSync(ddlPath, "utf8");
+          let tables = ddl.split(";");
+          tables.map((createTable) => {
+            if (createTable) this.db.run(createTable.trim() + ";"); // DDL to create table
           });
-      } else {
-          console.log('Database ready');
-      }
-  });
-  }
-
-  createNewPublicUser({
-    fullname,
-    email,
-    password,
-    phoneNumber,
-    profilePicture,
-  }) {
-    let account_id = uuid.v4();
-    this.db.run(
-      "INSERT INTO account (account_id, fullname, password, email, phone_number, profile_picture) VALUES (?, ?, ?, ?, ?, ?)",
-      [account_id, fullname, password, email, phoneNumber, profilePicture]
-    );
-    return account_id;
-  }
-
-  async getPublicUser(email, password) {
-    return new Promise((resolve, reject) => {
-      this.db.get(
-        "SELECT * FROM account WHERE email = ? AND password=?;", [email, password], function(err, row){
-          if(row) resolve(row);
-          if(err) reject(err);
         });
+      } else {
+        console.log("Database ready");
+      }
     });
   }
 
-  createNewEmployee({ fullname, email, password, property_id, type }) {
-    this.db.run(
-      "INSERT INTO employee VALUES (employee_id, property_id, type)",
-      [this.createNewPublicUser(fullname, email, password), property_id, type]
-    );
+  /**
+   * The function `createNewPublicUser` creates a new public user in a database if the user does not
+   * already exist.
+   * @returns The `createNewPublicUser` function is returning a Promise. If there is no existing user
+   * with the provided email and password, it will insert a new user into the database and resolve the
+   * Promise with the newly created account_id. If an existing user is found, it will reject the
+   * Promise with the message "User already registered!".
+   */
+  async createNewPublicUser({
+    fullname,
+    email,
+    password,
+    phoneNumber=null,
+    profilePicture=null
+  }) {
+    let existingUser = await this.isUser(email);
+    return new Promise((resolve, reject) => {
+      if (existingUser.count === 0) {
+        let account_id = uuid.v4();
+        this.db.run(
+          "INSERT INTO account (account_id, fullname, password, email, phone_number, profile_picture) VALUES (?, ?, ?, ?, ?, ?)",
+          [account_id, fullname, password, email, phoneNumber, profilePicture]
+        );
+        resolve(account_id);
+      }
+      reject("User already resgistered!");
+    });
   }
 
+  async isUser(email) {
+    return new Promise((resolve, reject) => {
+      this.db.get(
+        "SELECT COUNT(*) AS count FROM account WHERE email = ?",
+        email,
+        function (err, row) {
+          console.log("Inside: ", row);
+          if (row) resolve(row);
+          resolve(null);
+        }
+      );
+    });
+  }
+
+  async getPublicUser(email, password) {
+    let existingUser = await this.isUser(email);
+    return new Promise(async (resolve, reject) => {
+      if (existingUser.count > 0) {
+        this.db.get(
+          "SELECT * FROM account WHERE email = ? AND password = ?",
+          [email, password],
+          function (err, row) {
+            if (row) resolve(row);
+            if (err) reject(err);
+          }
+        );
+      }
+      else{reject("User does not have an account.");}
+    });
+  }
+
+  /**
+   * The function `createNewEmployee` inserts a new employee into a database table with the provided
+   * information.
+   */
+  async createNewEmployee({ fullname, email, password, property_id=null, type }) {
+    let existingUser = await this.isUser(email);
+    return new Promise(async (resolve, reject) => {
+      if (existingUser.count === 0) {
+        employee_id = await this.createNewPublicUser({ fullname, email, password });
+        this.db.run(
+          "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",
+          [employee_id, property_id, type]
+        );
+        resolve(employee_id);
+      }
+      else {
+        existingUser = await this.getPublicUser(email, password);
+        this.db.run(
+          "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",
+          [existingUser.account_id, property_id, type]
+        );
+        resolve(existingUser.account_id);
+      }
+    });
+  }
+
+  async getEmployee(email, password) {
+    let existingUser = await this.isUser(email);
+    return new Promise(async (resolve, reject) => {
+      if (existingUser.count > 0) {
+        this.db.get(
+          "SELECT * FROM employee_data WHERE email = ? AND password = ?",
+          [email, password],
+          function (err, row) {
+            if (row) resolve(row);
+            if (err) reject(err);
+          }
+        );
+      }
+      else{reject("User does not have an account.");}
+    });
+  }
+
+  run(query) {
+    this.db.run(query);
+  }
+
+  /**
+   * The close method closes the database connection and logs a message indicating whether the
+   * operation was successful or if an error occurred.
+   */
   close() {
     this.db.close((err) => {
       if (err) {

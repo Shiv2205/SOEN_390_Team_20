@@ -4,7 +4,6 @@ export default function UploadWidget({ setProfilePic, setThumbnail }) {
     const cloudinaryRef = useRef();
     const widgetRef = useRef();
     useEffect(() => {
-        console.log("smth s,th: ", import.meta.env.CLOUDINARY_CLOUD_NAME);
         cloudinaryRef.current = window.cloudinary;
         widgetRef.current = cloudinaryRef.current.createUploadWidget({
             cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
