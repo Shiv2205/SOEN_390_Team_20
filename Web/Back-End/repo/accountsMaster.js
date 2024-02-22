@@ -1,13 +1,15 @@
 const DBControllerFactory = require('../Factory/DBControllerFactory');
 
-class accountsMaster {
+class AccountsMaster {
     constructor() {
       this.dbController = DBControllerFactory.createInstance();
     }
   
-    async  getUserDetails(email, password) {
+    async  getUserDetails(user_email, user_password) {
       try {
-        return await this.dbController.getPublicUser(email, password);
+        let {status, data} = await this.dbController.getPublicUser(user_email, user_password);
+        const { password, registration_key, created_at, ...public_data } = data;
+        return { status, public_data };
       } catch (error) {
         console.log("Failed to get user from the database.");
       }
@@ -35,6 +37,13 @@ class accountsMaster {
       }
     }
 
+    /**
+     * The function `registerEmployee` asynchronously registers a new employee by calling
+     * `createNewEmployee` method from `dbController` and handles any errors that may occur.
+     * @param employeeData - { fullname, email, password, property_id (Optional), type }
+     * @returns The `registerEmployee` function is returning the result of
+     * `this.dbController.createNewEmployee(employeeData)` after awaiting its completion.
+     */
     async registerEmployee(employeeData) {
       try {
         return await this.dbController.createNewEmployee(employeeData);
@@ -43,10 +52,18 @@ class accountsMaster {
       }
     }
 
+    async getPropertyEmployees(property_id) {
+      try {
+        return await this.dbController.getAllEmployees(property_id);
+      } catch (error) {
+        console.log("Failed to get employees for given property in the database.");
+      }
+    }
+
     close() {
       this.dbController.close();
     }
   }
   
-  module.exports = accountsMaster;
+  module.exports = AccountsMaster;
   

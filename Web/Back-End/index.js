@@ -6,13 +6,14 @@ const cors = require("cors");
 const loginRouter = require("./routes/login");
 const usersRouter = require("./routes/users");
 const signUpRouter = require("./routes/signup");
+const propertyHandler = require('./routes/properties');
 
 //express app
 const app = express();
 
 //Handle CORS
 const corsOptions = {
-  origin: "http://localhost:5173"
+  origin: ["http://localhost:5173", 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld', "http://localhost:3000"]
 };
 
 //Utils
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use("/", usersRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signUpRouter);
+app.use("/properties", propertyHandler);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -39,7 +41,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json({ error: "Page not found" });
+  res.json({ error: "Page not found. Index.js" });
 });
 
 module.exports = app;

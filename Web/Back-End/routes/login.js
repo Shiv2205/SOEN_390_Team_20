@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const accountsMaster = require('../repo/accountsMaster');
+const AccountsMaster = require('../repo/accountsMaster');
 
 /* The code you provided is a route handler for a POST request to the URL ("/login"). */
 router.post("/", async function (req, res, next) {
@@ -12,10 +12,11 @@ router.post("/", async function (req, res, next) {
   }
 
   try {
-    let dbExpert = new accountsMaster();
+    let dbExpert = new AccountsMaster();
     let userDetails = await dbExpert.getUserDetails(formData.email, formData.password);
-    if(userDetails)
-      res.status(201).send({ response: "User logged in successfully!", loginData: userDetails });
+    if(userDetails.status === 202)
+      res.status(userDetails.status).send({ response: "User logged in successfully!", loginData: userDetails.public_data });
+    else res.status(userDetails.status).send(userDetails);
   } 
   catch (error) {
     res.status(500).send({ response: error.message });
