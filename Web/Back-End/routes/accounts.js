@@ -1,15 +1,17 @@
+const express = require('express');
+const router = express.Router();
 const AccountsMaster = require("../repo/accountsMaster");
 
 const accounts = new AccountsMaster();
 
 // Middleware to handle errors consistently
-app.use((err, req, res, next) => {
+router.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something went wrong!");
 });
 
 // 1. /register
-app.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const account_id = await accounts.registerUser(req.body);
     res.json({ account_id });
@@ -19,7 +21,7 @@ app.post("/register", async (req, res) => {
 });
 
 // 2. /users
-app.post("/users", async (req, res) => {
+router.post("/users", async (req, res) => {
   try {
     const { status, public_data } = await accounts.getUserDetails(
       req.body.email,
@@ -32,7 +34,7 @@ app.post("/users", async (req, res) => {
 });
 
 // 3. /register/employee
-app.post("/register/employee", async (req, res) => {
+router.post("/register/employee", async (req, res) => {
   try {
     const result = await accounts.registerEmployee(req.body);
     res.json(result);
@@ -42,7 +44,7 @@ app.post("/register/employee", async (req, res) => {
 });
 
 // 4. /employees
-app.post("/employees", async (req, res) => {
+router.post("/employees", async (req, res) => {
   try {
     const employeeDetails = await accounts.getEmployeeDetails(
       req.body.email,
@@ -55,7 +57,7 @@ app.post("/employees", async (req, res) => {
 });
 
 //5. //employees/property-agents
-app.post("/employees/property-agents", async (req, res) => {
+router.post("/employees/property-agents", async (req, res) => {
   try {
     const employees = await accounts.getPropertyEmployees(req.body.property_id);
     res.json(employees);
@@ -63,3 +65,5 @@ app.post("/employees/property-agents", async (req, res) => {
     next(error);
   }
 });
+
+module.exports = router;

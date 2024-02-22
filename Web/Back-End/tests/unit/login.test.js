@@ -1,62 +1,114 @@
-const request = require('supertest');
-const express = require('express');
-const router = require('../../routes/login');
-const getUserData = require('../../util/getUserData');
+jest.mock("../../repo/accountsMaster"); // Mock the AccountsMaster dependency
 
-jest.mock('../../util/getUserData'); // Mocking getUserData function
+const express = require("express");
+const router = require("../../routes/login"); // Replace with actual path
+const AccountsMaster = require("../../repo/accountsMaster");
 
-const app = express();
-app.use(express.json());
-app.use('/', router);
+describe("Login middleware", () => {
+  let mockReq, mockRes, mockNext;
 
-describe('POST /', () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear mock calls before each test
+    mockReq = {};
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+    mockNext = jest.fn();
   });
 
-  it('should return 400 if no data received', async () => {
-    const response = await request(app).post('/');
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toEqual({ response: 'Data not received' });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should return 201 and login data if user exists', async () => {
-    const mockUserData = [
-      { email: 'test@example.com', password: 'qwerty123', name: 'Test User' }
-    ];
-    getUserData.mockResolvedValue(mockUserData);
+  // --- Test: Empty request body ---
+  it("should send 400 if request body is empty", async () => {
+    mockReq.body = {};
 
-    const response = await request(app)
-      .post('/')
-      .send({ email: 'test@example.com', password: 'qwerty123' });
-
-    expect(response.statusCode).toBe(201);
-    expect(response.body).toEqual({
-      response: 'User logged in successfully!',
-      loginData: { email: 'test@example.com', password: 'qwerty123', name: 'Test User' }
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        response: "Data not received",
+      });
     });
   });
 
-  it('should return 500 if user does not exist', async () => {
-    const mockUserData = [];
-    getUserData.mockResolvedValue(mockUserData);
+  // --- Test: Successful login ---
+  it("should send 202 and login data on successful login", async () => {
+    mockReq.body = { email: "michael@example.com", password: "password6" };
+    const mockUserDetails = {
+      status: 202,
+      public_data: {
+        account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
+        fullname: "Michael Wilson",
+        email: "michael@example.com",
+        phone_number: "6543217890",
+        profile_picture: "https://randomuser.me/api/portraits/men/3.jpg",
+        account_type: "Renter",
+      },
+    };
+    AccountsMaster.mockReturnValue({
+      getUserDetails: jest.fn().mockResolvedValue(mockUserDetails),
+    });
 
-    const response = await request(app)
-      .post('/')
-      .send({ email: 'test@example.com', password: 'qwerty123' });
-
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toEqual({ response: 'Email or password is incorrect' });
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(AccountsMaster.getUserDetails).toHaveBeenCalledWith(
+        "michael@example.com",
+        "password6"
+      );
+      expect(mockRes.status).toHaveBeenCalledWith(202);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        response: "User logged in successfully!",
+        loginData: {
+          account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
+          fullname: "Michael Wilson",
+          email: "michael@example.com",
+          phone_number: "6543217890",
+          profile_picture: "https://randomuser.me/api/portraits/men/3.jpg",
+          account_type: "Renter",
+        },
+      });
+    });
   });
 
-  it('should return 500 if getUserData throws an error', async () => {
-    getUserData.mockRejectedValue(new Error('Database error'));
+  // --- Test: Failed login ---
+  it("should send error status and message on failed login", async () => {
+    mockReq.body = { email: "invalid", password: "wrong" };
+    const mockErrorStatus = 401;
+    const mockErrorMessage = "Invalid credentials";
+    AccountsMaster.mockReturnValue({
+      getUserDetails: jest.fn().mockResolvedValue({
+        status: mockErrorStatus,
+        message: mockErrorMessage,
+      }),
+    });
 
-    const response = await request(app)
-      .post('/')
-      .send({ email: 'test@example.com', password: 'qwerty123' });
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(AccountsMaster.getUserDetails).toHaveBeenCalledWith(
+        "invalid",
+        "wrong"
+      );
+      expect(mockRes.status).toHaveBeenCalledWith(mockErrorStatus);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        status: mockErrorStatus,
+        message: mockErrorMessage,
+      });
+    });
+  });
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toEqual({ response: 'Database error' });
+  // --- Test: Error handling ---
+  it("should send 500 and error message on internal error", async () => {
+    mockReq.body = { email: "test", password: "test" };
+    AccountsMaster.mockReturnValue({
+      getUserDetails: jest.fn().mockRejectedValue(new Error("Database error")),
+    });
+
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(AccountsMaster.getUserDetails).toHaveBeenCalledWith(
+        "test",
+        "test"
+      );
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.send).toHaveBeenCalledWith({ response: "Database error" });
+    });
   });
 });

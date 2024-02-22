@@ -1,58 +1,90 @@
-const request = require('supertest');
-const app = require('../../index'); // Import the Express app
-const fs = require('fs/promises');
-const path = require('path');
+jest.mock("../../repo/accountsMaster"); // Mock the accountsMaster dependency
 
-// Function to clear user_data.json after each test
-async function clearUserData() {
-  const dataFilePath = path.join(process.cwd(), 'data/test_user_data.json');
-  await fs.writeFile(dataFilePath, '[]');
-}
+const express = require("express");
+const router = require("../../routes/signup"); // Replace with actual path
+const accountsMaster = require("../../repo/accountsMaster");
 
-// Clear data before each test
-beforeEach(clearUserData);
+describe("Signup middleware", () => {
+  let mockReq, mockRes, mockNext;
 
-describe('POST /signup', () => {
-  it('should add a new user successfully', async () => {
-    const res = await request(app)
-      .post('/signup')
-      .send({ fullname: 'John Doe', email: 'johndoe@example.com', password: 'qwerty123', confirmPassword: 'qwerty123' });
-
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toEqual({ response: 'User added successfully!' });
-
-    // Check if user data was added to the file
-    const dataFilePath = path.join(process.cwd(), 'data/test_user_data.json');
-    const fileData = await fs.readFile(dataFilePath, 'utf-8');
-    const userData = JSON.parse(fileData);
-    expect(userData).toEqual([{ fullname: 'John Doe', email: 'johndoe@example.com', password: 'qwerty123', confirmPassword: 'qwerty123' }]);
+  beforeEach(() => {
+    mockReq = {};
+    mockRes = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+    mockNext = jest.fn();
   });
 
-  it('should handle existing email error', async () => {
-    // Add an existing user to the file
-    await fs.writeFile(
-      path.join(process.cwd(), 'data/test_user_data.json'),
-      JSON.stringify([{ fullname: 'Jane Doe', email: 'janedoe@example.com', password: 'qwerty123', confirmPassword: 'qwerty123' }])
-    );
-
-    const res = await request(app)
-      .post('/signup')
-      .send({ fullname: 'Jane Doe', email: 'janedoe@example.com', password: 'qwerty123', confirmPassword: 'qwerty123' });
-
-    expect(res.statusCode).toBe(500);
-    expect(res.body).toEqual({ response: 'This email address is already in use' });
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should handle missing data', async () => {
-    const res = await request(app).post('/signup');
+  // --- Test: Empty request body ---
+  it("should send 400 if request body is empty", async () => {
+    mockReq.body = {};
 
-    expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual({ response: 'Data not received' });
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(mockRes.status).toHaveBeenCalledWith(400);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        response: "Data not received",
+      });
+    });
   });
 
-  // Add more test cases for different error scenarios and edge cases
+  // --- Test: Successful registration ---
+  it("should send 201 and success message on successful registration", async () => {
+    mockReq.body = {
+      name: "John Doe",
+      email: "test@example.com",
+      password: "password",
+    };
+    const mockDbResponse = { status: 201, message: "User added successfully!" };
+    accountsMaster.mockReturnValue({
+      registerUser: jest.fn().mockResolvedValue(mockDbResponse),
+    });
+
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
+      expect(mockRes.status).toHaveBeenCalledWith(201);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        response: "User added successfully!",
+      });
+    });
+  });
+
+  // --- Test: Failed registration (from database) ---
+  it("should send error status and message from database on failed registration", async () => {
+    mockReq.body = { name: "Jane Smith", email: "invalid", password: "weak" };
+    const mockErrorStatus = 409;
+    const mockErrorMessage = "Email already exists";
+    accountsMaster.mockReturnValue({
+      registerUser: jest.fn().mockResolvedValue({
+        status: mockErrorStatus,
+        message: mockErrorMessage,
+      }),
+    });
+
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
+      expect(mockRes.status).toHaveBeenCalledWith(mockErrorStatus);
+      expect(mockRes.send).toHaveBeenCalledWith({
+        response: mockErrorMessage,
+      });
+    });
+  });
+
+  // --- Test: Error handling ---
+  it("should send 500 and error message on internal error", async () => {
+    mockReq.body = { name: "Test User", email: "test", password: "test" };
+    accountsMaster.mockReturnValue({
+      registerUser: jest.fn().mockRejectedValue(new Error("Database error")),
+    });
+
+    await router.post("/", (mockReq, mockRes, mockNext) => {
+      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.send).toHaveBeenCalledWith({ response: "Database error" });
+    });
+  });
 });
-
-
-// Clear data after all tests
-afterAll(clearUserData);

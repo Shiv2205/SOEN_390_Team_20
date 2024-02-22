@@ -24,9 +24,6 @@ router.post("/", async (req, res, next) => {
   catch (error) {
     res.status(500).send({ response: error.message });
   }
-  // finally{
-  //   dbExpert.close();
-  // }
   
 });
 

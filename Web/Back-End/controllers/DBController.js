@@ -376,18 +376,24 @@ class DBController {
     return new Promise(async (resolve, reject) => {
       const unit_data = [];
       if (unitExists) {
-        this.db.each(
-          "SELECT * FROM unit WHERE property_id = ?;",
+        this.db.all(
+         `SELECT 
+            unit_id,
+            property_id,
+            size,
+            monthly_rent,
+            condo_fee,
+            condo_balance,
+            owner_id,
+            renter_id 
+          FROM unit 
+          WHERE property_id = ?;`,
           property_id,
-          function (err, row) {
-            if (row) {
-              const { owner_registration_key, renter_registration_key, ...public_data } = row;
-              unit_data.push(public_data);
-            }
+          function (err, rows) {
             if (err) reject(err);
+            if(rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
         );
-        resolve({ status: 200, data: unit_data });
       } else {
         resolve({
           status: 204,
@@ -434,7 +440,7 @@ class DBController {
           creator_id,
           function (err, rows) {
             if (err) reject(err);
-            if (rows.length > 0) resolve({ status: 200, data: rows });
+            if(rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
         );
       } else {
