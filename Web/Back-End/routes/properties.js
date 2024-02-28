@@ -1,22 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const PropertyMaster = require('../repo/propertyMaster');
-const unitsHandler = require('./nested_routes/units');
-const postsHandler = require('./nested_routes/posts');
+const PropertyMaster = require("../repo/propertyMaster");
+const unitsHandler = require("./nested_routes/units");
+const postsHandler = require("./nested_routes/posts");
 
 const property = new PropertyMaster();
 
-router.use('/units', unitsHandler);
-router.use('/posts', postsHandler);
+router.use("/units", unitsHandler);
+router.use("/posts", postsHandler);
 
 // Middleware to handle errors consistently
 router.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  res.status(500).send("Something went wrong!");
 });
 
 // 1. /register
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const result = await property.registerNewProperty(req.body);
     res.json(result);
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
 });
 
 // 2. /real-estate
-router.post('/real-estate', async (req, res, next) => {
+router.post("/real-estate", async (req, res, next) => {
   try {
     const property_data = await property.getProperty(req.body.property_id);
     res.json(property_data);
@@ -36,7 +36,12 @@ router.post('/real-estate', async (req, res, next) => {
 });
 
 // 3. /real-estate/company-assets
-router.post('/real-estate/company-assets', async (req, res) => {
+router.post("/real-estate/company-assets", async (req, res) => {
+  if (!employee_id || typeof employee_id !== "string") {
+    return res
+      .status(400)
+      .send({ error: "Missing required field or wrong data type" }); // bad request
+  }
   try {
     const properties = await property.getAllProperties(req.body.employee_id);
     res.json(properties);
