@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import Profile from "../components/Profile";
 import PropertyPage from "../components/ListingPageComponent"
+import PropertyView from "../components/PropertyView";
 
 function App() {
   const views = {
+    PROPERTYVIEW: 4,
     PROPERTYPAGE: 3,
     PROFILE: 2,
     LOGIN: 1,
@@ -25,14 +28,14 @@ function App() {
         return <Login setView={setView} views={views} setUserData={setUserData} />;
       case views.PROFILE:
         return <Profile userData={userData} setView={setView} views={views} />;
-      case views.PROPERTYPAGE:
-        return <PropertyPage userData={userData} setView={setView} views={views} />;
+      case views.PROPERTYVIEW:
+        return <PropertyView userData={userData}/>;
       default:
         return <SignUp setView={setView} views={views} />;
     }
   };
 
-  return <div className="App">{renderView()}</div>;
+  return renderView();
 }
 
 export default App;

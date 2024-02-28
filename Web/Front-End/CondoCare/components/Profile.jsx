@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blank from "../src/assets/blank.webp"
 
-function Profile( {userData} ) {
+function Profile( {userData, setView, views} ) {
 
     const [copyText, setCopyText] = useState('');
 
@@ -42,6 +42,9 @@ function Profile( {userData} ) {
                 <div className="info">
                 <h3 style={{borderRadius:"10px", borderStyle:"solid", borderColor:"black", padding:"5px"}}> {hardcodedCopyText2} <button onClick={() => handleCopy(hardcodedCopyText2)}>Copy</button> </h3>
                 </div>
+            </div>
+            <div>
+                <button onClick={() => {setView(views.PROPERTYVIEW);}}>Property View</button>
             </div>
         </div>
     );
