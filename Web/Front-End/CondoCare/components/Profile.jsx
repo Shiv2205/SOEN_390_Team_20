@@ -43,7 +43,7 @@ function Profile( {userData, setView, views} ) {
                 </div>
             </div>
             <div>
-                <button onClick={console.log("Clicked!")}>Property View</button>
+                <button onClick={() => {setView(views.PROPERTYVIEW);}}>Property View</button>
             </div>
         </div>
     );

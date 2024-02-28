@@ -1,0 +1,31 @@
+.property-view-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+}
+
+.property-image {
+  width: 100%; /* Make the image fill the container */
+  height: 100%; /* Make the image fill the container */
+  object-fit: cover; /* Crop the image */
+}
+
+.property-image-container {
+  width: 500px; /* Set the width of the container */
+  height: 400px; /* Set the height of the container */
+  overflow: hidden; /* Hide overflow content */
+  padding: 20px;
+}
+
+.property-info {
+  font-family: Arial, sans-serif;
+}
+
+.property-info h2 {
+  color: #333;
+}
+
+.property-info p {
+  margin: 5px 0;
+}
