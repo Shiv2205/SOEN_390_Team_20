@@ -47,6 +47,7 @@ function Profile( {userData, setView, views} ) {
             </div>
             <div>
                 <button onClick={() => {setView(views.PROPERTYVIEW);}}>Property View</button>
+                <button onClick={() => {setView(views.PROPERTYREGISTRATION);}}>Add new property</button>
             </div>
         </div>
     );

@@ -7,9 +7,11 @@ import Login from "../components/Login";
 import Profile from "../components/Profile";
 import PropertyPage from "../components/ListingPageComponent"
 import PropertyView from "../components/PropertyView";
+import PropertyRegistration from "../components/PropertyRegistration";
 
 function App() {
   const views = {
+    PROPERTYREGISTRATION: 5,
     PROPERTYVIEW: 4,
     PROPERTYPAGE: 3,
     PROFILE: 2,
@@ -30,6 +32,8 @@ function App() {
         return <Profile userData={userData} setView={setView} views={views} />;
       case views.PROPERTYVIEW:
         return <PropertyView userData={userData}/>;
+      case views.PROPERTYREGISTRATION:
+        return<PropertyRegistration userData={userData}/>;
       default:
         return <SignUp setView={setView} views={views} />;
     }
