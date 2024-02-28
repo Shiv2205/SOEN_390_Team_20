@@ -3,17 +3,18 @@ const fs = require("fs");
 const uuid = require("uuid");
 const path = require("path");
 
+const currentDB = 'jest_data.txt';//test_data.txt
 const ddlPath = path.join(process.cwd() + "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
-const currentDBPath = path.join(process.cwd() + "/data/test_data.txt");//test_data.txt
+const currentDBPath = path.join(process.cwd() + `/data/${currentDB}`);
 
 let instance = null;
 
 /* The DBController class is a JavaScript class that provides methods for initializing and closing a
 database connection. */
 class DBController {
-  constructor() {
-    this.initialize();
+  constructor(DBPath=currentDBPath) {
+    this.initialize(DBPath);
     if (!instance) {
       instance = this;
     }
@@ -24,13 +25,14 @@ class DBController {
    * The `initialize` function checks if a database exists, and if not, creates tables based on a
    * provided DDL file.
    */
-  async initialize() {
-    this.db = new sqlite3.cached.Database(currentDBPath);
+  async initialize(DBPath=currentDBPath) {
+    this.db = new sqlite3.Database(DBPath);//new sqlite3.cached.Database(currentDBPath);
     return new Promise((resolve, reject) => {
       fs.stat(currentDBPath, (err, stats) => {
         if (err) {
-          console.error("Database does not exist");
+          console.log("Database does not exist");
           this.db.serialize(() => {
+            console.log("Inside actual function")
             let ddl = fs.readFileSync(ddlPath, "utf8");
             let tables = ddl.split(";--");
             tables.map((createTable) => {
@@ -38,7 +40,8 @@ class DBController {
             });
           });
           resolve({ init: "Database initialized" });
-        } else {
+        } 
+        else {
           resolve({ init: "Database ready" });
         }
       });
@@ -49,7 +52,7 @@ class DBController {
     return new Promise((resolve, reject) => {
       fs.stat(currentDBPath, (err, stats) => {
         if (!err) {
-          console.error("Database ready");
+          console.log("Database ready");
           this.db = new sqlite3.cached.Database(currentDBPath);
           this.db.serialize(() => {
             let ddl = fs.readFileSync(testData, "utf8");
@@ -176,9 +179,9 @@ class DBController {
   }
 
   async getEmployee(email, password) {
-    let existingUser = await this.isUser(email);
+    let existingUser = await this.recordExists("employee_data", "email", email);
     return new Promise(async (resolve, reject) => {
-      if (existingUser.count > 0) {
+      if (existingUser) {
         this.db.get(
           "SELECT * FROM employee_data WHERE email = ? AND password = ?",
           [email, password],
@@ -283,9 +286,8 @@ class DBController {
           (SELECT W.property_id
            FROM work_at W
            JOIN employee E ON E.employee_id = W.employee_id
-           AND E.employee_id = ?
-           WHERE E.type = ?);`,
-          [employee_id, "admin"],
+           AND E.employee_id = ?);`,
+          [employee_id],
           function (err, rows) {
             if (err) reject(err);
             if(rows) {if (rows.length > 0) resolve({ status: 200, data: rows });}
@@ -447,6 +449,31 @@ class DBController {
         resolve({
           status: 204,
           message: "User has no posts in database.",
+        });
+      }
+    });
+  }
+
+  async getAllPostsReplies(post_id) {
+    let postsExists = await this.recordExists(
+      "post",
+      "post_id",
+      post_id
+    );
+    return new Promise(async (resolve, reject) => {
+      if (postsExists) {
+        this.db.all(
+          "SELECT * FROM post WHERE post_id = ?;",
+          post_id,
+          function (err, rows) {
+            if (err) reject(err);
+            if(rows) if (rows.length > 0) resolve({ status: 200, data: rows });
+          }
+        );
+      } else {
+        resolve({
+          status: 204,
+          message: "No replies for this post in database.",
         });
       }
     });

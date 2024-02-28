@@ -9,7 +9,7 @@ class PropertyMaster {
     try {
         return await this.dbController.createNewProperty(propertyData);
     } catch (error) {
-        console.log(error);
+        return error;
     }
   }
 

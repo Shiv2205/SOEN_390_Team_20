@@ -10,18 +10,18 @@ router.use('/units', unitsHandler);
 router.use('/posts', postsHandler);
 
 // Middleware to handle errors consistently
-router.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something went wrong!');
-});
+const errorHandler = (err, req, res, next) => {
+  res.status(500).send({ message: 'Something went wrong!'});
+};
+router.use(errorHandler);
 
 // 1. /register
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
   try {
     const result = await property.registerNewProperty(req.body);
-    res.json(result);
+    res.status(result.status).json(result);
   } catch (error) {
-    next(error); // Pass to error-handling middleware
+    errorHandler(error, req, res, next); // Pass to error-handling middleware
   }
 });
 
@@ -29,19 +29,19 @@ router.post('/register', async (req, res) => {
 router.post('/real-estate', async (req, res, next) => {
   try {
     const property_data = await property.getProperty(req.body.property_id);
-    res.json(property_data);
+    res.status(property_data.status).json(property_data);
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 
 // 3. /real-estate/company-assets
-router.post('/real-estate/company-assets', async (req, res) => {
+router.post('/real-estate/company-assets', async (req, res, next) => {
   try {
     const properties = await property.getAllProperties(req.body.employee_id);
-    res.json(properties);
+    res.status(properties.status).json(properties);
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 

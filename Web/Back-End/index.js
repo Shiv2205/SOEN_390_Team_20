@@ -7,13 +7,14 @@ const loginRouter = require("./routes/login");
 const usersRouter = require("./routes/users");
 const signUpRouter = require("./routes/signup");
 const propertyHandler = require('./routes/properties');
+const accountsHandler = require('./routes/accounts');
 
 //express app
 const app = express();
 
 //Handle CORS
 const corsOptions = {
-  origin: ["http://localhost:5173", 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld', "http://localhost:3000"]
+  origin: ["http://localhost:5173", 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld']
 };
 
 //Utils
@@ -26,6 +27,7 @@ app.use(cookieParser());
 app.use("/", usersRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signUpRouter);
+app.use("/accounts", accountsHandler);
 app.use("/properties", propertyHandler);
 
 // catch 404 and forward to error handler

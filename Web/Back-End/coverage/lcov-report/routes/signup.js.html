@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.41% </span>
+                <span class="strong">94.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/17</span>
+                <span class='fraction'>16/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.41% </span>
+                <span class="strong">94.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/17</span>
+                <span class='fraction'>16/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,21 +100,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -125,26 +125,26 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
 const router = express.Router();
-const accountsMaster = require('../repo/accountsMaster');
+const AccountsMaster = require('../repo/accountsMaster');
 &nbsp;
 /* The code block `router.post("/", async (req, res, next) =&gt; { ... })` is defining a route handler for
 a POST request to the URL ("/signup") of the server. */
-router.post("/", <span class="fstat-no" title="function not covered" >as</span>ync (req, res, next) =&gt; {
-  let formData = <span class="cstat-no" title="statement not covered" >req.body;</span>
-<span class="cstat-no" title="statement not covered" >  console.log(formData);</span>
+router.post("/", async (req, res, next) =&gt; {
+  let formData = req.body;
+  console.log(formData);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (Object.keys(formData).length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >    res.status(400).send({ response: "Data not received" });</span>
-<span class="cstat-no" title="statement not covered" >    return;</span>
+  if (Object.keys(formData).length === 0) {
+    res.status(400).send({ response: "Data not received" });
+    return;
   }
 &nbsp;
-  let dbExpert = <span class="cstat-no" title="statement not covered" >new accountsMaster();</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    let dbResponse = <span class="cstat-no" title="statement not covered" >await dbExpert.registerUser(formData);</span>
-<span class="cstat-no" title="statement not covered" >    if(dbResponse.status === 201) </span>
-<span class="cstat-no" title="statement not covered" >      res.status(dbResponse.status).send({ response: "User added successfully!" });</span>
+  let dbExpert = new AccountsMaster();
+  try {
+    let dbResponse = await dbExpert.registerUser(formData);
+    if(dbResponse.status === 201) 
+      res.status(dbResponse.status).send({ response: "User added successfully!" });
     else
-<span class="cstat-no" title="statement not covered" >      res.status(dbResponse.status).send({ response: dbResponse.message });</span>
+      res.status(dbResponse.status).send({ response: dbResponse.message });
   } 
   catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).send({ response: error.message });</span>
@@ -160,7 +160,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-22T06:00:45.528Z
+                at 2024-02-27T23:54:34.457Z
             </div>
         <script src="../prettify.js"></script>
         <script>
