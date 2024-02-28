@@ -16,6 +16,7 @@ function Profile( {userData, setView, views} ) {
 
     return(
         <div className="profile-container">
+            <button onClick={() => setView(views.PROPERTYPAGE)}></button>
             <h2> Profile </h2>
             <div className="profile-info">
                 <img src={userData.profile_picture} alt='Profile' />

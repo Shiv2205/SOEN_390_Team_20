@@ -4,15 +4,14 @@ import { useEffect } from "react";
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
-import Profile from "../components/Profile"
+import Profile from "../components/Profile";
+import PropertyPage from "../components/ListingPageComponent"
 import PropertyView from "../components/PropertyView";
-
-//#################################### For testing Need to remove ##################################################
-const log = console.log;
 
 function App() {
   const views = {
-    PROPERTYVIEW: 3,
+    PROPERTYVIEW: 4,
+    PROPERTYPAGE: 3,
     PROFILE: 2,
     LOGIN: 1,
     SIGNUP: 0,
