@@ -1,0 +1,38 @@
+.listing-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    width: calc(100% - 40px);
+    /* Subtracting padding */
+    margin: 0 auto;
+    /* Center the card horizontally */
+    padding: 20px;
+    /* Add padding */
+    background-color: #f9f9f9;
+    /* Light gray background color */
+    color: black;
+    /* Color set to black */
+    max-width: 600px;
+    /* Set a maximum width */
+}
+
+
+
+.listing-image {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.listing-details {
+    padding: 20px;
+}
+
+.listing-info {
+    margin: 0;
+    margin-bottom: 10px;
+    color: black;
+}
