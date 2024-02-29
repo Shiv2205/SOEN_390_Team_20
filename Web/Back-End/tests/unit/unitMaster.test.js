@@ -94,11 +94,11 @@ describe("UnitMaster", () => {
   describe("registerUnit", () => {
     it("registers a new unit successfully", async () => {
       const mockData = {
-        property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
-        size: 20,
-        monthly_rent: 1700,
-        condo_fee: 5200,
-        condo_balance: 200000,
+        property_id: "test-prop-id",
+        size: 100,
+        monthly_rent: 1000,
+        condo_fee: 1200,
+        condo_balance: 3579,
       };
 
       let unitSpy = jest.spyOn(unitController, "registerUnit");
@@ -107,9 +107,13 @@ describe("UnitMaster", () => {
       expect(result).toEqual(createUnitOutput);
       expect(unitSpy).toHaveBeenCalledWith(mockData);
       expect(unitController.dbController.createNewUnit).toHaveBeenCalled();
-      expect(unitController.dbController.createNewUnit).toHaveBeenCalledWith(
-        mockData
-      );
+      expect(unitController.dbController.createNewUnit).toHaveBeenCalledWith({
+        ...mockData,
+        owner_id: "",
+        renter_id: "",
+        owner_registration_key: "",
+        renter_registration_key: "",
+      });
     });
 
     errorHandler("createNewUnit");

@@ -84,9 +84,10 @@ describe("PostsMaster", () => {
   describe("createPost", () => {
     it("creates a new post successfully", async () => {
       const postData = {
-        creator_id: "user_id",
-        title: "Post Title",
-        content: "Post Content",
+        property_id: "test-prop-id",
+        creator_id: "test-owner-id",
+        content: "This is a test post.",
+        replied_to: "",
       };
 
       let postSpy = jest.spyOn(postController, "createPost");
@@ -130,7 +131,9 @@ describe("PostsMaster", () => {
       let result = await postController.getPropertyPosts(propertyId);
       expect(result).toEqual(getPropertyPostsOutput);
       expect(postSpy).toHaveBeenCalledWith(propertyId);
-      expect(postController.dbController.getAllPropertyPosts).toHaveBeenCalled();
+      expect(
+        postController.dbController.getAllPropertyPosts
+      ).toHaveBeenCalled();
       expect(
         postController.dbController.getAllPropertyPosts
       ).toHaveBeenCalledWith(propertyId);

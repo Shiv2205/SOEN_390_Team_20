@@ -37,17 +37,8 @@ router.post("/real-estate", async (req, res, next) => {
 
 // 3. /real-estate/company-assets
 router.post('/real-estate/company-assets', async (req, res, next) => {
-  if (!employee_id || typeof employee_id !== "string") {
-    return res
-      .status(400)
-      .send({ error: "Missing required field or wrong data type" }); // bad request
-  }
   try {
     let employee_id = req.body.employee_id;
-    if (!employee_id || typeof(employee_id) !== 'string'){
-      // bad request
-      return res.status(400).send({error: "Missing required field or wrong data type"});
-  }
     const properties = await property.getAllProperties(employee_id);
     res.json(properties);
   } catch (error) {

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/27</span>
+                <span class='fraction'>28/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/27</span>
+                <span class='fraction'>28/28</span>
             </div>
         
             
@@ -110,7 +110,9 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -131,7 +133,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -142,31 +154,23 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const express = require('express');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
 const router = express.Router();
-const PropertyMaster = require('../repo/propertyMaster');
-const unitsHandler = require('./nested_routes/units');
-const postsHandler = require('./nested_routes/posts');
+const PropertyMaster = require("../repo/propertyMaster");
+const unitsHandler = require("./nested_routes/units");
+const postsHandler = require("./nested_routes/posts");
 &nbsp;
 const property = new PropertyMaster();
 &nbsp;
-router.use('/units', unitsHandler);
-router.use('/posts', postsHandler);
+router.use("/units", unitsHandler);
+router.use("/posts", postsHandler);
 &nbsp;
 // Middleware to handle errors consistently
 const errorHandler = (err, req, res, next) =&gt; {
@@ -185,7 +189,7 @@ router.post('/register', async (req, res, next) =&gt; {
 });
 &nbsp;
 // 2. /real-estate
-router.post('/real-estate', async (req, res, next) =&gt; {
+router.post("/real-estate", async (req, res, next) =&gt; {
   try {
     const property_data = await property.getProperty(req.body.property_id);
     res.status(property_data.status).json(property_data);
@@ -197,21 +201,23 @@ router.post('/real-estate', async (req, res, next) =&gt; {
 // 3. /real-estate/company-assets
 router.post('/real-estate/company-assets', async (req, res, next) =&gt; {
   try {
-    const properties = await property.getAllProperties(req.body.employee_id);
-    res.status(properties.status).json(properties);
+    let employee_id = req.body.employee_id;
+    const properties = await property.getAllProperties(employee_id);
+    res.json(properties);
   } catch (error) {
     errorHandler(error, req, res, next);
   }
 });
 &nbsp;
-module.exports = router;</pre></td></tr></table></pre>
+module.exports = router;
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-29T22:23:16.955Z
+                at 2024-02-29T23:36:23.632Z
             </div>
         <script src="../prettify.js"></script>
         <script>
