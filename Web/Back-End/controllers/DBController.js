@@ -136,6 +136,7 @@ class DBController {
             if (err) reject(err);
           }
         );
+        resolve({ status: 400, message: "Something  went wrong" });
       } else {
         resolve({ status: 400, message: "User does not have an account." });
       }

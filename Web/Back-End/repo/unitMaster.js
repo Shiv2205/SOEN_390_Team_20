@@ -9,7 +9,7 @@ class UnitMaster {
     try {
       return await this.dbController.createNewUnit(unitData);
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -17,15 +17,15 @@ class UnitMaster {
     try {
       return await this.dbController.getUnit(unit_id);
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
   async getPropertyUnits(property_id) {
     try {
-        return await this.dbController.getAllUnits(property_id);
+      return await this.dbController.getAllUnits(property_id);
     } catch (error) {
-        console.log(error);
+      return error;
     }
   }
 }

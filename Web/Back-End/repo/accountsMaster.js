@@ -15,7 +15,8 @@ class AccountsMaster {
       const { password, registration_key, created_at, ...public_data } = data;
       return { status, public_data };
     } catch (error) {
-      console.log("Failed to get user from the database.");
+      error.message = "Failed to get user from the database.";
+      return error;
     }
   }
 
@@ -23,7 +24,8 @@ class AccountsMaster {
     try {
       return await this.dbController.getEmployee(email, password);
     } catch (error) {
-      console.log("Failed to get employee from the database.");
+      error.message = "Failed to get employee from the database.";
+      return error;
     }
   }
 
@@ -43,7 +45,8 @@ class AccountsMaster {
       userData.password = hashedPassword;
       return await this.dbController.createNewPublicUser(userData);
     } catch (error) {
-      console.log("Failed to create a new user in the database.");
+      error.message = "Failed to create a new user in the database.";
+      return error;
     }
   }
 
@@ -58,7 +61,8 @@ class AccountsMaster {
     try {
       return await this.dbController.createNewEmployee(employeeData);
     } catch (error) {
-      console.log("Failed to create a new employee in the database.");
+      error.message = "Failed to create a new employee in the database.";
+      return error;
     }
   }
 
@@ -66,14 +70,13 @@ class AccountsMaster {
     try {
       return await this.dbController.getAllEmployees(property_id);
     } catch (error) {
-      console.log(
-        "Failed to get employees for given property in the database."
-      );
+      error.message = "Failed to get employees for given property in the database.";
+      return error;
     }
   }
 
   close() {
-    this.dbController.close();
+    return this.dbController.close();
   }
 }
 

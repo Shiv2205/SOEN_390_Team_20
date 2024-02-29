@@ -5,27 +5,27 @@ class PropertyMaster {
     this.dbController = DBControllerFactory.createInstance();
   }
 
-  async registerNewProperty(propertyData){
+  async registerNewProperty(propertyData) {
     try {
-        return await this.dbController.createNewProperty(propertyData);
+      return await this.dbController.createNewProperty(propertyData);
     } catch (error) {
-        return error;
+      return error;
     }
   }
 
-  async getProperty(property_id){
+  async getProperty(property_id) {
     try {
-        return await this.dbController.getProperty(property_id);
+      return await this.dbController.getProperty(property_id);
     } catch (error) {
-        console.log(error);
+      return error;
     }
   }
 
   async getAllProperties(employee_id) {
     try {
-        return await this.dbController.getAllProperties(employee_id);
+      return await this.dbController.getAllProperties(employee_id);
     } catch (error) {
-        console.log(error);
+      return error;
     }
   }
 }

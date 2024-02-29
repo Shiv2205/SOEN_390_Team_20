@@ -36,11 +36,11 @@ describe("Properties Router", () => {
     it("registers a new property successfully", async () => {
       const mockReq = {
         body: {
-          property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
-          size: 20,
-          monthly_rent: 1700,
-          condo_fee: 5200,
-          condo_balance: 200000,
+          unit_count: 20,
+          locker_count: 10,
+          parking_count: 50,
+          address: "123 Main St",
+          picture: "main_street.jpg",
         },
       };
 

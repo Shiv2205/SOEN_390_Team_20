@@ -59,10 +59,11 @@ jest.mock("uuid", () => ({
 
 describe("DBController", () => {
   let dbController; // = new DBController();//DBController.prototype;
-  const recordExistsTest = require('./utils/recordExistsTest');
+  const recordExistsTest = require("./utils/recordExistsTest");
 
   beforeEach(() => {
     dbController = new DBController();
+    dbController.initialize();
   });
 
   afterEach(() => {
@@ -73,9 +74,11 @@ describe("DBController", () => {
 
   describe("initialize", () => {
     it("should create tables if database does not exist", async () => {
-      let spyStat = jest.spyOn(fs, "stat").mockImplementationOnce((path, callback) =>
-        callback(new Error("File does not exist"))
-      );
+      let spyStat = jest
+        .spyOn(fs, "stat")
+        .mockImplementationOnce((path, callback) =>
+          callback(new Error("File does not exist"))
+        );
 
       await expect(dbController.initialize()).resolves.toEqual({
         init: "Database initialized",
@@ -107,7 +110,11 @@ describe("DBController", () => {
         dbController.createNewPublicUser(testRecord)
       ).resolves.toEqual({ status: 400, message: "User already resgistered!" });
 
-      recordExistsTest(spy, {tableName:"account", fieldName:"email", value:testRecord.email})
+      recordExistsTest(spy, {
+        tableName: "account",
+        fieldName: "email",
+        value: testRecord.email,
+      });
     });
 
     it("should add a new user and return a status 200 and the  inserted id", async () => {
@@ -119,7 +126,11 @@ describe("DBController", () => {
         dbController.createNewPublicUser(testRecord)
       ).resolves.toEqual({ status: 201, account_id: "mock-uuid" });
 
-      recordExistsTest(spy, {tableName:"account", fieldName:"email", value:testRecord.email})
+      recordExistsTest(spy, {
+        tableName: "account",
+        fieldName: "email",
+        value: testRecord.email,
+      });
     });
   });
 
@@ -130,12 +141,26 @@ describe("DBController", () => {
       email: "john@example.com",
     };
 
-    it("", async () => {
+    it("should return { status: 400, message: 'Something  went wrong' }", async () => {
       spy = jest
         .spyOn(dbController, "recordExists")
         .mockResolvedValueOnce(true);
 
-      await expect(dbController.getPublicUser(testRecord.email, testRecord.password)).resolves.toEqual()
-    })
-  })
+      let getPublicUserSPy = jest.spyOn(dbController, "getPublicUser")
+
+      await expect(
+        dbController.getPublicUser(testRecord.email, testRecord.password)
+      ).resolves.toEqual({ status: 400, message: "Something  went wrong" });
+      expect(dbController.db.get).toHaveBeenCalled();
+      expect(getPublicUserSPy).toHaveBeenCalledWith(testRecord.email, testRecord.password);
+
+      recordExistsTest(spy, {
+        tableName: "account",
+        fieldName: "email",
+        value: testRecord.email,
+      });
+    });
+
+
+  });
 });
