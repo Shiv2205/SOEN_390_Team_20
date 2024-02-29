@@ -9,6 +9,7 @@ const signUpRouter = require("./routes/signup");
 const propertyHandler = require('./routes/properties');
 const accountsHandler = require('./routes/accounts');
 
+
 //express app
 const app = express();
 
