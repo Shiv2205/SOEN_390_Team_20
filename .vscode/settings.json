@@ -1,4 +1,5 @@
 {
-    "alva.apiKey": "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",
-    "docwriter.style": "Auto-detect"
+  "alva.apiKey": "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",
+  "docwriter.style": "Auto-detect",
+  "workbench.editor.enablePreview": false
 }

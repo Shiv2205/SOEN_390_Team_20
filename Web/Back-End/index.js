@@ -7,7 +7,7 @@ const loginRouter = require("./routes/login");
 const usersRouter = require("./routes/users");
 const signUpRouter = require("./routes/signup");
 const propertyHandler = require('./routes/properties');
-const propertyViewRouter = require('./routes/propertyview');
+
 
 //express app
 const app = express();
@@ -28,7 +28,6 @@ app.use("/", usersRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signUpRouter);
 app.use("/properties", propertyHandler);
-app.use("/propertyview", propertyViewRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
