@@ -24,7 +24,7 @@ describe("Properties Router", () => {
     it("should handle errors and send 500 response", async () => {
       const err = new Error("Test error");
 
-      jest.spyOn(propertyPrototype, `${methodName}`).mockReturnValue(err);
+      jest.spyOn(propertyPrototype, `${methodName}`).mockImplementationOnce(() => {throw err});
 
       let response = await request(app).post(`${path}`);
       expect(response.status).toEqual(500);

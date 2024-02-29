@@ -6,7 +6,7 @@ const PostsMaster = require('../../repo/postsMaster'); // Adjust the path as per
 const posts = new PostsMaster();
 
 const errorHandler = (err, req, res, next) => {
-    if(err) res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
 };
 
 router.use(errorHandler);

@@ -119,10 +119,7 @@ describe("AccountsMaster", () => {
       const password = "password123";
 
       const result = await accountsController.getUserDetails(email, password);
-      expect(result).toEqual({
-        status: getPublicUserOutput.status,
-        public_data: { ...getPublicUserOutput.data },
-      });
+      expect(result).toEqual(getPublicUserOutput);
       expect(accountsController.dbController.getPublicUser).toHaveBeenCalled();
       expect(
         accountsController.dbController.getPublicUser

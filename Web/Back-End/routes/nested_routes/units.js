@@ -6,7 +6,7 @@ const UnitMaster = require('../../repo/unitMaster');
 const unit = new UnitMaster();
 
 const errorHandler = (err, req, res, next) => {
-    if(err) res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
 };
 
 router.use(errorHandler);
