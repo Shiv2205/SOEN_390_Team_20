@@ -1,20 +1,17 @@
-jest.mock("../../repo/accountsMaster"); // Mock the accountsMaster dependency
-
+jest.mock("../../repo/accountsMaster");
+const router = require("../../routes/signup");
+const AccountsMaster = require("../../repo/accountsMaster");
+const request = require("supertest");
 const express = require("express");
-const router = require("../../routes/signup"); // Replace with actual path
-const accountsMaster = require("../../repo/accountsMaster");
+
+const app = express();
+app.use(express.json());
+app.use(router);
 
 describe("Signup middleware", () => {
-  let mockReq, mockRes, mockNext;
+  const accountPrototype = AccountsMaster.prototype;
 
-  beforeEach(() => {
-    mockReq = {};
-    mockRes = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
-    };
-    mockNext = jest.fn();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -22,69 +19,51 @@ describe("Signup middleware", () => {
 
   // --- Test: Empty request body ---
   it("should send 400 if request body is empty", async () => {
-    mockReq.body = {};
-
-    await router.post("/", (mockReq, mockRes, mockNext) => {
-      expect(mockRes.status).toHaveBeenCalledWith(400);
-      expect(mockRes.send).toHaveBeenCalledWith({
-        response: "Data not received",
-      });
+    const response = await request(app).post("/").send({});
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual({
+      response: "Data not received",
     });
   });
 
   // --- Test: Successful registration ---
   it("should send 201 and success message on successful registration", async () => {
-    mockReq.body = {
-      name: "John Doe",
-      email: "test@example.com",
-      password: "password",
+    let req = {
+      body: {
+        name: "John Doe",
+        email: "test@example.com",
+        password: "password",
+      },
     };
-    const mockDbResponse = { status: 201, message: "User added successfully!" };
-    accountsMaster.mockReturnValue({
-      registerUser: jest.fn().mockResolvedValue(mockDbResponse),
+
+    jest.spyOn(accountPrototype, "registerUser").mockResolvedValue({
+      status: 201,
+      account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
     });
 
-    await router.post("/", (mockReq, mockRes, mockNext) => {
-      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
-      expect(mockRes.status).toHaveBeenCalledWith(201);
-      expect(mockRes.send).toHaveBeenCalledWith({
-        response: "User added successfully!",
-      });
-    });
-  });
-
-  // --- Test: Failed registration (from database) ---
-  it("should send error status and message from database on failed registration", async () => {
-    mockReq.body = { name: "Jane Smith", email: "invalid", password: "weak" };
-    const mockErrorStatus = 409;
-    const mockErrorMessage = "Email already exists";
-    accountsMaster.mockReturnValue({
-      registerUser: jest.fn().mockResolvedValue({
-        status: mockErrorStatus,
-        message: mockErrorMessage,
-      }),
-    });
-
-    await router.post("/", (mockReq, mockRes, mockNext) => {
-      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
-      expect(mockRes.status).toHaveBeenCalledWith(mockErrorStatus);
-      expect(mockRes.send).toHaveBeenCalledWith({
-        response: mockErrorMessage,
-      });
+    const response = await request(app).post("/").send(req.body);
+    expect(accountPrototype.registerUser).toHaveBeenCalledWith(req.body);
+    expect(response.status).toEqual(201);
+    expect(response.body).toEqual({
+      response: "User added successfully!",
     });
   });
 
-  // --- Test: Error handling ---
-  it("should send 500 and error message on internal error", async () => {
-    mockReq.body = { name: "Test User", email: "test", password: "test" };
-    accountsMaster.mockReturnValue({
-      registerUser: jest.fn().mockRejectedValue(new Error("Database error")),
-    });
+  // --- Test: already registered (from database) ---
+  it("should send error status and message from database on existing user", async () => {
+    let req = {
+      body: { name: "Jane Smith", email: "invalid", password: "weak" },
+    };
 
-    await router.post("/", (mockReq, mockRes, mockNext) => {
-      expect(accountsMaster.registerUser).toHaveBeenCalledWith(mockReq.body);
-      expect(mockRes.status).toHaveBeenCalledWith(500);
-      expect(mockRes.send).toHaveBeenCalledWith({ response: "Database error" });
+    jest
+      .spyOn(accountPrototype, "registerUser")
+      .mockResolvedValue({ status: 400, message: "User already resgistered!" });
+
+    const response = await request(app).post("/").send(req.body);
+    expect(accountPrototype.registerUser).toHaveBeenCalledWith(req.body);
+    expect(response.status).toEqual(400);
+    expect(response.body).toEqual({
+      response: "User already resgistered!",
     });
   });
 });

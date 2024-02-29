@@ -1,4 +1,5 @@
 const DBControllerFactory = require("../Factory/DBControllerFactory");
+const bcrypt = require("bcryptjs");
 
 class AccountsMaster {
   constructor() {
@@ -26,7 +27,8 @@ class AccountsMaster {
       );
       return { status, data };
     } catch (error) {
-      console.log("Failed to get user from the database.");
+      error.message = "Failed to get user from the database.";
+      return error;
     }
   }
 
@@ -45,7 +47,8 @@ class AccountsMaster {
     try {
       return await this.dbController.getEmployee(email, password);
     } catch (error) {
-      console.log("Failed to get employee from the database.");
+      error.message = "Failed to get employee from the database.";
+      return error;
     }
   }
 
@@ -55,25 +58,18 @@ class AccountsMaster {
    * @param userData - { fullname, email, password, phoneNumber (optional), profilePicture (optional) }
    * @returns account_id of the newly created account, or error if user is already registered
    */
-  async registerUser({
-    fullname,
-    email,
-    password,
-    phoneNumber = null,
-    profilePicture = null,
-    account_type = "Public",
-  }) {
+  async registerUser(userData) {
     try {
-      return await this.dbController.createNewPublicUser({
-        fullname,
-        email,
-        password,
-        phoneNumber,
-        profilePicture,
-        account_type,
-      });
+      // Hash the password using bcryptjs
+      const saltRounds = 8;
+      const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+
+      // Replace the plain text password with the hashed password
+      userData.password = hashedPassword;
+      return await this.dbController.createNewPublicUser(userData);
     } catch (error) {
-      console.log("Failed to create a new user in the database.");
+      error.message = "Failed to create a new user in the database.";
+      return error;
     }
   }
 
@@ -100,7 +96,8 @@ class AccountsMaster {
         type,
       });
     } catch (error) {
-      console.log("Failed to create a new employee in the database.");
+      error.message = "Failed to create a new employee in the database.";
+      return error;
     }
   }
 
@@ -116,14 +113,13 @@ class AccountsMaster {
     try {
       return await this.dbController.getAllEmployees(property_id);
     } catch (error) {
-      console.log(
-        "Failed to get employees for given property in the database."
-      );
+      error.message = "Failed to get employees for given property in the database.";
+      return error;
     }
   }
 
   close() {
-    this.dbController.close();
+    return this.dbController.close();
   }
 }
 

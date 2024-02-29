@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">93.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/16</span>
+                <span class='fraction'>15/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">93.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/16</span>
+                <span class='fraction'>15/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,19 +95,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -120,20 +120,20 @@ var router = express.Router();
 const AccountsMaster = require('../repo/accountsMaster');
 &nbsp;
 /* The code you provided is a route handler for a POST request to the URL ("/login"). */
-router.post("/", <span class="fstat-no" title="function not covered" >as</span>ync function (req, res, next) {
-  let formData = <span class="cstat-no" title="statement not covered" >req.body;</span>
+router.post("/", async function (req, res, next) {
+  let formData = req.body;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (Object.keys(formData).length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >    res.status(400).send({ response: "Data not received" });</span>
-<span class="cstat-no" title="statement not covered" >    return;</span>
+  if (Object.keys(formData).length === 0) {
+    res.status(400).send({ response: "Data not received" });
+    return;
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    let dbExpert = <span class="cstat-no" title="statement not covered" >new AccountsMaster();</span>
-    let userDetails = <span class="cstat-no" title="statement not covered" >await dbExpert.getUserDetails(formData.email, formData.password);</span>
-<span class="cstat-no" title="statement not covered" >    if(userDetails.status === 202)</span>
-<span class="cstat-no" title="statement not covered" >      res.status(userDetails.status).send({ response: "User logged in successfully!", loginData: userDetails.public_data });</span>
-    else <span class="cstat-no" title="statement not covered" >res.status(userDetails.status).send(userDetails);</span>
+  try {
+    let dbExpert = new AccountsMaster();
+    let userDetails = await dbExpert.getUserDetails(formData.email, formData.password);
+    if(userDetails.status === 202)
+      res.status(userDetails.status).send({ response: "User logged in successfully!", loginData: userDetails.public_data });
+    else res.status(userDetails.status).send(userDetails);
   } 
   catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).send({ response: error.message });</span>
@@ -148,7 +148,7 @@ module.exports = router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-22T06:00:45.528Z
+                at 2024-02-29T22:23:16.955Z
             </div>
         <script src="../prettify.js"></script>
         <script>

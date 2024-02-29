@@ -1,5 +1,13 @@
 {
-  "alva.apiKey": "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",
-  "docwriter.style": "Auto-detect",
-  "workbench.editor.enablePreview": false
+    "alva.apiKey": "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",
+    "docwriter.style": "Auto-detect",
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "jest_data.txt",
+            "database": "${workspaceFolder:SOEN_390_Team_20}/Web/Back-End/data/jest_data.txt"
+        }
+    ]
 }
