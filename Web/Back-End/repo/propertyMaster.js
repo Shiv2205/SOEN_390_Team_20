@@ -27,7 +27,7 @@ class PropertyMaster {
         picture,
       });
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -44,7 +44,7 @@ class PropertyMaster {
     try {
       return await this.dbController.getProperty(property_id);
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -62,7 +62,7 @@ class PropertyMaster {
     try {
       return await this.dbController.getAllProperties(employee_id);
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 }

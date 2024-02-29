@@ -144,3 +144,31 @@ export default SignUp;
 // formData.append("confirmPassword", event.target.confirmPassword.value);
 // formData.append("phoneNumber", event.target.phone.value || "");
 // formData.append("profilePicture", profilePic || null);
+
+/**
+ *   validatePassword(password) {
+    // Example validation rules - Adjust as needed
+    const minLength = 8;
+    const requiresUppercase = true;
+    const requiresLowercase = true;
+    const requiresNumber = true;
+    const requiresSymbol = true;
+
+    return (
+      password.length >= minLength &&
+      requiresUppercase &&
+      /[A-Z]/.test(password) &&
+      requiresLowercase &&
+      /[a-z]/.test(password) &&
+      requiresNumber &&
+      /\d/.test(password) &&
+      requiresSymbol &&
+      /[^A-Za-z0-9]/.test(password)
+    );
+  }
+
+        // Password validation logic
+      if (!this.validatePassword(userData.password)) {
+        throw new Error("Password does not meet security requirements.");
+      }
+ */

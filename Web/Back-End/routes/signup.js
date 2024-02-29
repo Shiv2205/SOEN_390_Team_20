@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const accountsMaster = require('../repo/accountsMaster');
+const AccountsMaster = require('../repo/accountsMaster');
 
 /* The code block `router.post("/", async (req, res, next) => { ... })` is defining a route handler for
 a POST request to the URL ("/signup") of the server. */
@@ -13,7 +13,7 @@ router.post("/", async (req, res, next) => {
     return;
   }
 
-  let dbExpert = new accountsMaster();
+  let dbExpert = new AccountsMaster();
   try {
     let dbResponse = await dbExpert.registerUser(formData);
     if(dbResponse.status === 201) 

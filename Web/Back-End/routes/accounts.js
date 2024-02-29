@@ -5,64 +5,64 @@ const AccountsMaster = require("../repo/accountsMaster");
 const accounts = new AccountsMaster();
 
 // Middleware to handle errors consistently
-router.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong!");
-});
+const errorHandler = (err, req, res, next) => {
+  res.status(500).send({ message: 'Something went wrong!'});
+};
+router.use(errorHandler);
 
 // 1. /register
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   try {
-    const account_id = await accounts.registerUser(req.body);
-    res.json({ account_id });
+    const response = await accounts.registerUser(req.body);
+    res.status(response.status).json({ ...response });
   } catch (error) {
-    next(error); // Pass to error-handling middleware
+    errorHandler(error, req, res, next); // Pass to error-handling middleware
   }
 });
 
 // 2. /users
-router.post("/users", async (req, res) => {
+router.post("/users", async (req, res, next) => {
   try {
     const { status, public_data } = await accounts.getUserDetails(
       req.body.email,
       req.body.password
     );
-    res.status(status).json(public_data);
+    res.status(status).json({status, public_data});
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 
 // 3. /register/employee
-router.post("/register/employee", async (req, res) => {
+router.post("/register/employee", async (req, res, next) => {
   try {
     const result = await accounts.registerEmployee(req.body);
-    res.json(result);
+    res.status(result.status).json(result);
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 
 // 4. /employees
-router.post("/employees", async (req, res) => {
+router.post("/employees", async (req, res, next) => {
   try {
     const employeeDetails = await accounts.getEmployeeDetails(
       req.body.email,
       req.body.password
     );
-    res.json(employeeDetails);
+    res.status(employeeDetails.status).json(employeeDetails);
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 
 //5. //employees/property-agents
-router.post("/employees/property-agents", async (req, res) => {
+router.post("/employees/property-agents", async (req, res, next) => {
   try {
     const employees = await accounts.getPropertyEmployees(req.body.property_id);
-    res.json(employees);
+    res.status(employees.status).json(employees);
   } catch (error) {
-    next(error);
+    errorHandler(error, req, res, next);
   }
 });
 

@@ -15,7 +15,7 @@ class PostsMaster {
     try {
         return await this.dbController.createNewPost({ property_id, creator_id, content, replied_to});
     } catch (error) {
-        console.log(error);
+        return error;
     }
   }
 
@@ -31,7 +31,7 @@ class PostsMaster {
     try {
         return await this.dbController.getAllUserPosts(creator_id);
     } catch (error) {
-        console.log(error);
+        return error;
     }
   }
 
@@ -50,7 +50,7 @@ class PostsMaster {
     try {
         return await this.dbController.getAllPropertyPosts(property_id);
     } catch (error) {
-        console.log(error);
+        return error;
     }
   }
 }
