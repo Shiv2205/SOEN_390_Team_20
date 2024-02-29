@@ -5,7 +5,7 @@ const path = require("path");
 
 const ddlPath = path.join(process.cwd() + "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
-const currentDBPath = path.join(process.cwd() + "/data/test_data.txt");//test_data.txt
+const currentDBPath = path.join(process.cwd() + "/data/test_data.txt"); //test_data.txt
 
 let instance = null;
 
@@ -83,13 +83,14 @@ class DBController {
     });
   }
 
+
   /**
    * The function `createNewPublicUser` creates a new public user in a database if the user does not
    * already exist.
-   * @returns The `createNewPublicUser` function is returning a Promise. If there is no existing user
-   * with the provided email and password, it will insert a new user into the database and resolve the
-   * Promise with the newly created account_id. If an existing user is found, it will reject the
-   * Promise with the message "User already registered!".
+   * @returns The `createNewPublicUser` function returns a Promise that resolves to an object
+   * containing either a status of 201 and the newly created account_id if the user was successfully
+   * created, or a status of 400 and a message indicating that the user is already registered if an
+   * existing user with the same email is found.
    */
   async createNewPublicUser({
     fullname,
@@ -126,7 +127,15 @@ class DBController {
     return new Promise(async (resolve, reject) => {
       if (existingUser) {
         this.db.get(
-          "SELECT * FROM account WHERE email = ? AND password = ?",
+          `SELECT 
+          account_id,
+          fullname,
+          email,
+          phone_number,
+          profile_picture,
+          account_type 
+          FROM account 
+          WHERE email = ? AND password = ?`,
           [email, password],
           function (err, row) {
             if (row) resolve({ status: 202, data: row });
@@ -213,7 +222,10 @@ class DBController {
           }
         );
       } else {
-        resolve({ status: 204, message: "No employees found for given property" });
+        resolve({
+          status: 204,
+          message: "No employees found for given property",
+        });
       }
     });
   }
@@ -235,7 +247,7 @@ class DBController {
         let property_id = uuid.v4();
         this.db.run(
           "INSERT INTO property (property_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
-          [property_id, parking_count, locker_count, address, picture]
+          [property_id, unit_count, parking_count, locker_count, address, picture]
         );
         resolve({ status: 201, property_id: property_id });
       }
@@ -277,7 +289,7 @@ class DBController {
     return new Promise(async (resolve, reject) => {
       if (employeeExists) {
         this.db.all(
-         `SELECT P.*
+          `SELECT P.*
           FROM property P
           WHERE P.property_id IN 
           (SELECT W.property_id
@@ -288,12 +300,16 @@ class DBController {
           [employee_id, "admin"],
           function (err, rows) {
             if (err) reject(err);
-            if(rows) {if (rows.length > 0) resolve({ status: 200, data: rows });}
-
+            if (rows) {
+              if (rows.length > 0) resolve({ status: 200, data: rows });
+            }
           }
         );
       } else {
-        resolve({ status: 204, message: "No properties found for given employee" });
+        resolve({
+          status: 204,
+          message: "No properties found for given employee",
+        });
       }
     });
   }
@@ -334,15 +350,11 @@ class DBController {
   }
 
   async getUnit(unit_id) {
-    let unitExists = await this.recordExists(
-      "unit",
-      "unit_id",
-      unit_id
-    );
+    let unitExists = await this.recordExists("unit", "unit_id", unit_id);
     return new Promise(async (resolve, reject) => {
       if (unitExists) {
         this.db.get(
-         `SELECT 
+          `SELECT 
             unit_id,
             property_id,
             size,
@@ -377,7 +389,7 @@ class DBController {
       const unit_data = [];
       if (unitExists) {
         this.db.all(
-         `SELECT 
+          `SELECT 
             unit_id,
             property_id,
             size,
@@ -391,7 +403,7 @@ class DBController {
           property_id,
           function (err, rows) {
             if (err) reject(err);
-            if(rows) if (rows.length > 0) resolve({ status: 200, data: rows });
+            if (rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
         );
       } else {
@@ -403,36 +415,21 @@ class DBController {
     });
   }
 
-  async createNewPost({
-    property_id,
-    creator_id,
-    content,
-    replied_to=""
-  }) {
+  async createNewPost({ property_id, creator_id, content, replied_to = "" }) {
     return new Promise((resolve, reject) => {
       let post_id = uuid.v4();
       this.db.run(
         `INSERT INTO post 
           (post_id, property_id, creator_id, content, replied_to) 
           VALUES (?, ?, ?, ?, ?)`,
-        [
-          post_id,
-          property_id,
-          creator_id,
-          content,
-          replied_to
-        ]
+        [post_id, property_id, creator_id, content, replied_to]
       );
       resolve({ status: 201, post_id: post_id });
     });
   }
 
   async getAllUserPosts(creator_id) {
-    let postsExists = await this.recordExists(
-      "post",
-      "creator_id",
-      creator_id
-    );
+    let postsExists = await this.recordExists("post", "creator_id", creator_id);
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
@@ -440,7 +437,7 @@ class DBController {
           creator_id,
           function (err, rows) {
             if (err) reject(err);
-            if(rows) if (rows.length > 0) resolve({ status: 200, data: rows });
+            if (rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
         );
       } else {
