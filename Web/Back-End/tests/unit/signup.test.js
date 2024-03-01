@@ -66,4 +66,23 @@ describe("Signup middleware", () => {
       response: "User already resgistered!",
     });
   });
+
+  it("Should send a status 500 with an error message", async () => {
+    let req = { body: { name: "SignUp", email: "Test", password: "Error" } };
+    const mockErrorStatus = 500;
+    const mockErrorMessage = "Test Error";
+    let testError = new Error(mockErrorMessage);
+    let spy = jest
+      .spyOn(accountPrototype, "registerUser")
+      .mockImplementationOnce(() => {
+        throw testError;
+      });
+
+    const response = await request(app).post("/").send(req.body);
+    expect(accountPrototype.registerUser).toHaveBeenCalledWith(req.body);
+    expect(response.status).toEqual(mockErrorStatus);
+    expect(response.body).toEqual({
+      response: mockErrorMessage,
+    });
+  });
 });
