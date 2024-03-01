@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/PropertyView.css";
+import BellIcon from '../components/BellIcon';
 
 function PropertyView({ userData }) {
   const [propertyInfo, setPropertyInfo] = useState(null);
@@ -36,8 +37,13 @@ function PropertyView({ userData }) {
     return <div>Loading...</div>;
   }
 
+  const handleBellClick = () => {
+    setIsNotificationsVisible(true);
+  };
+
   return (
     <div className="property-view-container">
+      <BellIcon onClick={handleBellClick} />
       <div className="property-card">
         <div className="property-image-container">
             <p>{propertyInfo.address}</p>

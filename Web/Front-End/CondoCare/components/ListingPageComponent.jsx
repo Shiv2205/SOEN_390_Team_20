@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ListingComponent from './ListingComponent';
+import BellIcon from '../components/BellIcon';
 
 const ListingsPageComponent = ({ userData, setView, views }) => {
     const [propertyList, setPropertyList] = useState([]);
@@ -31,8 +32,13 @@ const ListingsPageComponent = ({ userData, setView, views }) => {
         fetchPropertyList();
     }, [userData.account_id]);
 
+    const handleBellClick = () => {
+        setIsNotificationsVisible(true);
+      };
+
     return (
         <div className="listings-page">
+            <BellIcon onClick={handleBellClick} />
             <h1 style={{ color: 'black' }}>Property Listings</h1>
             {/* <img src={propertyList.data[0].picture}></img> */}
             {

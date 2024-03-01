@@ -1,5 +1,6 @@
 import { useState } from "react";
 import blank from "../src/assets/blank.webp"
+import BellIcon from '../components/BellIcon';
 
 
 function Profile( {userData, setView, views} ) {
@@ -16,8 +17,13 @@ function Profile( {userData, setView, views} ) {
     }
     //console.log(reader.readAsBinaryString(userData.profile_picture));
 
+    const handleBellClick = () => {
+        setIsNotificationsVisible(true);
+      };
+
     return (
         <div className="profile-container">
+            <BellIcon onClick={handleBellClick} />
             <button onClick={() => setView(views.PROPERTYPAGE)}></button>
             <h2> Profile </h2>
             <div className="profile-info">

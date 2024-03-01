@@ -1,5 +1,6 @@
 import React,  { useState } from 'react';
 import "../src/PropertyRegistration.css";
+import BellIcon from '../components/BellIcon';
 
 
 function PropertyRegistration() {
@@ -11,6 +12,10 @@ function PropertyRegistration() {
         address: '',
         picture: ''
     });
+
+    const handleBellClick = () => {
+        setIsNotificationsVisible(true);
+      };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,6 +33,7 @@ function PropertyRegistration() {
     return (
 
         <form onSubmit={handleSubmit}>
+            <BellIcon onClick={handleBellClick} />
             <h2>Add a new property</h2>
             <div>
                 <label>Unit Count</label>
