@@ -3,7 +3,7 @@ const fs = require("fs");
 const uuid = require("uuid");
 const path = require("path");
 
-const currentDB = 'jest_data.txt';//test_data.txt
+const currentDB = 'test_data.txt';//test_data.txt
 const ddlPath = path.join(process.cwd() + "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
 const currentDBPath = path.join(process.cwd() + `/data/${currentDB}`);
@@ -32,7 +32,6 @@ class DBController {
         if (err) {
           console.log("Database does not exist");
           this.db.serialize(() => {
-            console.log("Inside actual function")
             let ddl = fs.readFileSync(ddlPath, "utf8");
             let tables = ddl.split(";--");
             tables.map((createTable) => {
@@ -53,7 +52,7 @@ class DBController {
       fs.stat(currentDBPath, (err, stats) => {
         if (!err) {
           console.log("Database ready");
-          this.db = new sqlite3.cached.Database(currentDBPath);
+          this.db = new sqlite3.Database(currentDBPath);
           this.db.serialize(() => {
             let ddl = fs.readFileSync(testData, "utf8");
             let tables = ddl.split(";");
@@ -65,7 +64,7 @@ class DBController {
           });
           resolve({ populate: "Database populated" });
         } else {
-          console.log({ populate: "Database does not exist" });
+          reject({ populate: "Database does not exist" });
         }
       });
     });
@@ -78,7 +77,6 @@ class DBController {
         { $record_id: record_id },
 
         function (err, row) {
-          console.log("Inside recordExists: ", row);
           if (row.count > 0) resolve(true);
           else resolve(false);
         }
@@ -145,7 +143,6 @@ class DBController {
             if (err) reject(err);
           }
         );
-        resolve({ status: 400, message: "Something  went wrong" });
       } else {
         resolve({ status: 400, message: "User does not have an account." });
       }
@@ -166,12 +163,12 @@ class DBController {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise(async (resolve, reject) => {
       if (!existingUser) {
-        employee_id = await this.createNewPublicUser({
+        let employee_id = (await this.createNewPublicUser({
           fullname,
           email,
           password,
           account_type: "Employee",
-        });
+        })).account_id;
         this.db.run(
           "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",
           [employee_id, property_id, type]
@@ -179,11 +176,12 @@ class DBController {
         resolve({ status: 201, employee_id: employee_id });
       } else {
         existingUser = await this.getPublicUser(email, password);
+        let account_id = existingUser.data.account_id;
         this.db.run(
           "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",
-          [existingUser.account_id, property_id, type]
+          [account_id, property_id, type]
         );
-        resolve({ status: 201, employee_id: existingUser.account_id });
+        resolve({ status: 201, employee_id: account_id });
       }
     });
   }
@@ -461,7 +459,7 @@ class DBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE post_id = ?;",
+          "SELECT * FROM post WHERE replied_to = ?;",
           post_id,
           function (err, rows) {
             if (err) reject(err);
@@ -509,7 +507,7 @@ class DBController {
   close() {
     this.db.close((err) => {
       if (err) {
-        console.error("Error closing database:", err);
+        console.log("Error closing database:", err);
       } else {
         console.log("Database connection closed.");
       }

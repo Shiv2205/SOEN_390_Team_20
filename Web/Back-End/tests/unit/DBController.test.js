@@ -1,40 +1,16 @@
 const DBController = require("../../controllers/DBController");
 const fs = require("fs");
-//const sqlite3 = require('sqlite3');
-
-// jest.mock("../../controllers/DBController", () => {
-//   // return jest.fn().mockImplementation(() => ({
-//   //   initialize: jest.fn(async () => {
-//   //     return new Promise((resolve) => resolve({ init: "Database ready" }));
-//   //   }),
-//   //   populate: jest.fn(),
-//   //   recordExists: jest.fn(),
-//   //   createNewPublicUser: jest.fn(),
-//   //   getPublicUser: jest.fn(),
-//   //   createNewEmployee: jest.fn(),
-//   //   getEmployee: jest.fn(),
-//   //   getAllEmployees: jest.fn(),
-//   //   createNewProperty: jest.fn(),
-//   //   getProperty: jest.fn(),
-//   //   getAllProperties: jest.fn(),
-//   //   createNewUnit: jest.fn(),
-//   //   getUnit: jest.fn(),
-//   //   getAllUnits: jest.fn(),
-//   //   createNewPost: jest.fn(),
-//   //   getAllUserPosts: jest.fn(),
-//   //   getAllPropertyPosts: jest.fn(),
-//   //   close: jest.fn(),
-//   // }));
-// }).requireActual("../../controllers/DBController");
 
 // Mock dependencies
 jest.mock("sqlite3", () => ({
   verbose: jest.fn(() => ({
     Database: jest.fn(() => ({
-      serialize: jest.fn(),
-      run: jest.fn(),
-      get: jest.fn(),
-      all: jest.fn(),
+      serialize: jest.fn((callback) => callback()),
+      run: jest.fn((query, values) => {}),
+      get: jest.fn((query, values, callback) => {
+        callback(null, { count: 0 });
+      }),
+      all: jest.fn((query, values) => {}),
       close: jest.fn(),
     })),
     cached: {
@@ -51,15 +27,14 @@ jest.mock("sqlite3", () => ({
 
 jest.mock("fs", () => ({
   stat: jest.fn((path, callback) => callback(null, {})),
-  readFileSync: jest.fn(),
+  readFileSync: jest.fn(() => "Test string ;-- String test"),
 }));
 jest.mock("uuid", () => ({
   v4: jest.fn(() => "mock-uuid"),
 }));
 
 describe("DBController", () => {
-  let dbController; // = new DBController();//DBController.prototype;
-  const recordExistsTest = require("./utils/recordExistsTest");
+  let dbController;
 
   beforeEach(() => {
     dbController = new DBController();
@@ -77,7 +52,7 @@ describe("DBController", () => {
       let spyStat = jest
         .spyOn(fs, "stat")
         .mockImplementationOnce((path, callback) =>
-          callback(new Error("File does not exist"))
+          callback("File does not exist", {})
         );
 
       await expect(dbController.initialize()).resolves.toEqual({
@@ -85,7 +60,8 @@ describe("DBController", () => {
       });
 
       expect(spyStat).toHaveBeenCalled(); // DDL
-      expect(dbController.db.serialize).toHaveBeenCalledTimes(1);
+      expect(dbController.db.serialize).toHaveBeenCalled();
+      expect(dbController.db.run).toHaveBeenCalled();
     });
 
     it("should not create tables if database exists", async () => {
@@ -95,72 +71,90 @@ describe("DBController", () => {
     });
   });
 
-  describe("createNewPublicUser", () => {
-    let spy;
-    let testRecord = {
-      fullname: "John Doe",
-      email: "john@example.com",
-    };
-    it("should return status code 400 if user exists", async () => {
-      spy = jest
-        .spyOn(dbController, "recordExists")
-        .mockResolvedValueOnce(true);
+  describe("populate", () => {
+    let spyStat;
+    it("should populate tables if database exists", async () => {
+      spyStat = jest.spyOn(fs, "stat");
 
-      await expect(
-        dbController.createNewPublicUser(testRecord)
-      ).resolves.toEqual({ status: 400, message: "User already resgistered!" });
-
-      recordExistsTest(spy, {
-        tableName: "account",
-        fieldName: "email",
-        value: testRecord.email,
+      await expect(dbController.populate()).resolves.toEqual({
+        populate: "Database populated",
       });
+
+      expect(spyStat).toHaveBeenCalled(); // DDL
+      expect(dbController.db.serialize).toHaveBeenCalled();
+      expect(dbController.db.run).toHaveBeenCalled();
     });
 
-    it("should add a new user and return a status 200 and the  inserted id", async () => {
-      spy = jest
-        .spyOn(dbController, "recordExists")
-        .mockResolvedValueOnce(false);
+    it("should not populate tables if database does not exist", async () => {
+      spyStat = jest
+        .spyOn(fs, "stat")
+        .mockImplementationOnce((path, callback) => callback(true, {}));
 
-      await expect(
-        dbController.createNewPublicUser(testRecord)
-      ).resolves.toEqual({ status: 201, account_id: "mock-uuid" });
-
-      recordExistsTest(spy, {
-        tableName: "account",
-        fieldName: "email",
-        value: testRecord.email,
+      await expect(dbController.populate()).rejects.toEqual({
+        populate: "Database does not exist",
       });
     });
   });
 
-  describe("getPublicUser", () => {
-    let spy;
-    let testRecord = {
-      password: "John Doe",
-      email: "john@example.com",
-    };
-
-    it("should return { status: 400, message: 'Something  went wrong' }", async () => {
-      spy = jest
-        .spyOn(dbController, "recordExists")
-        .mockResolvedValueOnce(true);
-
-      let getPublicUserSPy = jest.spyOn(dbController, "getPublicUser")
+  describe("recordExists", () => {
+    it("should resolve to true if record exists", async () => {
+      let spy = jest
+        .spyOn(dbController.db, "get")
+        .mockImplementationOnce((query, values, callback) => {
+          callback(null, { count: 5 });
+        });
 
       await expect(
-        dbController.getPublicUser(testRecord.email, testRecord.password)
-      ).resolves.toEqual({ status: 400, message: "Something  went wrong" });
-      expect(dbController.db.get).toHaveBeenCalled();
-      expect(getPublicUserSPy).toHaveBeenCalledWith(testRecord.email, testRecord.password);
-
-      recordExistsTest(spy, {
-        tableName: "account",
-        fieldName: "email",
-        value: testRecord.email,
-      });
+        dbController.recordExists("testTable", "test_col", "test_value")
+      ).resolves.toBeTruthy();
+      expect(spy).toHaveBeenCalledWith(
+        spy.mock.calls[0][0],
+        { $record_id: "test_value" },
+        spy.mock.calls[0][2]
+      );
     });
 
+    it("should resolve to false if record does not exist", async () => {
+      let spy = jest.spyOn(dbController.db, "get");
 
+      await expect(
+        dbController.recordExists("testTable", "test_col", "test_value")
+      ).resolves.toBeFalsy();
+      expect(spy).toHaveBeenCalledWith(
+        spy.mock.calls[0][0],
+        { $record_id: "test_value" },
+        spy.mock.calls[0][2]
+      );
+    });
+  });
+
+  describe("close", () => {
+    let closeSpy;
+    let consoleSpy = jest.spyOn(console, "log");
+    it("should log error if error is thrown", () => {
+      let testError = new Error("test error");
+      closeSpy = jest
+        .spyOn(dbController.db, "close")
+        .mockImplementationOnce((callback) => callback(testError));
+
+      dbController.close();
+      expect(closeSpy).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Error closing database:",
+        testError
+      );
+    });
+
+    it("should log success message upon successful close", () => {
+      closeSpy = jest
+        .spyOn(dbController.db, "close")
+        .mockImplementationOnce((callback) => callback(false));
+
+      dbController.close();
+      expect(closeSpy).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalledWith("Database connection closed.");
+    });
   });
 });
