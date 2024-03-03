@@ -23,11 +23,11 @@ router.post("/register", async (req, res, next) => {
 // 2. /users
 router.post("/users", async (req, res, next) => {
   try {
-    const { status, public_data } = await accounts.getUserDetails(
+    const { status, data } = await accounts.getUserDetails(
       req.body.email,
       req.body.password
     );
-    res.status(status).json({status, public_data});
+    res.status(status).json({status, data});
   } catch (error) {
     errorHandler(error, req, res, next);
   }

@@ -15,7 +15,7 @@ router.post("/", async function (req, res, next) {
     let dbExpert = new AccountsMaster();
     let userDetails = await dbExpert.getUserDetails(formData.email, formData.password);
     if(userDetails.status === 202)
-      res.status(userDetails.status).send({ response: "User logged in successfully!", loginData: userDetails.public_data });
+      res.status(userDetails.status).send({ response: "User logged in successfully!", loginData: userDetails.data });
     else res.status(userDetails.status).send(userDetails);
   } 
   catch (error) {
