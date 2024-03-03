@@ -15,7 +15,7 @@ const app = express();
 
 //Handle CORS
 const corsOptions = {
-  origin: ["http://localhost:5173", 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld']
+  origin: ["http://localhost:5173", 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld', 'https://soen-390-team-20.vercel.app/']
 };
 
 //Utils
