@@ -14,7 +14,7 @@ describe("Login middleware", () => {
   beforeEach(() => {
     jest.spyOn(accountPrototype, "getUserDetails").mockResolvedValue({
       status: 202,
-      public_data: { account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9" },
+      data: { account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9" },
     });
   });
 

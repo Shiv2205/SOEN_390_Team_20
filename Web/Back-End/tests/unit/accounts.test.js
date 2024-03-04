@@ -86,7 +86,7 @@ describe("Express accounts", () => {
       expect(response.status).toEqual(200);
       expect(response.body).toEqual({
         status: 200,
-        public_data: { name: "John Doe" },
+        data: { name: "John Doe" },
       });
       expect(accountPrototype.getUserDetails).toHaveBeenCalledWith(req.body.email, req.body.password);
       expect(accountPrototype.getUserDetails).toHaveBeenCalledTimes(1);
