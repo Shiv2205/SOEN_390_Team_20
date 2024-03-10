@@ -1,9 +1,15 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
 import bcrypt from "bcryptjs";
-import { UserData, EmployeeData, PublicUserData } from "../types/DBTypes";
+import {
+  UserData,
+  EmployeeData,
+  PublicUserData,
+  EmployeeDetails,
+  IDBController,
+} from "../types/DBTypes";
 
 class AccountsMaster {
-  private dbController: any; // You might want to replace 'any' with the actual type of dbController
+  readonly dbController: IDBController; // You might want to replace 'any' with the actual type of dbController
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();
@@ -25,16 +31,11 @@ class AccountsMaster {
   async getUserDetails(
     email: string,
     password: string
-  ): Promise<{ status: number; data: PublicUserData }> {
-    try {
-      const { status, data } = await this.dbController.getPublicUser(
-        email,
-        password
-      );
-      return { status, data };
-    } catch (error) {
-      throw new Error("Failed to get user from the database.");
-    }
+  ): Promise<{ status: number; data: PublicUserData } | Error> {
+    let result = await this.dbController.getPublicUser(email, password);
+    if (result.message) return new Error(result.message);
+
+    return result as { status: number; data: PublicUserData };
   }
 
   /**
@@ -51,13 +52,10 @@ class AccountsMaster {
   async getEmployeeDetails(
     email: string,
     password: string
-  ): Promise<any | Error> {
-    try {
-      return await this.dbController.getEmployee(email, password);
-    } catch (error) {
-      const err: Error = new Error("Failed to get employee from the database.");
-      return err;
-    }
+  ): Promise<{ status: number; data: EmployeeDetails } | Error> {
+    let result = await this.dbController.getEmployee(email, password);
+    if (result.message) return new Error(result.message);
+    return result as { status: number; data: EmployeeDetails };
   }
 
   /**
@@ -68,25 +66,16 @@ class AccountsMaster {
    */
   async registerUser(
     userData: UserData
-  ): Promise<
-    | { status: number; account_id: string }
-    | { status: number; message: string }
-    | Error
-  > {
-    try {
-      // Hash the password using bcryptjs
-      const saltRounds = 8;
-      const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
+  ): Promise<{ status: number; account_id: string } | Error> {
+    // Hash the password using bcryptjs
+    const saltRounds = 8;
+    const hashedPassword = await bcrypt.hash(userData.password, saltRounds);
 
-      // Replace the plain text password with the hashed password
-      userData.password = hashedPassword;
-      return await this.dbController.createNewPublicUser(userData);
-    } catch (error) {
-      const err: Error = new Error(
-        "Failed to create a new user in the database."
-      );
-      return err;
-    }
+    // Replace the plain text password with the hashed password
+    userData.password = hashedPassword;
+    let result = await this.dbController.createNewPublicUser(userData);
+    if (result.message) return new Error(result.message);
+    return result as { status: number; account_id: string };
   }
 
   /**
@@ -96,15 +85,12 @@ class AccountsMaster {
    * @returns The `registerEmployee` function is returning the result of
    * `this.dbController.createNewEmployee(employeeData)` after awaiting its completion.
    */
-  async registerEmployee(employeeData: EmployeeData): Promise<any | Error> {
-    try {
-      return await this.dbController.createNewEmployee(employeeData);
-    } catch (error) {
-      const err: Error = new Error(
-        "Failed to create a new employee in the database."
-      );
-      return err;
-    }
+  async registerEmployee(
+    employeeData: EmployeeData
+  ): Promise<{ status: number; employee_id: string } | Error> {
+    let result = await this.dbController.createNewEmployee(employeeData);
+    if (result.message) return new Error(result.message);
+    return result as { status: number; employee_id: string };
   }
 
   /**
@@ -115,15 +101,12 @@ class AccountsMaster {
    * @returns The `getPropertyEmployees` function is returning a promise that resolves to the result of
    * calling the `getAllEmployees` method on the `dbController` with the `property_id` parameter.
    */
-  async getPropertyEmployees(property_id: string): Promise<any | Error> {
-    try {
-      return await this.dbController.getAllEmployees(property_id);
-    } catch (error) {
-      const err: Error = new Error(
-        "Failed to get employees for given property in the database."
-      );
-      return err;
-    }
+  async getPropertyEmployees(
+    property_id: string
+  ): Promise<{ status: number; data: EmployeeDetails[] } | Error> {
+    let result = await this.dbController.getAllEmployees(property_id);
+    if (result.message) return new Error(result.message);
+    return result as { status: number; data: EmployeeDetails[] };
   }
 
   close() {

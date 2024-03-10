@@ -1,9 +1,8 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
-import { UnitData, UnitDetails } from '../types/DBTypes';
-
+import { IDBController, UnitData, UnitDetails } from "../types/DBTypes";
 
 class UnitMaster {
-  private dbController: any;
+  readonly dbController: IDBController;
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();
@@ -15,12 +14,12 @@ class UnitMaster {
    * @returns The `registerUnit` function is returning the result of `this.dbController.createNewUnit`
    * after awaiting its completion.
    */
-  async registerUnit(unit: UnitData) {
-    try {
-      return await this.dbController.createNewUnit(unit);
-    } catch (error) {
-      throw error as Error;
-    }
+  async registerUnit(
+    unit: UnitData
+  ): Promise<{ status: number; unit_id: string } | Error> {
+    let result = await this.dbController.createNewUnit(unit);
+    if (result instanceof Error) return result as Error;
+    return result as { status: number; unit_id: string };
   }
 
   /**
@@ -31,12 +30,12 @@ class UnitMaster {
    * @returns The `getUnit` function is returning the result of `this.dbController.getUnit(unit_id)`
    * after awaiting its completion.
    */
-  async getUnit(unit_id: string) {
-    try {
-      return await this.dbController.getUnit(unit_id);
-    } catch (error) {
-      throw error as Error;
-    }
+  async getUnit(
+    unit_id: string
+  ): Promise<{ status: number; data?: UnitDetails; message?: string } | Error> {
+    let result = await this.dbController.getUnit(unit_id);
+    if (result instanceof Error) return result as Error;
+    return result;
   }
 
   /**
@@ -48,12 +47,14 @@ class UnitMaster {
    * @returns The `getPropertyUnits` function is returning a promise that resolves to the result of
    * calling `this.dbController.getAllUnits(property_id)`.
    */
-  async getPropertyUnits(property_id: string):  Promise<{status: number; data?: UnitDetails[]; message?: string}> {
-    try {
-      return await this.dbController.getAllUnits(property_id);
-    } catch (error) {
-      throw error as Error;
-    }
+  async getPropertyUnits(
+    property_id: string
+  ): Promise<
+    { status: number; data?: UnitDetails[]; message?: string } | Error
+  > {
+    let result = await this.dbController.getAllUnits(property_id);
+    if (result instanceof Error) return result as Error;
+    return result;
   }
 }
 

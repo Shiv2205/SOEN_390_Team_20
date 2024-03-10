@@ -1,8 +1,8 @@
-const express = require("express");
-const router = require("../Back-End/routes/nested_routes/posts"); // Adjust the path as per your project structure
-jest.mock("../../repo/postsMaster");
-const PostsMaster = require("../Back-End/repo/postsMaster");
-const request = require("supertest");
+import express from "express";
+import request from "supertest";
+import router from "../../routes/nested_routes/posts";
+import PostsMaster from "../../repo/postsMaster";
+import { PostDetails, UnitDetails } from "../../types/DBTypes";
 
 const app = express();
 app.use(express.json());
@@ -19,15 +19,29 @@ describe("Posts Router", () => {
   });
 
   // Error-handling
-  const errorHandler = async (path, methodName) => {
+  const errorHandler = async (path: string, methodName: string) => {
     it("should handle errors and send 500 response", async () => {
-      const err = new Error("Test error");
+      const err = new Error("Test Error");
       let tempPrototype = PostsMaster.prototype;
-      jest.spyOn(tempPrototype, `${methodName}`).mockReturnValue(err);
+      let methodSpy;
 
-      let response = await request(app).post(`${path}`);
+      switch (methodName) {
+        case "createPost":
+          methodSpy = jest.spyOn(tempPrototype, "createPost");
+          break;
+        case "getPropertyPosts":
+          methodSpy = jest.spyOn(tempPrototype, "getPropertyPosts");
+          break;
+        default:
+          methodSpy = jest.spyOn(tempPrototype, "getUserPosts");
+          break;
+      }
+
+      methodSpy.mockResolvedValue(err);
+
+      let response = await request(app).post(path);
       expect(response.status).toEqual(500);
-      expect(response.body.error).toEqual("Internal Server Error");
+      expect(response.body.message).toEqual("Test Error");
     });
   };
 
@@ -41,22 +55,12 @@ describe("Posts Router", () => {
         },
       };
 
-      const result = { status: 201, data:  {
-        id: "1",
-        title: "Test Post",
-        content: "This is a test post.",
-        creator_id: "12345678-1234-1234-1234-123456789012",
-      }};
+      const result = { status: 201, post_id: "123"};
 
       jest.spyOn(postsPrototype, "createPost").mockResolvedValue(result);
 
       let response = await request(app).post("/create").send(mockReq.body);
-      expect(response.body.data).toEqual({
-        id: "1",
-        title: "Test Post",
-        content: "This is a test post.",
-        creator_id: "12345678-1234-1234-1234-123456789012",
-      });
+      expect(response.body).toEqual(result);
       expect(response.status).toEqual(201);
       expect(postsPrototype.createPost).toHaveBeenCalledWith(mockReq.body);
     });
@@ -70,18 +74,20 @@ describe("Posts Router", () => {
         body: { creator_id: "12345678-1234-1234-1234-123456789012" },
       };
 
-      const posts = [
+      const posts: PostDetails[] = [
         {
-          id: "1",
-          title: "Test Post 1",
-          content: "This is a test post 1.",
-          creator_id: "12345678-1234-1234-1234-123456789012",
+          property_id: "test-prop-id",
+          creator_id: "test-creator-id",
+          content: "test constent",
+          post_id: "test-port-id",
+          posted_at: "test-timestamp",
         },
         {
-          id: "2",
-          title: "Test Post 2",
-          content: "This is a test post 2.",
-          creator_id: "12345678-1234-1234-1234-123456789012",
+          property_id: "test-prop-id-2",
+          creator_id: "test-creator-id-2",
+          content: "test constent 2",
+          post_id: "test-port-id-2",
+          posted_at: "test-timestamp-2",
         },
       ];
 
@@ -106,20 +112,20 @@ describe("Posts Router", () => {
         body: { property_id: "12345678-1234-1234-1234-123456789012" },
       };
 
-      const posts = [
+      const posts: PostDetails[] = [
         {
-          id: "1",
-          title: "Test Post 1",
-          content: "This is a test post 1.",
-          creator_id: "12345678-1234-1234-1234-123456789012",
-          property_id: "12345678-1234-1234-1234-123456789012",
+          property_id: "test-prop-id",
+          creator_id: "test-creator-id",
+          content: "test constent",
+          post_id: "test-port-id",
+          posted_at: "test-timestamp",
         },
         {
-          id: "2",
-          title: "Test Post 2",
-          content: "This is a test post 2.",
-          creator_id: "12345678-1234-1234-1234-123456789012",
-          property_id: "12345678-1234-1234-1234-123456789012",
+          property_id: "test-prop-id-2",
+          creator_id: "test-creator-id-2",
+          content: "test constent 2",
+          post_id: "test-port-id-2",
+          posted_at: "test-timestamp-2",
         },
       ];
 

@@ -1,9 +1,30 @@
-const DBController = require("../Back-End/controllers/DBController");
-const fs = require("fs");
+import DBController from "../../controllers/DBController";
+import fs, {PathLike, Stats} from "fs";
 
 // Mock dependencies
 jest.mock("sqlite3", () => ({
-  verbose: jest.fn(() => ({
+  Database: jest.fn(() => ({
+    serialize: jest.fn((callback?: (() => void) | undefined): void => {if(callback) callback()}), //if(callback) callback()
+    run: jest.fn((query, values?: any) => {}),
+    get: jest.fn(
+      (
+        query,
+        values?: any,
+        callback?: ((err: Error | null, row: {}) => void) | undefined
+      ) => {
+        if (callback) callback(null, { count: 0 });
+      }
+    ),
+    all: jest.fn((
+      query,
+      values?: any,
+      callback?: ((err: Error | null, row: [{}]) => void) | undefined
+    ) => {
+      if (callback) callback(null, [{ count: 0 }]);
+    }),
+    close: jest.fn(),
+  })),
+  cached: {
     Database: jest.fn(() => ({
       serialize: jest.fn((callback) => callback()),
       run: jest.fn((query, values) => {}),
@@ -13,20 +34,17 @@ jest.mock("sqlite3", () => ({
       all: jest.fn((query, values) => {}),
       close: jest.fn(),
     })),
-    cached: {
-      Database: jest.fn(() => ({
-        serialize: jest.fn(),
-        run: jest.fn(),
-        get: jest.fn(),
-        all: jest.fn(),
-        close: jest.fn(),
-      })),
-    },
-  })),
+  },
 }));
 
 jest.mock("fs", () => ({
-  stat: jest.fn((path, callback) => callback(null, {})),
+  stat: jest.fn(
+    (
+      path,
+      undefined, 
+      callback: (err: NodeJS.ErrnoException | null, stats: fs.Stats) => void
+    ) =>{ callback(null, {} as fs.Stats)}
+  ), //((path, callback) => callback(null, {})),
   readFileSync: jest.fn(() => "Test string ;-- String test"),
 }));
 jest.mock("uuid", () => ({
@@ -34,25 +52,21 @@ jest.mock("uuid", () => ({
 }));
 
 describe("DBController", () => {
-  let dbController;
+  let dbController = new DBController();
 
   beforeEach(() => {
-    dbController = new DBController();
     dbController.initialize();
   });
 
   afterEach(() => {
-    // Close the database connection after each test
-    dbController.close();
     jest.clearAllMocks();
   });
-
   describe("initialize", () => {
-    it("should create tables if database does not exist", async () => {
+    it("should create tables if database does not exist",  async () => {
       let spyStat = jest
         .spyOn(fs, "stat")
-        .mockImplementationOnce((path, callback) =>
-          callback("File does not exist", {})
+        .mockImplementationOnce((path: PathLike, undefined, callback: (err: NodeJS.ErrnoException | null, stats: Stats ) => void) =>
+          {callback(new Error("File does not exist"), {} as fs.Stats)}
         );
 
       await expect(dbController.initialize()).resolves.toEqual({
@@ -88,7 +102,9 @@ describe("DBController", () => {
     it("should not populate tables if database does not exist", async () => {
       spyStat = jest
         .spyOn(fs, "stat")
-        .mockImplementationOnce((path, callback) => callback(true, {}));
+        .mockImplementationOnce((path, options, callback) =>
+          callback(new Error(), {} as fs.Stats)
+        );
 
       await expect(dbController.populate()).rejects.toEqual({
         populate: "Database does not exist",
@@ -102,6 +118,7 @@ describe("DBController", () => {
         .spyOn(dbController.db, "get")
         .mockImplementationOnce((query, values, callback) => {
           callback(null, { count: 5 });
+          return dbController.db;
         });
 
       await expect(
@@ -135,7 +152,9 @@ describe("DBController", () => {
       let testError = new Error("test error");
       closeSpy = jest
         .spyOn(dbController.db, "close")
-        .mockImplementationOnce((callback) => callback(testError));
+        .mockImplementationOnce((callback) => {
+          if (callback) callback(testError);
+        });
 
       dbController.close();
       expect(closeSpy).toHaveBeenCalled();
@@ -149,7 +168,9 @@ describe("DBController", () => {
     it("should log success message upon successful close", () => {
       closeSpy = jest
         .spyOn(dbController.db, "close")
-        .mockImplementationOnce((callback) => callback(false));
+        .mockImplementationOnce((callback) => {
+          if (callback) callback(null);
+        });
 
       dbController.close();
       expect(closeSpy).toHaveBeenCalled();

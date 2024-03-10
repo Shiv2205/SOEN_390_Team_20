@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, Router } from "express";
+import express from "express";
 import request from "supertest";
 import router from "../../routes/login"; // Update this with your router file name
 import AccountsMaster from "../../repo/accountsMaster";
@@ -7,28 +7,11 @@ const app = express();
 app.use(express.json());
 app.use(router);
 
-const accountsMasterMock = jest.mock("../../repo/accountsMaster", () => {
-  return {
-    __esModule: true,
-    default: jest.fn().mockImplementation(() => ({
-      registerUser: jest.fn(),
-      getUserDetails: jest.fn((email: string, password: string) => ({
-        status: 202,
-        data: { account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9" },
-      })),
-      registerEmployee: jest.fn(),
-      getEmployeeDetails: jest.fn(),
-      getPropertyEmployees: jest.fn(),
-    })),
-  };
-});
-
 describe("Login middleware", () => {
-  let accountPrototype: jest.Mocked<AccountsMaster>;
+  const accountPrototype = AccountsMaster.prototype;
 
   beforeEach(() => {
     //
-    accountPrototype = AccountsMaster.prototype as jest.Mocked<AccountsMaster>;
   });
 
   afterEach(() => {
@@ -47,17 +30,30 @@ describe("Login middleware", () => {
   // --- Test: Successful login ---
   it("should send 202 and login data on successful login", async () => {
     let req = { body: { email: "michael@example.com", password: "password6" } };
+    let res = {
+      status: 202,
+      data: {
+        account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
+        fullname: "Michael Scott",
+        email: "michael@example.com",
+        account_type: "Public",
+      },
+    }
+
+    jest
+      .spyOn(accountPrototype, "getUserDetails")
+      .mockResolvedValueOnce(res);
 
     const response = await request(app).post("/").send(req.body);
-    let accountsSpy = jest.spyOn(accountPrototype, "getUserDetails");
+
     expect(accountPrototype.getUserDetails).toHaveBeenCalledWith(
       "michael@example.com",
       "password6"
     );
-    expect(response.status).toEqual(202);
+    expect(response.status).toEqual(res.status);
     expect(response.body).toEqual({
       response: "User logged in successfully!",
-      loginData: { account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9" },
+      loginData: res.data,
     });
   });
 
@@ -66,18 +62,14 @@ describe("Login middleware", () => {
     let req = { body: { email: "invalid", password: "wrong" } };
     const mockErrorStatus = 500;
     const mockErrorMessage = "Invalid credentials";
-    let tempPrototype = AccountsMaster.prototype as jest.Mocked<AccountsMaster>;
 
-    jest.spyOn(tempPrototype, "getUserDetails").mockImplementationOnce(() => {
-      throw new Error(mockErrorMessage);
-    });
+    jest.spyOn(accountPrototype, "getUserDetails").mockRejectedValueOnce(new Error(mockErrorMessage));
 
     const response = await request(app).post("/").send(req.body);
-    expect(tempPrototype.getUserDetails).toHaveBeenCalledWith(
+    expect(accountPrototype.getUserDetails).toHaveBeenCalledWith(
       "invalid",
       "wrong"
     );
-    console.log("test passes");
     expect(response.status).toEqual(mockErrorStatus);
     expect(response.body).toEqual({
       response: mockErrorMessage,
@@ -88,7 +80,7 @@ describe("Login middleware", () => {
   it("Should send a status 500 with an error message", async () => {
     let req = { body: { email: "Test", password: "Error" } };
     const mockErrorStatus = 500;
-    const mockErrorMessage = "Test Error";
+    const mockErrorMessage = "Invalid credentials";
     let testError = new Error(mockErrorMessage);
     let spy = jest
       .spyOn(accountPrototype, "getUserDetails")

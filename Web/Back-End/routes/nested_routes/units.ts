@@ -16,16 +16,16 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
     const status = err.status || 500;
     res.status(status).send({ message: err.message || 'Something went wrong!' });
 };
-router.use(errorHandler);
 
 // Middleware endpoint handler for /register route
 router.post('/register', async (req: Request<{}, {}, UnitData>, res: Response, next: NextFunction) => {
     try {
         const unitData: UnitData = req.body;
         const result = await unit.registerUnit(unitData);
+        if(result instanceof Error) throw result as Error;
         res.status(result.status).json(result);
     } catch (error) {
-        next(error); // Propagate the error to the error handler
+        errorHandler(error as Error, req, res, next);
     }
 });
 
@@ -34,13 +34,10 @@ router.post('/get-unit', async (req: Request<{}, {}, { unit_id: string }>, res: 
     try {
         const { unit_id } = req.body;
         const result = await unit.getUnit(unit_id);
-        if (!result) {
-            res.status(404).json({ error: 'Unit not found' });
-            return;
-        }
+        if(result instanceof Error) throw result as Error;
         res.status(result.status).json(result);
     } catch (error) {
-        next(error); // Propagate the error to the error handler
+        errorHandler(error as Error, req, res, next);
     }
 });
 
@@ -49,9 +46,10 @@ router.post('/property-assets', async (req: Request<{}, {}, { property_id: strin
     try {
         const { property_id } = req.body;
         const units = await unit.getPropertyUnits(property_id);
+        if(units instanceof Error) throw units as Error;
         res.status(units.status).json(units);
     } catch (error) {
-        next(error); // Propagate the error to the error handler
+        errorHandler(error as Error, req, res, next);
     }
 });
 

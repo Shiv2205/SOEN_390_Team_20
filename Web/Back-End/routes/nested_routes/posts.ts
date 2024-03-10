@@ -7,16 +7,15 @@ const router: Router = express.Router();
 const posts = new PostsMaster();
 
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(500).json({ error: err.message || 'Internal Server Error' });
+    res.status(500).json({ message: err.message || 'Internal Server Error' });
 };
-
-router.use(errorHandler);
 
 // Middleware endpoint handler for /create route
 router.post('/create', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const postData = req.body;
         const result = await posts.createPost(postData);
+        if(result instanceof Error) throw result as Error;
         res.status(result.status).json(result);
     } catch (error) {
         errorHandler(error as Error, req, res, next);
@@ -28,6 +27,7 @@ router.post('/user-posts', async (req: Request, res: Response, next: NextFunctio
     try {
         const { creator_id } = req.body;
         const result = await posts.getUserPosts(creator_id);
+        if(result instanceof Error) throw result as Error;
         res.status(result.status).json(result);
     } catch (error) {
         errorHandler(error as Error, req, res, next);
@@ -39,6 +39,7 @@ router.post('/property-channel-posts', async (req: Request, res: Response, next:
     try {
         const { property_id } = req.body;
         const result = await posts.getPropertyPosts(property_id);
+        if(result instanceof Error) throw result as Error;
         res.status(result.status).json(result);
     } catch (error) {
         errorHandler(error as Error, req, res, next);

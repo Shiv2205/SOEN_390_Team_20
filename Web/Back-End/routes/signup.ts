@@ -18,20 +18,11 @@ router.post(
     try {
       const dbResponse = await dbExpert.registerUser(formData);
 
-      if (dbResponse instanceof Error) throw new Error();
+      if (dbResponse instanceof Error) throw dbResponse;
 
-      const statusCode = dbResponse.status;
-      if (statusCode === 400) {
-        const errResponse = dbResponse as {
-          status: number;
-          message: string;
-        };
-        throw new Error(errResponse.message);
-      }
-
-      res.status(statusCode).send({ response: "Successfully registered user." });
-    } catch (error: any) {
-      res.status(500).send({ response: error.message || "An error occurred" });
+      res.status(dbResponse.status).send({ response: "Successfully registered user." });
+    } catch (error) {
+      res.status(400).send({ response: (error as Error).message || "An error occurred" });
     }
   }
 );

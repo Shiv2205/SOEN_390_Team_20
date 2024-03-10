@@ -1,5 +1,5 @@
-const UnitMaster = require("../Back-End/repo/unitMaster");
-const DBControllerFactory = require("../Back-End/Factory/DBControllerFactory");
+import UnitMaster from "../../repo/unitMaster";
+import DBControllerFactory from "../../Factory/DBControllerFactory";
 
 const createUnitOutput = {
   status: 201,
@@ -47,37 +47,71 @@ const getAllUnitsOutput = {
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
   .mockImplementation(() => ({
-    createNewUnit: jest.fn((mockData) => createUnitOutput),
-    getUnit: jest.fn((unit_id) => getUnitOutput),
-    getAllUnits: jest.fn(() => getAllUnitsOutput),
+    initialize: jest.fn(),
+    populate: jest.fn(),
+    recordExists: jest.fn(),
+    createNewPublicUser: jest.fn(),
+    getPublicUser: jest.fn(),
+    createNewEmployee: jest.fn(),
+    getEmployee: jest.fn(),
+    getAllEmployees: jest.fn(),
+    createNewProperty: jest.fn(),
+    getProperty: jest.fn(),
+    getAllProperties: jest.fn(),
+    createNewUnit: jest.fn((mockData) => Promise.resolve(createUnitOutput)),
+    getUnit: jest.fn((unit_id) => Promise.resolve(getUnitOutput)),
+    getAllUnits: jest.fn(() => Promise.resolve(getAllUnitsOutput)),
+    createNewPost: jest.fn(),
+    getAllUserPosts: jest.fn(),
+    getAllPostsReplies: jest.fn(),
+    getAllPropertyPosts: jest.fn(),
+    close: jest.fn(),
   }));
 
 describe("UnitMaster", () => {
-  let unitController;
+  let unitController: UnitMaster;
 
   // Test method for error branches
-  const errorHandler = (methodName) => {
+  const errorHandler = (methodName: string) => {
     it("should handle errors", async () => {
       let testError = new Error("Test Error");
-      let dbMockSpy = jest
-        .spyOn(unitController.dbController, methodName)
-        .mockImplementationOnce(() => {
-          throw testError;
-        });
 
       switch (methodName) {
         case "createNewUnit":
-          await expect(unitController.registerUnit({})).resolves.toEqual(
-            testError
-          );
+          jest
+            .spyOn(unitController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(
+            unitController.registerUnit({
+              property_id: "test-prop-id",
+              size: 100,
+              monthly_rent: 1000,
+              condo_fee: 1200,
+              condo_balance: 3579,
+            })
+          ).rejects.toEqual(testError);
           break;
         case "getUnit":
-          await expect(unitController.getUnit({})).resolves.toEqual(testError);
-          break;
-        case "getAllUnits":
-          await expect(unitController.getPropertyUnits({})).resolves.toEqual(
+          jest
+            .spyOn(unitController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(unitController.getUnit("test-unit-id")).rejects.toEqual(
             testError
           );
+          break;
+        case "getAllUnits":
+          jest
+            .spyOn(unitController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(
+            unitController.getPropertyUnits("test-property_id")
+          ).rejects.toEqual(testError);
           break;
       }
     });
@@ -109,10 +143,6 @@ describe("UnitMaster", () => {
       expect(unitController.dbController.createNewUnit).toHaveBeenCalled();
       expect(unitController.dbController.createNewUnit).toHaveBeenCalledWith({
         ...mockData,
-        owner_id: "",
-        renter_id: "",
-        owner_registration_key: "",
-        renter_registration_key: "",
       });
     });
 

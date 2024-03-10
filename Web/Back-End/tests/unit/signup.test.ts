@@ -1,8 +1,7 @@
-jest.mock("../../repo/accountsMaster");
-const router = require("../Back-End/routes/signup");
-const AccountsMaster = require("../Back-End/repo/accountsMaster");
-const request = require("supertest");
-const express = require("express");
+import express from "express";
+import request from "supertest";
+import router from "../../routes/signup"; // Update this with your router file name
+import AccountsMaster from "../../repo/accountsMaster";
 
 const app = express();
 app.use(express.json());
@@ -45,19 +44,19 @@ describe("Signup middleware", () => {
     expect(accountPrototype.registerUser).toHaveBeenCalledWith(req.body);
     expect(response.status).toEqual(201);
     expect(response.body).toEqual({
-      response: "User added successfully!",
+      response: "Successfully registered user.",
     });
   });
 
   // --- Test: already registered (from database) ---
   it("should send error status and message from database on existing user", async () => {
     let req = {
-      body: { name: "Jane Smith", email: "invalid", password: "weak" },
+      body: { fullname: "Jane Smith", email: "invalid", password: "weak" },
     };
 
     jest
       .spyOn(accountPrototype, "registerUser")
-      .mockResolvedValue({ status: 400, message: "User already resgistered!" });
+      .mockResolvedValue(new Error("User already resgistered!"));
 
     const response = await request(app).post("/").send(req.body);
     expect(accountPrototype.registerUser).toHaveBeenCalledWith(req.body);
@@ -67,9 +66,9 @@ describe("Signup middleware", () => {
     });
   });
 
-  it("Should send a status 500 with an error message", async () => {
-    let req = { body: { name: "SignUp", email: "Test", password: "Error" } };
-    const mockErrorStatus = 500;
+  it("Should send a status 400 with an error message", async () => {
+    let req = { body: { fullname: "SignUp", email: "Test", password: "Error" } };
+    const mockErrorStatus = 400;
     const mockErrorMessage = "Test Error";
     let testError = new Error(mockErrorMessage);
     let spy = jest

@@ -24,13 +24,14 @@ router.post(
         formData.email,
         formData.password
       );
-      if (userDetails.status === 202)
+      if (!(userDetails instanceof Error)) {
         res
           .status(userDetails.status)
           .send({
             response: "User logged in successfully!",
             loginData: userDetails.data,
           });
+      }
       else throw new Error("Invalid credentials");
     } catch (error) {
       const err: Error = error as Error;

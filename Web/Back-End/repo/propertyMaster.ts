@@ -1,38 +1,29 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
-import { PropertyData } from "../types/DBTypes";
+import { IDBController, PropertyData } from "../types/DBTypes";
 
 class PropertyMaster {
-  private dbController: any; 
+  readonly dbController: IDBController; 
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();
   }
 
   async registerNewProperty(propertyDetails: PropertyData): Promise<{status: number; property_id: string} | Error> {
-    try {
-      return await this.dbController.createNewProperty(propertyDetails);
-    } catch (error) {
-      const err: Error = error as Error;
-      return err;
-    }
+    let result = await this.dbController.createNewProperty(propertyDetails);
+    if (result.message) return new Error(result.message);
+    return result as {status: number; property_id: string};
   }
 
   async getProperty(property_id: string): Promise<{status: number; data: PropertyData} | Error> {
-    try {
-      return await this.dbController.getProperty(property_id);
-    } catch (error) {
-      const err: Error = error as Error;
-      return err;
-    }
+    let result =await this.dbController.getProperty(property_id);
+    if (result.message) return new Error(result.message);
+    return result as {status: number; data: PropertyData};
   }
 
   async getAllProperties(employee_id: string): Promise<{status: number; data: PropertyData[]} | Error> {
-    try {
-      return await this.dbController.getAllProperties(employee_id);
-    } catch (error) {
-      const err: Error = error as Error;
-      return err;
-    }
+    let result = await this.dbController.getAllProperties(employee_id);
+    if (result.message) return new Error(result.message);
+    return result as {status: number; data: PropertyData[]};
   }
 }
 

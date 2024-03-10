@@ -26,7 +26,6 @@ const errorHandler = (
   const status = err.status || 500;
   res.status(status).send({ message: err.message || "Something went wrong!" });
 };
-router.use(errorHandler);
 
 // 1. /register
 router.post(
@@ -41,7 +40,7 @@ router.post(
       if (result instanceof Error) throw result as Error; 
       res.status(result.status).json(result);
     } catch (error) {
-      next(error); // Propagate the error to the error handler
+      errorHandler(error as Error, req, res, next); // Propagate the error to the error handler
     }
   }
 );
@@ -59,7 +58,7 @@ router.post(
       if (property_data instanceof Error) throw property_data as Error; 
       res.status(property_data.status).json(property_data);
     } catch (error) {
-      next(error);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );
@@ -77,7 +76,7 @@ router.post(
       const properties = await property.getAllProperties(employee_id);
       res.json(properties);
     } catch (error) {
-      next(error);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );

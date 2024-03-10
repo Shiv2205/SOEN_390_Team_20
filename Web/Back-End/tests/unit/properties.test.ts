@@ -1,8 +1,7 @@
-const express = require("express");
-const router = require("../Back-End/routes/properties");
-jest.mock("../../repo/propertyMaster");
-const PropertyMaster = require("../Back-End/repo/propertyMaster");
-const request = require("supertest");
+import express from "express";
+import request from "supertest";
+import router from "../../routes/properties"; // Update this with your router file name
+import PropertyMaster from "../../repo/propertyMaster";
 
 const app = express();
 app.use(express.json());
@@ -20,15 +19,33 @@ describe("Properties Router", () => {
   });
 
   // Error-handling
-  const errorHandler = async (path, methodName) => {
+  const errorHandler = async (path: string, methodName: string) => {
     it("should handle errors and send 500 response", async () => {
       const err = new Error("Test error");
+      let methodSpy;
 
-      jest.spyOn(propertyPrototype, `${methodName}`).mockImplementationOnce(() => {throw err});
+      switch (methodName) {
+        case "registerNewProperty":
+          methodSpy = jest
+          .spyOn(propertyPrototype, "registerNewProperty");
+          break;
+        case "getAllProperties":
+          methodSpy = jest
+          .spyOn(propertyPrototype, "getAllProperties");
+          break;
+        default:
+          methodSpy = jest
+          .spyOn(propertyPrototype, "getProperty");
+          break;
+      }
 
-      let response = await request(app).post(`${path}`);
+      methodSpy.mockImplementationOnce(() => {
+        throw err;
+      });
+
+      let response = await request(app).post(path);
       expect(response.status).toEqual(500);
-      expect(response.body.message).toEqual("Something went wrong!");
+      expect(response.body.message).toEqual("Test error");
     });
   };
 

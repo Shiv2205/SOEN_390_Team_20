@@ -1,33 +1,34 @@
-const PostsMaster = require("../Back-End/repo/postsMaster");
-const DBControllerFactory = require("../Back-End/Factory/DBControllerFactory");
+import PostsMaster from "../../repo/postsMaster";
+import DBControllerFactory from "../../Factory/DBControllerFactory";
+import { IDBController, PostDetails } from "../../types/DBTypes";
 
 const createPostOutput = {
   status: 201,
   post_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
 };
 
-const getUserPostsOutput = {
+const getUserPostsOutput: { status: number; data?: PostDetails[] } = {
   status: 200,
   data: [
     {
       post_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       creator_id: "user_id",
-      title: "Post Title",
+      property_id: "Property id test",
       content: "Post Content",
-      created_at: "2024-02-29T12:00:00Z",
+      posted_at: "2024-02-29T12:00:00Z",
     },
   ],
 };
 
-const getPropertyPostsOutput = {
+const getPropertyPostsOutput: { status: number; data?: PostDetails[] } = {
   status: 200,
   data: [
     {
       post_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       creator_id: "user_id",
-      title: "Post Title",
+      property_id: "Property id test",
       content: "Post Content",
-      created_at: "2024-02-29T12:00:00Z",
+      posted_at: "2024-02-29T12:00:00Z",
     },
   ],
 };
@@ -35,39 +36,71 @@ const getPropertyPostsOutput = {
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
   .mockImplementation(() => ({
-    createNewPost: jest.fn((postData) => createPostOutput),
-    getAllUserPosts: jest.fn(() => getUserPostsOutput),
-    getAllPropertyPosts: jest.fn(() => getPropertyPostsOutput),
+    initialize: jest.fn(),
+    populate: jest.fn(),
+    recordExists: jest.fn(),
+    createNewPublicUser: jest.fn(),
+    getPublicUser: jest.fn(),
+    createNewEmployee: jest.fn(),
+    getEmployee: jest.fn(),
+    getAllEmployees: jest.fn(),
+    createNewProperty: jest.fn(),
+    getProperty: jest.fn(),
+    getAllProperties: jest.fn(),
+    createNewUnit: jest.fn(),
+    getUnit: jest.fn(),
+    getAllUnits: jest.fn(),
+    createNewPost: jest.fn((postData) => Promise.resolve(createPostOutput)),
+    getAllUserPosts: jest.fn(() => Promise.resolve(getUserPostsOutput)),
+    getAllPostsReplies: jest.fn(),
+    getAllPropertyPosts: jest.fn(() => Promise.resolve(getPropertyPostsOutput)),
+    close: jest.fn(),
   }));
 
 describe("PostsMaster", () => {
-  let postController;
+  let postController: PostsMaster;
 
   // Test method for error branches
-  const errorHandler = (methodName) => {
+  const errorHandler = (methodName: string) => {
     it("should handle errors", async () => {
       let testError = new Error("Test Error");
-      let dbMockSpy = jest
-        .spyOn(postController.dbController, methodName)
-        .mockImplementationOnce(() => {
-          throw testError;
-        });
 
       switch (methodName) {
         case "createNewPost":
-          await expect(postController.createPost({})).resolves.toEqual(
+          jest
+            .spyOn(postController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(postController.createPost(    {
+            creator_id: "user_id",
+            property_id: "Property id test",
+            content: "Post Content",
+          })).rejects.toEqual(
             testError
           );
           break;
+
         case "getAllUserPosts":
-          await expect(postController.getUserPosts("user_id")).resolves.toEqual(
+          jest
+            .spyOn(postController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(postController.getUserPosts("user_id")).rejects.toEqual(
             testError
           );
           break;
+
         case "getAllPropertyPosts":
+          jest
+            .spyOn(postController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
             postController.getPropertyPosts("property_id")
-          ).resolves.toEqual(testError);
+          ).rejects.toEqual(testError);
           break;
       }
     });

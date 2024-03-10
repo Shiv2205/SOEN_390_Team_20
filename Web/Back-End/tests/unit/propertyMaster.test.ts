@@ -1,13 +1,25 @@
-const PropertyMaster = require("../Back-End/repo/propertyMaster");
-const DBControllerFactory = require("../Back-End/Factory/DBControllerFactory");
+import PropertyMaster from "../../repo/propertyMaster";
+import DBControllerFactory from "../../Factory/DBControllerFactory";
 
 const createNewPropertyOutput = {
-    status: 201,
-    property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
-  };
+  status: 201,
+  property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+};
 const getPropertyOutput = {
-    status: 202,
-    data: {
+  status: 202,
+  data: {
+    property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+    unit_count: 20,
+    locker_count: 10,
+    parking_count: 50,
+    address: "123 Main St",
+    picture: "main_street.jpg",
+  },
+};
+const getAllPropertiesOutput = {
+  status: 200,
+  data: [
+    {
       property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       unit_count: 20,
       locker_count: 10,
@@ -15,57 +27,87 @@ const getPropertyOutput = {
       address: "123 Main St",
       picture: "main_street.jpg",
     },
-  };
-const getAllPropertiesOutput = {
-    status: 200,
-    data: [
-      {
-        property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
-        unit_count: 20,
-        locker_count: 10,
-        parking_count: 50,
-        address: "123 Main St",
-        picture: "main_street.jpg",
-      },
-    ],
-  };
+  ],
+};
+
+/**
+ *     createNewProperty: jest.fn((mockData) => Promise.resolve(createNewPropertyOutput)),
+    getProperty: jest.fn((property_id) => Promise.resolve(getPropertyOutput)),
+    getAllProperties: jest.fn(() => Promise.resolve(getAllPropertiesOutput)),
+ */
 
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
   .mockImplementation(() => ({
-    createNewProperty: jest.fn((mockData) => (createNewPropertyOutput)),
-    getProperty: jest.fn((property_id) => (getPropertyOutput)),
-    getAllProperties: jest.fn(() => (getAllPropertiesOutput)),
+    initialize: jest.fn(),
+    populate: jest.fn(),
+    recordExists: jest.fn(),
+    createNewPublicUser: jest.fn(),
+    getPublicUser: jest.fn(),
+    createNewEmployee: jest.fn(),
+    getEmployee: jest.fn(),
+    getAllEmployees: jest.fn(),
+    createNewProperty: jest.fn((mockData) =>
+      Promise.resolve(createNewPropertyOutput)
+    ),
+    getProperty: jest.fn((property_id) => Promise.resolve(getPropertyOutput)),
+    getAllProperties: jest.fn(() => Promise.resolve(getAllPropertiesOutput)),
+    createNewUnit: jest.fn(),
+    getUnit: jest.fn(),
+    getAllUnits: jest.fn(),
+    createNewPost: jest.fn(),
+    getAllUserPosts: jest.fn(),
+    getAllPostsReplies: jest.fn(),
+    getAllPropertyPosts: jest.fn(),
+    close: jest.fn(),
   }));
 
 describe("PropertyMaster", () => {
-  let propertyController;
+  let propertyController: PropertyMaster;
 
   //Test method for error branches
-  const errorHandler = (methodName) => {
+  const errorHandler = (methodName: string) => {
     it("should handle errors", async () => {
       let testError = new Error("Test Error");
-      let dbMockSpy = jest
-        .spyOn(propertyController.dbController, methodName)
-        .mockImplementationOnce(() => {
-          throw testError;
-        });
 
       switch (methodName) {
         case "createNewProperty":
+          jest
+            .spyOn(propertyController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
-            propertyController.registerNewProperty({})
-          ).resolves.toEqual(testError);
+            propertyController.registerNewProperty({
+              unit_count: 20,
+              locker_count: 10,
+              parking_count: 50,
+              address: "123 Main St",
+              picture: "main_street.jpg",
+            })
+          ).rejects.toEqual(testError);
           break;
+
         case "getProperty":
-          await expect(propertyController.getProperty({})).resolves.toEqual(
-            testError
-          );
-          break;
-        case "getAllProperties":
+          jest
+            .spyOn(propertyController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
-            propertyController.getAllProperties({})
-          ).resolves.toEqual(testError);
+            propertyController.getProperty("test-property-id")
+          ).rejects.toEqual(testError);
+          break;
+
+        case "getAllProperties":
+          jest
+            .spyOn(propertyController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(
+            propertyController.getAllProperties("test-employee-id")
+          ).rejects.toEqual(testError);
           break;
       }
     });

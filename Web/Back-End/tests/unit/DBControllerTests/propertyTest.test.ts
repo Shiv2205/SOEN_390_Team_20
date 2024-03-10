@@ -1,53 +1,66 @@
-const recordExistsTest = require("../utils/recordExistsTest");
-const DBController = require("../../../controllers/DBController");
+import recordExistsTest from "../utils/recordExistsTest";
+import DBController from "../../../controllers/DBController";
+import fs from "fs";
 
 // Mock dependencies
 jest.mock("sqlite3", () => ({
-  verbose: jest.fn(() => ({
+  Database: jest.fn(() => ({
+    serialize: jest.fn((callback?: (() => void) | undefined): void => {if(callback) callback()}), //if(callback) callback()
+    run: jest.fn((query, values?: any) => {}),
+    get: jest.fn(
+      (
+        query,
+        values?: any,
+        callback?: ((err: Error | null, row: {}) => void) | undefined
+      ) => {
+        if (callback) callback(null, { count: 0 });
+      }
+    ),
+    all: jest.fn((
+      query,
+      values?: any,
+      callback?: ((err: Error | null, row: [{}]) => void) | undefined
+    ) => {
+      if (callback) callback(null, [{ count: 0 }]);
+    }),
+    close: jest.fn(),
+  })),
+  cached: {
     Database: jest.fn(() => ({
-      serialize: jest.fn(),
+      serialize: jest.fn((callback) => callback()),
       run: jest.fn((query, values) => {}),
       get: jest.fn((query, values, callback) => {
-        callback(null, "test");
+        callback(null, { count: 0 });
       }),
-      all: jest.fn((query, values, callback) => {
-        callback(null, "test");
-      }),
+      all: jest.fn((query, values) => {}),
       close: jest.fn(),
     })),
-    cached: {
-      Database: jest.fn(() => ({
-        serialize: jest.fn(),
-        run: jest.fn(),
-        get: jest.fn(),
-        all: jest.fn(),
-        close: jest.fn(),
-      })),
-    },
-  })),
+  },
 }));
-
 jest.mock("fs", () => ({
-  stat: jest.fn((path, callback) => callback(null, {})),
-  readFileSync: jest.fn(),
+  stat: jest.fn(
+    (
+      path,
+      undefined, 
+      callback: (err: NodeJS.ErrnoException | null, stats: fs.Stats) => void
+    ) =>{ callback(null, {} as fs.Stats)}
+  ), //((path, callback) => callback(null, {})),
+  readFileSync: jest.fn(() => "Test string ;-- String test"),
 }));
 jest.mock("uuid", () => ({
   v4: jest.fn(() => "mock-uuid"),
 }));
 
 describe("property tests", () => {
-  let dbController;
+  let dbController = new DBController();
   beforeEach(() => {
-    dbController = new DBController();
     dbController.initialize();
   });
 
   afterEach(() => {
-    // Close the database connection after each test
-    dbController.close();
     jest.clearAllMocks();
   });
-
+  
   describe("createNewProperty", () => {
     let spy;
     let propertySpy;
@@ -147,7 +160,7 @@ describe("property tests", () => {
       expect(dbController.db.get).toHaveBeenCalledWith(
         "SELECT * FROM property WHERE property_id = ?;",
         testPropID,
-        dbController.db.get.mock.calls[0][2] // callback function is the last argument in this call
+        (dbController.db.get as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
       expect(propertySpy).toHaveBeenCalledWith(testPropID);
 
@@ -191,9 +204,9 @@ describe("property tests", () => {
       ).resolves.toBeTruthy();
       expect(dbController.db.all).toHaveBeenCalled();
       expect(dbController.db.all).toHaveBeenCalledWith(
-        dbController.db.all.mock.calls[0][0],
+        (dbController.db.all as jest.Mock).mock.calls[0][0],
         [testEmpID],
-        dbController.db.all.mock.calls[0][2] // callback function is the last argument in this call
+        (dbController.db.all as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
       expect(getAllPropertiesSpy).toHaveBeenCalledWith(testEmpID);
 

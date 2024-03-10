@@ -2,15 +2,24 @@ import * as sqlite3 from "sqlite3";
 import * as fs from "fs";
 import * as uuid from "uuid";
 import * as path from "path";
-import { PropertyData, UnitDetails } from "../types/DBTypes";
+import {
+  EmployeeDetails,
+  IDBController,
+  PostData,
+  PostDetails,
+  PropertyData,
+  PublicUserData,
+  UnitData,
+  UnitDetails,
+} from "../types/DBTypes";
 
 const currentDB = "test_data.txt"; // test_data.txt
 const ddlPath = path.join(process.cwd(), "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
 const currentDBPath = path.join(process.cwd(), `/data/${currentDB}`);
 
-class DBController {
-  private db: sqlite3.Database;
+class DBController implements IDBController {
+  readonly db: sqlite3.Database;
 
   constructor(DBPath: string = currentDBPath) {
     this.db = new sqlite3.Database(DBPath);
@@ -19,7 +28,7 @@ class DBController {
 
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, (err, stats) => {
+      fs.stat(currentDBPath, undefined, (err, stats) => {
         if (err) {
           console.log("Database does not exist");
           this.db.serialize(() => {
@@ -39,10 +48,10 @@ class DBController {
 
   async populate(): Promise<{ populate: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, (err, stats) => {
+      fs.stat(currentDBPath, undefined, (err, stats) => {
         if (!err) {
-          console.log("Database ready");
-          this.db = new sqlite3.Database(currentDBPath);
+          // console.log("Database ready");
+          // this.db = new sqlite3.Database(currentDBPath);
           this.db.serialize(() => {
             let ddl = fs.readFileSync(testData, "utf8");
             let tables = ddl.split(";");
@@ -117,7 +126,7 @@ class DBController {
   async getPublicUser(
     email: string,
     password: string
-  ): Promise<{ status: number; data?: any; message?: string }> {
+  ): Promise<{ status: number; data?: PublicUserData; message?: string }> {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise(async (resolve, reject) => {
       if (existingUser) {
@@ -132,7 +141,7 @@ class DBController {
                     FROM account 
                     WHERE email = ? AND password = ?`,
           [email, password],
-          function (err, row) {
+          function (err, row: PublicUserData) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
           }
@@ -174,7 +183,7 @@ class DBController {
         resolve({ status: 201, employee_id: employee_id });
       } else {
         let existingUser = await this.getPublicUser(email, password);
-        let account_id = existingUser.data.account_id;
+        let account_id = existingUser.data?.account_id;
         this.db.run(
           "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",
           [account_id, property_id, type]
@@ -187,14 +196,22 @@ class DBController {
   async getEmployee(
     email: string,
     password: string
-  ): Promise<{ status: number; data?: any; message?: string }> {
+  ): Promise<{ status: number; data?: EmployeeDetails; message?: string }> {
     let existingUser = await this.recordExists("employee_data", "email", email);
     return new Promise(async (resolve, reject) => {
       if (existingUser) {
         this.db.get(
-          "SELECT * FROM employee_data WHERE email = ? AND password = ?",
+          `SELECT 
+            employee_id,
+            type,
+            fullname,
+            email,
+            phone_number,
+            profile_picture,
+          FROM employee_data 
+          WHERE email = ? AND password = ?`,
           [email, password],
-          function (err, row) {
+          function (err, row: EmployeeDetails) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
           }
@@ -207,7 +224,7 @@ class DBController {
 
   async getAllEmployees(
     property_id: string
-  ): Promise<{ status: number; data?: any[]; message?: string }> {
+  ): Promise<{ status: number; data?: EmployeeDetails[]; message?: string }> {
     let propertyExists = await this.recordExists(
       "property",
       "property_id",
@@ -221,7 +238,7 @@ class DBController {
                     JOIN work_at W ON E.employee_id = W.employee_id
                     WHERE W.property_id = ?;`,
           property_id,
-          function (err, rows) {
+          function (err, rows: EmployeeDetails[]) {
             if (err) reject(err);
             if (rows.length > 0) resolve({ status: 200, data: rows });
           }
@@ -275,7 +292,7 @@ class DBController {
 
   async getProperty(
     property_id: string
-  ): Promise<{ status: number; data?: any; message?: string }> {
+  ): Promise<{ status: number; data?: PropertyData; message?: string }> {
     let propertyExists = await this.recordExists(
       "property",
       "property_id",
@@ -286,7 +303,7 @@ class DBController {
         this.db.get(
           "SELECT * FROM property WHERE property_id = ?;",
           property_id,
-          function (err, row) {
+          function (err, row: PropertyData) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
           }
@@ -345,17 +362,11 @@ class DBController {
     renter_id = "",
     owner_registration_key = "",
     renter_registration_key = "",
-  }: {
-    property_id: string;
-    size: number;
-    monthly_rent: number;
-    condo_fee: number;
-    condo_balance: number;
-    owner_id?: string;
-    renter_id?: string;
-    owner_registration_key?: string;
-    renter_registration_key?: string;
-  }): Promise<{ status: number; unit_id?: string; message?: string }> {
+  }: UnitData): Promise<{
+    status: number;
+    unit_id?: string;
+    message?: string;
+  }> {
     return new Promise((resolve, reject) => {
       let unit_id = uuid.v4();
       this.db.run(
@@ -435,7 +446,7 @@ class DBController {
                     FROM unit 
                     WHERE property_id = ?;`,
           property_id,
-          function (err, rows:  UnitDetails[]) {
+          function (err, rows: UnitDetails[]) {
             if (err) reject(err);
             if (rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
@@ -454,12 +465,7 @@ class DBController {
     creator_id,
     content,
     replied_to = "",
-  }: {
-    property_id: string;
-    creator_id: string;
-    content: string;
-    replied_to?: string;
-  }): Promise<{ status: number; post_id?: string; message?: string }> {
+  }: PostData): Promise<{ status: number; post_id: string }> {
     return new Promise((resolve, reject) => {
       let post_id = uuid.v4();
       this.db.run(
@@ -474,14 +480,14 @@ class DBController {
 
   async getAllUserPosts(
     creator_id: string
-  ): Promise<{ status: number; data?: any[]; message?: string }> {
+  ): Promise<{ status: number; data?: PostDetails[]; message?: string }> {
     let postsExists = await this.recordExists("post", "creator_id", creator_id);
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
           "SELECT * FROM post WHERE creator_id = ?;",
           creator_id,
-          function (err, rows) {
+          function (err, rows: PostDetails[]) {
             if (err) reject(err);
             if (rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
@@ -497,14 +503,14 @@ class DBController {
 
   async getAllPostsReplies(
     post_id: string
-  ): Promise<{ status: number; data?: any[]; message?: string }> {
+  ): Promise<{ status: number; data?: PostDetails[]; message?: string }> {
     let postsExists = await this.recordExists("post", "post_id", post_id);
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
           "SELECT * FROM post WHERE replied_to = ?;",
           post_id,
-          function (err, rows) {
+          function (err, rows: PostDetails[]) {
             if (err) reject(err);
             if (rows) if (rows.length > 0) resolve({ status: 200, data: rows });
           }
@@ -520,7 +526,7 @@ class DBController {
 
   async getAllPropertyPosts(
     property_id: string
-  ): Promise<{ status: number; data?: any[]; message?: string }> {
+  ): Promise<{ status: number; data?: PostDetails[]; message?: string }> {
     let postsExists = await this.recordExists(
       "post",
       "property_id",
@@ -531,7 +537,7 @@ class DBController {
         this.db.all(
           "SELECT * FROM post WHERE property_id = ?;",
           property_id,
-          function (err, rows) {
+          function (err, rows: PostDetails[]) {
             if (err) reject(err);
             if (rows.length > 0) resolve({ status: 200, data: rows });
           }

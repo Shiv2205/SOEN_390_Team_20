@@ -1,5 +1,6 @@
-const AccountsMaster = require("../Back-End/repo/accountsMaster");
-const DBControllerFactory = require("../Back-End/Factory/DBControllerFactory");
+import AccountsMaster from "../../repo/accountsMaster";
+import DBControllerFactory from "../../Factory/DBControllerFactory";
+import { EmployeeDetails } from "../../types/DBTypes";
 
 jest.mock("bcryptjs", () => ({
   hash: jest.fn(() => "password456"),
@@ -8,20 +9,22 @@ jest.mock("bcryptjs", () => ({
 const getPublicUserOutput = {
   status: 200,
   data: {
-    user_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+    account_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
     fullname: "John Doe",
     email: "john@example.com",
     phone_number: "1234567890",
     profile_picture: "profile.jpg",
+    account_type: "Public"
   },
 };
-const getEmployeeOutput = {
+const getEmployeeOutput: {status: number; data: EmployeeDetails}  = {
   status: 200,
   data: {
     employee_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
     fullname: "Jane Smith",
     email: "jane@example.com",
-    password: "password456",
+    phone_number: "51426377834",
+    profile_picture: "",
     property_id: "property_id",
     type: "manager",
   },
@@ -34,14 +37,15 @@ const createNewEmployeeOutput = {
   status: 201,
   employee_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
 };
-const getAllEmployeesOutput = {
+const getAllEmployeesOutput: {status: number; data: EmployeeDetails[]} = {
   status: 200,
   data: [
     {
       employee_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       fullname: "Jane Smith",
       email: "jane@example.com",
-      password: "password456",
+      phone_number: "51426377834",
+      profile_picture: "",
       property_id: "property_id",
       type: "manager",
     },
@@ -51,55 +55,100 @@ const getAllEmployeesOutput = {
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
   .mockImplementation(() => ({
-    getPublicUser: jest.fn(async (email, password) => getPublicUserOutput),
-    getEmployee: jest.fn(async (email, password) => getEmployeeOutput),
-    createNewPublicUser: jest.fn((userData) => createNewPublicUserOutput),
-    createNewEmployee: jest.fn((employeeData) => createNewEmployeeOutput),
-    getAllEmployees: jest.fn(() => getAllEmployeesOutput),
+    initialize: jest.fn(),
+    populate: jest.fn(),
+    recordExists: jest.fn(),
+    createNewPublicUser: jest.fn((userData) => Promise.resolve(createNewPublicUserOutput)),
+    getPublicUser: jest.fn(async (email, password) => Promise.resolve(getPublicUserOutput)),
+    createNewEmployee: jest.fn((employeeData) => Promise.resolve(createNewEmployeeOutput)),
+    getEmployee: jest.fn(async (email, password) => Promise.resolve(getEmployeeOutput)),
+    getAllEmployees: jest.fn(() => Promise.resolve(getAllEmployeesOutput)),
+    createNewProperty: jest.fn(),
+    getProperty: jest.fn(),
+    getAllProperties: jest.fn(),
+    createNewUnit: jest.fn(),
+    getUnit: jest.fn(),
+    getAllUnits: jest.fn(),
+    createNewPost: jest.fn(),
+    getAllUserPosts: jest.fn(),
+    getAllPostsReplies: jest.fn(),
+    getAllPropertyPosts: jest.fn(),
     close: jest.fn(() => true),
   }));
 
 describe("AccountsMaster", () => {
-  let accountsController;
+  let accountsController: AccountsMaster;
 
   // Test method for error branches
-  const errorHandler = (methodName) => {
+  const errorHandler = (methodName: string) => {
     it("should handle errors", async () => {
       let testError = new Error("Test Error");
-      let dbMockSpy = jest
-        .spyOn(accountsController.dbController, methodName)
-        .mockImplementationOnce(() => {
-          throw testError;
-        });
 
       switch (methodName) {
         case "getPublicUser":
+          jest
+            .spyOn(accountsController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
             accountsController.getUserDetails("test@example.com", "password123")
-          ).resolves.toEqual(testError);
+          ).rejects.toEqual(testError);
           break;
         case "getEmployee":
+          jest
+            .spyOn(accountsController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
             accountsController.getEmployeeDetails(
               "test@example.com",
               "password456"
             )
-          ).resolves.toEqual(testError);
+          ).rejects.toEqual(testError);
           break;
         case "createNewPublicUser":
-          await expect(accountsController.registerUser({})).resolves.toEqual(
+          jest
+            .spyOn(accountsController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(accountsController.registerUser( {
+            fullname: "John Doe",
+            email: "john@example.com",
+            password: "password123",
+            phone_number: "1234567890",
+            profile_picture: "profile.jpg",
+          })).rejects.toEqual(
             testError
           );
           break;
         case "createNewEmployee":
-          await expect(
-            accountsController.registerEmployee({})
-          ).resolves.toEqual(testError);
+          jest
+            .spyOn(accountsController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
+          await expect(accountsController.registerEmployee({
+            fullname: "Jane Smith",
+            email: "jane@example.com",
+            password: "password456",
+            property_id: "property_id",
+            type: "manager",
+          })).rejects.toEqual(
+            testError
+          );
           break;
         case "getAllEmployees":
+          jest
+            .spyOn(accountsController.dbController, methodName)
+            .mockImplementationOnce(() => {
+              throw testError;
+            });
           await expect(
             accountsController.getPropertyEmployees("property_id")
-          ).resolves.toEqual(testError);
+          ).rejects.toEqual(testError);
           break;
       }
     });
@@ -156,8 +205,8 @@ describe("AccountsMaster", () => {
         fullname: "John Doe",
         email: "john@example.com",
         password: "password123",
-        phoneNumber: "1234567890",
-        profilePicture: "profile.jpg",
+        phone_number: "1234567890",
+        profile_picture: "profile.jpg",
       };
 
       const result = await accountsController.registerUser(userData);
@@ -215,7 +264,7 @@ describe("AccountsMaster", () => {
 
   describe("Database connection close", () => {
     it("Should close the database connection successfully", () => {
-        expect(accountsController.close()).toBeTruthy();
+      expect(accountsController.close()).toBeTruthy();
     });
-  })
+  });
 });

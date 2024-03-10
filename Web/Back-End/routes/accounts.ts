@@ -13,12 +13,12 @@ interface Error {
 
 // Middleware to handle errors consistently
 const errorHandler = (
-  err: unknown,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.status(500).send({ message: "Something went wrong!" });
+  res.status(500).send({ message: err.message || "Something went wrong!" });
 };
 router.use(errorHandler);
 
@@ -28,19 +28,10 @@ router.post(
   async (req: Request<{}, {}, UserData>, res: Response, next: NextFunction) => {
     try {
       const response = await accounts.registerUser(req.body);
-      if (response instanceof Error) throw new Error();
-
-      const statusCode = response.status;
-      if (statusCode === 400) {
-        const errResponse = response as {
-          status: number;
-          message: string;
-        };
-        throw new Error(errResponse.message);
-      }
+      if (response instanceof Error) throw response;
       res.status(response.status).json({ ...response });
     } catch (error) {
-      errorHandler(error, req, res, next); // Pass to error-handling middleware
+      errorHandler(error as Error, req, res, next); // Pass to error-handling middleware
     }
   }
 );
@@ -54,13 +45,16 @@ router.post(
     next: NextFunction
   ) => {
     try {
-      const { status, data } = await accounts.getUserDetails(
+      const response = await accounts.getUserDetails(
         req.body.email,
         req.body.password
       );
+
+      if(response instanceof Error) throw response;
+      const { status, data  } = response;
       res.status(status).json({ status, data });
     } catch (error) {
-      errorHandler(error, req, res, next);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );
@@ -75,9 +69,10 @@ router.post(
   ) => {
     try {
       const result = await accounts.registerEmployee(req.body);
+      if(result instanceof Error) throw result;
       res.status(result.status).json(result);
     } catch (error) {
-      errorHandler(error, req, res, next);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );
@@ -95,9 +90,10 @@ router.post(
         req.body.email,
         req.body.password
       );
+      if(employeeDetails instanceof Error) throw employeeDetails;
       res.status(employeeDetails.status).json(employeeDetails);
     } catch (error) {
-      errorHandler(error, req, res, next);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );
@@ -114,9 +110,10 @@ router.post(
       const employees = await accounts.getPropertyEmployees(
         req.body.property_id
       );
+      if(employees instanceof Error) throw employees;
       res.status(employees.status).json(employees);
     } catch (error) {
-      errorHandler(error, req, res, next);
+      errorHandler(error as Error, req, res, next);
     }
   }
 );
