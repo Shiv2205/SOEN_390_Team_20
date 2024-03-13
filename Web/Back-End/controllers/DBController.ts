@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as uuid from "uuid";
 import * as path from "path";
 import {
+  EmployeeData,
   EmployeeDetails,
   IDBController,
   PostData,
@@ -11,6 +12,7 @@ import {
   PublicUserData,
   UnitData,
   UnitDetails,
+  UserData,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.txt"; // test_data.txt
@@ -23,7 +25,6 @@ class DBController implements IDBController {
 
   constructor(DBPath: string = currentDBPath) {
     this.db = new sqlite3.Database(DBPath);
-    this.initialize(DBPath);
   }
 
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
@@ -90,17 +91,10 @@ class DBController implements IDBController {
     fullname,
     email,
     password,
-    phoneNumber = null,
-    profilePicture = null,
+    phone_number = "",
+    profile_picture = "",
     account_type = "Public",
-  }: {
-    fullname: string;
-    email: string;
-    password: string;
-    phoneNumber?: string | null;
-    profilePicture?: string | null;
-    account_type?: string;
-  }): Promise<{ status: number; account_id?: string; message?: string }> {
+  }: UserData & {account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin"}): Promise<{ status: number; account_id?: string; message?: string }> {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise((resolve, reject) => {
       if (!existingUser) {
@@ -112,8 +106,8 @@ class DBController implements IDBController {
             fullname,
             password,
             email,
-            phoneNumber,
-            profilePicture,
+            phone_number,
+            profile_picture,
             account_type,
           ]
         );
@@ -158,13 +152,7 @@ class DBController implements IDBController {
     password,
     property_id = null,
     type,
-  }: {
-    fullname: string;
-    email: string;
-    password: string;
-    property_id?: string | null;
-    type: string;
-  }): Promise<{ status: number; employee_id?: string; message?: string }> {
+  }: EmployeeData): Promise<{ status: number; employee_id?: string; message?: string }> {
     let userExists = await this.recordExists("account", "email", email);
     return new Promise(async (resolve, reject) => {
       if (!userExists) {
@@ -233,10 +221,9 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (propertyExists) {
         this.db.all(
-          `SELECT E.*
-                    FROM employee_data E 
-                    JOIN work_at W ON E.employee_id = W.employee_id
-                    WHERE W.property_id = ?;`,
+          `SELECT *
+           FROM employee_data 
+           WHERE property_id = ?;`,
           property_id,
           function (err, rows: EmployeeDetails[]) {
             if (err) reject(err);
@@ -253,18 +240,13 @@ class DBController implements IDBController {
   }
 
   async createNewProperty({
+    admin_id,
     unit_count,
     parking_count,
     locker_count,
     address,
     picture = "",
-  }: {
-    unit_count: number;
-    parking_count: number;
-    locker_count: number;
-    address: string;
-    picture?: string;
-  }): Promise<{ status: number; property_id?: string; message?: string }> {
+  }: PropertyData): Promise<{ status: number; property_id?: string; message?: string }> {
     let propertyExists = await this.recordExists(
       "property",
       "address",
@@ -274,9 +256,10 @@ class DBController implements IDBController {
       if (!propertyExists) {
         let property_id = uuid.v4();
         this.db.run(
-          "INSERT INTO property (property_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
+          "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
           [
             property_id,
+            admin_id,
             unit_count,
             parking_count,
             locker_count,
@@ -318,24 +301,20 @@ class DBController implements IDBController {
   }
 
   async getAllProperties(
-    employee_id: string
+    admin_id: string
   ): Promise<{ status: number; data?: PropertyData[]; message?: string }> {
-    let employeeExists = await this.recordExists(
-      "employee",
-      "employee_id",
-      employee_id
+    let adminExists = await this.recordExists(
+      "CMC_Admin",
+      "admin_id",
+      admin_id
     );
     return new Promise(async (resolve, reject) => {
-      if (employeeExists) {
+      if (adminExists) {
         this.db.all(
-          `SELECT P.*
-                    FROM property P
-                    WHERE P.property_id IN 
-                    (SELECT W.property_id
-                    FROM work_at W
-                    JOIN employee E ON E.employee_id = W.employee_id
-                    AND E.employee_id = ?);`,
-          [employee_id],
+          `SELECT *
+          FROM property
+          WHERE admin_id = ?;`,
+          [admin_id],
           function (err: Error, rows: PropertyData[]) {
             if (err) reject(err);
             if (rows) {
@@ -358,10 +337,9 @@ class DBController implements IDBController {
     monthly_rent,
     condo_fee,
     condo_balance,
-    owner_id = "",
-    renter_id = "",
-    owner_registration_key = "",
-    renter_registration_key = "",
+    occupant_id = "",
+    occupant_registration_key = "",
+    occupant_type,
   }: UnitData): Promise<{
     status: number;
     unit_id?: string;
@@ -371,9 +349,10 @@ class DBController implements IDBController {
       let unit_id = uuid.v4();
       this.db.run(
         `INSERT INTO unit 
-                (unit_id, property_id, size, monthly_rent, condo_fee, condo_balance, owner_id, 
-                renter_id, owner_registration_key, renter_registration_key) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                (unit_id, property_id, size, monthly_rent, condo_fee, condo_balance, occupant_id,
+                occupant_registration_key,
+                occupant_type) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           unit_id,
           property_id,
@@ -381,10 +360,9 @@ class DBController implements IDBController {
           monthly_rent,
           condo_fee,
           condo_balance,
-          owner_id,
-          renter_id,
-          owner_registration_key,
-          renter_registration_key,
+          occupant_id,
+          occupant_registration_key,
+          occupant_type,
         ]
       );
       resolve({ status: 201, unit_id: unit_id });
@@ -405,8 +383,7 @@ class DBController implements IDBController {
                     monthly_rent,
                     condo_fee,
                     condo_balance,
-                    owner_id,
-                    renter_id 
+                    occupant_id
                     FROM unit WHERE unit_id = ?;`,
           unit_id,
           function (err, row: UnitDetails) {
@@ -441,8 +418,7 @@ class DBController implements IDBController {
                     monthly_rent,
                     condo_fee,
                     condo_balance,
-                    owner_id,
-                    renter_id 
+                    occupant_id
                     FROM unit 
                     WHERE property_id = ?;`,
           property_id,

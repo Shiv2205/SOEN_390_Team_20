@@ -1,6 +1,7 @@
 import recordExistsTest from "../utils/recordExistsTest";
 import DBController from "../../../controllers/DBController";
 import fs from "fs";
+import { EmployeeData } from "../../../types/DBTypes";
 
 // Mock dependencies
 jest.mock("sqlite3", () => ({
@@ -65,11 +66,11 @@ describe("employee tests", () => {
   describe("createNewEmployee", () => {
     let spy;
     let employeeSpy;
-    let testRecord = {
+    let testRecord: EmployeeData = {
       fullname: "John Doe",
       email: "john@example.com",
       password: "password1",
-      type: "testEmployee",
+      type: "manager",
     };
     it("should create an employee account even if employee has public account", async () => {
       spy = jest

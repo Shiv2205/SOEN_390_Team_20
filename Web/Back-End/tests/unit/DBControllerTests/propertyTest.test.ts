@@ -66,6 +66,7 @@ describe("property tests", () => {
     let propertySpy;
     let mockRes;
     let testRecord = {
+      admin_id: "test-admin-id",
       unit_count: 10,
       parking_count: 10,
       locker_count: 10,
@@ -86,9 +87,10 @@ describe("property tests", () => {
       expect(propertySpy).toHaveBeenCalledWith(testRecord);
       expect(dbController.db.run).toHaveBeenCalled();
       expect(dbController.db.run).toHaveBeenCalledWith(
-        "INSERT INTO property (property_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
         [
           mockRes.property_id,
+          testRecord.admin_id,
           testRecord.unit_count,
           testRecord.parking_count,
           testRecord.locker_count,
@@ -186,8 +188,8 @@ describe("property tests", () => {
       });
 
       recordExistsTest(spy, {
-        tableName: "employee",
-        fieldName: "employee_id",
+        tableName: "CMC_Admin",
+        fieldName: "admin_id",
         value: testEmpID,
       });
     });
@@ -211,8 +213,8 @@ describe("property tests", () => {
       expect(getAllPropertiesSpy).toHaveBeenCalledWith(testEmpID);
 
       recordExistsTest(spy, {
-        tableName: "employee",
-        fieldName: "employee_id",
+        tableName: "CMC_Admin",
+        fieldName: "admin_id",
         value: testEmpID,
       });
     });

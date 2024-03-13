@@ -1,14 +1,16 @@
 import PropertyMaster from "../../repo/propertyMaster";
 import DBControllerFactory from "../../Factory/DBControllerFactory";
+import { PropertyData } from "../../types/DBTypes";
 
 const createNewPropertyOutput = {
   status: 201,
   property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
 };
-const getPropertyOutput = {
+const getPropertyOutput: {status: number, data?: PropertyData} = {
   status: 202,
   data: {
     property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+    admin_id: "test-admin",
     unit_count: 20,
     locker_count: 10,
     parking_count: 50,
@@ -16,11 +18,12 @@ const getPropertyOutput = {
     picture: "main_street.jpg",
   },
 };
-const getAllPropertiesOutput = {
+const getAllPropertiesOutput: {status: number, data?: PropertyData[]} = {
   status: 200,
   data: [
     {
       property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+      admin_id: "test-id",
       unit_count: 20,
       locker_count: 10,
       parking_count: 50,
@@ -29,12 +32,6 @@ const getAllPropertiesOutput = {
     },
   ],
 };
-
-/**
- *     createNewProperty: jest.fn((mockData) => Promise.resolve(createNewPropertyOutput)),
-    getProperty: jest.fn((property_id) => Promise.resolve(getPropertyOutput)),
-    getAllProperties: jest.fn(() => Promise.resolve(getAllPropertiesOutput)),
- */
 
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
@@ -50,7 +47,7 @@ const factoryMockSpy = jest
     createNewProperty: jest.fn((mockData) =>
       Promise.resolve(createNewPropertyOutput)
     ),
-    getProperty: jest.fn((property_id) => Promise.resolve(getPropertyOutput)),
+    getProperty: jest.fn((property_id: string) => Promise.resolve(getPropertyOutput)),
     getAllProperties: jest.fn(() => Promise.resolve(getAllPropertiesOutput)),
     createNewUnit: jest.fn(),
     getUnit: jest.fn(),
@@ -79,6 +76,7 @@ describe("PropertyMaster", () => {
             });
           await expect(
             propertyController.registerNewProperty({
+              admin_id: "error-admin",
               unit_count: 20,
               locker_count: 10,
               parking_count: 50,
@@ -124,6 +122,7 @@ describe("PropertyMaster", () => {
   describe("registerNewProperty", () => {
     it("registers a new property successfully", async () => {
       const mockData = {
+        admin_id: "test-admin-id",
         unit_count: 20,
         locker_count: 10,
         parking_count: 50,
