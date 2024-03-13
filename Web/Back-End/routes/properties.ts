@@ -67,12 +67,12 @@ router.post(
 router.post(
   "/real-estate/company-assets",
   async (
-    req: Request<{}, {}, { employee_id: string }>,
+    req: Request<{}, {}, { admin_id: string }>,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      const employee_id = req.body.employee_id;
+      const employee_id = req.body.admin_id;
       const properties = await property.getAllProperties(employee_id);
       res.json(properties);
     } catch (error) {

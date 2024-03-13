@@ -195,10 +195,10 @@ class DBController implements IDBController {
             fullname,
             email,
             phone_number,
-            profile_picture,
+            profile_picture
           FROM employee_data 
-          WHERE email = ? AND password = ?`,
-          [email, password],
+          WHERE email = ? `,//AND password = ?`,
+          [email],// password],
           function (err, row: EmployeeDetails) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
@@ -256,7 +256,7 @@ class DBController implements IDBController {
       if (!propertyExists) {
         let property_id = uuid.v4();
         this.db.run(
-          "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
+          "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?, ?)",
           [
             property_id,
             admin_id,
