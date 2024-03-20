@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigation } from "./LandingPageComponents/navigation";
+import Navigation from "./LandingPageComponents/navigation";
 import { Header } from "./LandingPageComponents/header";
 import { Features } from "./LandingPageComponents/features";
 import { About } from "./LandingPageComponents/about";

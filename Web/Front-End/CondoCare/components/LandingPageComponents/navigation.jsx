@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from 'react';
+import ServiceRequestList from '../Servicerequestlist';
+import ServiceListCustomer from '../Servicerequestlist_customer';
 
+const Navigation = ({ onServiceRequestClick }) => {
+  const [dropdownOpenService, setDropdownOpenService] = useState(false);
+  const [dropdownOpenCustomer, setDropdownOpenCustomer] = useState(false);
 
-export const Navigation = (props) => {
+  const toggleDropdownService = () => {
+    setDropdownOpenService(!dropdownOpenService);
+    // Close Customer dropdown when opening Service dropdown
+    setDropdownOpenCustomer(false);
+  };
+
+  const toggleDropdownCustomer = () => {
+    setDropdownOpenCustomer(!dropdownOpenCustomer);
+    // Close Service dropdown when opening Customer dropdown
+    setDropdownOpenService(false);
+  };
+
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -63,9 +79,27 @@ export const Navigation = (props) => {
                 Contact
               </a>
             </li>
+            <li className="dropdown">
+              <a href="#" className="dropdown-toggle" onClick={toggleDropdownService}>
+                Service Request List<span className="caret"></span>
+              </a>
+              <ul className={`dropdown-menu ${dropdownOpenService ? 'show' : ''}`}>
+                <li><ServiceRequestList onSelect={onServiceRequestClick}/></li>
+              </ul>
+            </li>
+            <li className="dropdown">
+              <a href="#" className="dropdown-toggle" onClick={toggleDropdownCustomer}>
+                Customer Service Request List<span className="caret"></span>
+              </a>
+              <ul className={`dropdown-menu ${dropdownOpenCustomer ? 'show' : ''}`}>
+                <li><ServiceListCustomer onSelect={onServiceRequestClick}/></li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
   );
 };
+
+export default Navigation;
