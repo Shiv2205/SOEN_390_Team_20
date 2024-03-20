@@ -1,6 +1,6 @@
 import AccountsMaster from "../../repo/accountsMaster";
 import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { EmployeeDetails } from "../../types/DBTypes";
+import { EmployeeData, EmployeeDetails } from "../../types/DBTypes";
 
 jest.mock("bcryptjs", () => ({
   hash: jest.fn(() => "password456"),
@@ -224,7 +224,7 @@ describe("AccountsMaster", () => {
 
   describe("registerEmployee", () => {
     it("registers a new employee successfully", async () => {
-      const employeeData = {
+      const employeeData: EmployeeData = {
         fullname: "Jane Smith",
         email: "jane@example.com",
         password: "password456",

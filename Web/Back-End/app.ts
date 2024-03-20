@@ -1,10 +1,24 @@
 import app from './index';
+import WebSocket from './WebSocket/WebSocket';
+import { Socket } from 'socket.io'
+
 const port = process.env.PORT || 3000;
 
 // Start the server
 const server = app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+const socketIO = new WebSocket(server).getIO();
+
+socketIO.on("connection", (socket: Socket) => {
+  let connRes = { response: "Websocket connection successful" };
+  console.log(connRes);
+  socket.emit("connection response", JSON.stringify(connRes));
+});
+
+
 
 // Handle SIGINT signal
 process.on('SIGINT', () => {

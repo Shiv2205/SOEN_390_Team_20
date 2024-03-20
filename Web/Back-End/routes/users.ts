@@ -5,10 +5,13 @@ const router: Router = express.Router();
 
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
-  res.json({ status: "Server listening on port 3000" });
+  let dbInstance = DBControllerFactory.createInstance();
+  let initDB = await dbInstance.initialize();//.populate();
+  let popDB = await dbInstance.populate();
+  res.json({ status: "Server listening on port 3000",  dbStatus: popDB });
 
   /* FOR TESTING  PURPOSES ONLY! REMOVE LATER!!!!!111 
-  //let initDB = await DBControllerFactory.createInstance().initialize();//.populate();
+  let initDB = await DBControllerFactory.createInstance().initialize();//.populate();
   let populateDB = await DBControllerFactory.createInstance().populate();
   res.send({ populateDB});*/
 });

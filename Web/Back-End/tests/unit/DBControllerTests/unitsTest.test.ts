@@ -1,11 +1,14 @@
 import recordExistsTest from "../utils/recordExistsTest";
 import DBController from "../../../controllers/DBController";
 import fs from "fs";
+import { UnitData } from "../../../types/DBTypes";
 
 // Mock dependencies
 jest.mock("sqlite3", () => ({
   Database: jest.fn(() => ({
-    serialize: jest.fn((callback?: (() => void) | undefined): void => {if(callback) callback()}), //if(callback) callback()
+    serialize: jest.fn((callback?: (() => void) | undefined): void => {
+      if (callback) callback();
+    }), //if(callback) callback()
     run: jest.fn((query, values?: any) => {}),
     get: jest.fn(
       (
@@ -16,13 +19,15 @@ jest.mock("sqlite3", () => ({
         if (callback) callback(null, { count: 0 });
       }
     ),
-    all: jest.fn((
-      query,
-      values?: any,
-      callback?: ((err: Error | null, row: [{}]) => void) | undefined
-    ) => {
-      if (callback) callback(null, [{ count: 0 }]);
-    }),
+    all: jest.fn(
+      (
+        query,
+        values?: any,
+        callback?: ((err: Error | null, row: [{}]) => void) | undefined
+      ) => {
+        if (callback) callback(null, [{ count: 0 }]);
+      }
+    ),
     close: jest.fn(),
   })),
   cached: {
@@ -42,9 +47,11 @@ jest.mock("fs", () => ({
   stat: jest.fn(
     (
       path,
-      undefined, 
+      undefined,
       callback: (err: NodeJS.ErrnoException | null, stats: fs.Stats) => void
-    ) =>{ callback(null, {} as fs.Stats)}
+    ) => {
+      callback(null, {} as fs.Stats);
+    }
   ), //((path, callback) => callback(null, {})),
   readFileSync: jest.fn(() => "Test string ;-- String test"),
 }));
@@ -68,15 +75,14 @@ describe("units tests", () => {
     let mockRes;
     let testRecord = {
       property_id: "test-property-id",
+      occupant_id: "test-owner-id",
+      occupant_registration_key: "test-owner-reg-key",
+      occupant_type: "owner",
       size: 100,
       monthly_rent: 500,
       condo_fee: 50,
       condo_balance: 200,
-      owner_id: "test-owner-id",
-      renter_id: "test-renter-id",
-      owner_registration_key: "test-owner-reg-key",
-      renter_registration_key: "test-renter-reg-key",
-    };
+    } as UnitData;
     it("should create a unit", async () => {
       mockRes = { status: 201, unit_id: "mock-uuid" };
 
@@ -96,10 +102,9 @@ describe("units tests", () => {
           testRecord.monthly_rent,
           testRecord.condo_fee,
           testRecord.condo_balance,
-          testRecord.owner_id,
-          testRecord.renter_id,
-          testRecord.owner_registration_key,
-          testRecord.renter_registration_key,
+          testRecord.occupant_id,
+          testRecord.occupant_registration_key,
+          testRecord.occupant_type,
         ]
       );
     });

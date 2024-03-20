@@ -91,6 +91,7 @@ describe("Properties Router", () => {
         status: 202,
         data: {
           property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+          admin_id: "test-admin",
           unit_count: 20,
           locker_count: 10,
           parking_count: 50,
@@ -125,6 +126,7 @@ describe("Properties Router", () => {
         data: [
           {
             property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
+            admin_id: "test-admin",
             unit_count: 20,
             locker_count: 10,
             parking_count: 50,
