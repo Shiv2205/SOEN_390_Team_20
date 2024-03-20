@@ -13,6 +13,7 @@ import {
   UnitData,
   UnitDetails,
   UserData,
+  RequestDetails,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.txt"; // test_data.txt
@@ -94,7 +95,7 @@ class DBController implements IDBController {
     phone_number = "",
     profile_picture = "",
     account_type = "Public",
-  }: UserData & {account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin"}): Promise<{ status: number; account_id?: string; message?: string }> {
+  }: UserData & { account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin" }): Promise<{ status: number; account_id?: string; message?: string }> {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise((resolve, reject) => {
       if (!existingUser) {
@@ -525,6 +526,87 @@ class DBController implements IDBController {
         });
       }
     });
+  }
+
+  async createNewRequest({
+    employee_id,
+    type,
+    description,
+    status,
+  }: RequestDetails): Promise<{ status: number; request_id: string }> {
+    return new Promise((resolve, reject) => {
+      const request_id = uuid.v4(); // Generate a unique request_id using uuid
+
+      this.db.run(
+        `INSERT INTO request 
+              (request_id, employee_id, type, description, status) 
+              VALUES (?, ?, ?, ?, ?)`,
+        [request_id, employee_id, type, description, status],
+        (err) => {
+          if (err) {
+            reject({ status: 500, message: 'Error making request to database.' });
+          } else {
+            resolve({ status: 201, request_id });
+          }
+        }
+      );
+    });
+  }
+
+  async getRequest(
+    request_id: string
+  ): Promise<{ status: number; data?: RequestDetails; message?: string }> {
+    let requestExists = await this.recordExists("request", "request_id", request_id);
+    return new Promise(async (resolve, reject) => {
+      if (requestExists) {
+        this.db.get(
+          `SELECT 
+            request_id,
+            employee_id,
+            type,
+            description,
+            status
+            FROM request WHERE request_id = ?;`,
+          request_id,
+          function (err, row: RequestDetails) {
+            if (row) resolve({ status: 202, data: row });
+            if (err) reject(err);
+          }
+        );
+      } else {
+        reject({
+          status: 400,
+          message: "Request does not exist in database.",
+        });
+      }
+    });
+  }
+
+  async getAllRequests(): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
+    try {
+      const requests: RequestDetails[] = await new Promise((resolve, reject) => {
+        this.db.all(
+          `SELECT 
+            request_id,
+            employee_id,
+            type,
+            description,
+            status
+            FROM request;`,
+          function (err, rows: RequestDetails[]) {
+            if (err) {
+              reject({ status: 500, message: 'Error fetching requests from database.' });
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+
+      return { status: 200, data: requests, message: 'All requests retrieved successfully.' };
+    } catch (error) {
+      return { status: 500, message: (error as Error).message };
+    }
   }
 
   close(): void {

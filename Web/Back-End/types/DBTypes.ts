@@ -73,6 +73,32 @@ export interface UserCredentials {
   password: string;
 }
 
+// RequestStatus enum
+enum RequestStatus {
+  Received = 'Received',
+  InProgress = 'In progress',
+  Completed = 'Completed',
+}
+
+// RequestType enum
+enum RequestType {
+  DailyOperations = 'daily_operations',
+  MoveIn = 'move_in',
+  IntercomChange = 'intercom_change',
+  Access = 'access',
+  CommonAreaReport = 'common_area_report',
+  Question = 'question',
+}
+
+// RequestDetails interface
+export interface RequestDetails {
+  request_id: string;
+  employee_id: number;
+  type: RequestType;
+  description: string;
+  status: RequestStatus;
+}
+
 export interface IDBController {
   initialize(DBPath?: string): Promise<{ init: string }>;
   populate(): Promise<{ populate: string }>;
