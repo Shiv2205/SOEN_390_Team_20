@@ -2,7 +2,6 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f0f0f0;
   margin: 0;
-  display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -14,7 +13,7 @@ body {
 }
 
 .profile-picture-wrapper label {
-  margin-right: 50px; /* Adjusted margin for spacing */
+  margin-right: 50px; 
 }
 
 .signup-container {
@@ -23,15 +22,15 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  height: auto; /* Remove fixed height */
-  max-width: 400px; /* Adjusted max-width for better fit */
-  width: 90%; /* Set width to 90% of the viewport */
-  margin: auto; /* Center horizontally */
-  display: flex; /* Use flexbox */
-  flex-direction: column; /* Arrange children vertically */
-  justify-content: center; /* Center vertically */
-  overflow: hidden; /* Hide any overflowing content */
-  justify-content: flex-start; /* Adjusted to align items at the start */
+  height: auto;
+  max-width: 400px; 
+  width: 90%; 
+  margin: auto;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden; 
+  justify-content: flex-start;
 }
 
 .signup-container h2 {
@@ -41,18 +40,19 @@ body {
 .signup-container form {
   max-width: 300px;
   max-height: 100vh;
-  margin: auto 0; /* Adjusted margin for form */
+  margin: auto 0; 
   display: flex;
-  flex-direction: column; /* Align items in a column */
-  align-items: flex-start; /* Adjusted to align items at the start */
+  flex-direction: column;
+  align-items: flex-start; 
 }
 
 .signup-container label {
   display: flex;
   margin-right: 5px ;
   color: #555;
-  align-items: center; /* Align items vertically */
+  align-items: center; 
 }
+
 
 .signup-container input {
   width: 100%;
@@ -206,7 +206,26 @@ body {
 .profile-container .registration-keys .info{
   margin-left: 5px;
 }
-
 .profile-container button{
   background-color: #4caf50;
 }
+
+
+@media screen and (max-width: 400px) {
+  #features {
+    padding: 20px;
+    width: 111%;
+  }
+  #about,
+  #services,
+  #testimonials,
+  #team,
+  #contact,
+  #footer {
+    width: 111%;
+  }
+
+  #portfolio {
+    width: 110%;
+  }
+} 

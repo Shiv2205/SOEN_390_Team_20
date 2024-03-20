@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useEffect } from "react";
-
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
@@ -8,6 +7,13 @@ import Profile from "../components/Profile";
 import PropertyPage from "../components/ListingPageComponent"
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
+import LandingPage from "../components/LandingPage";
+// import SmoothScroll from "smooth-scroll";
+
+// export const scroll = new SmoothScroll('a[href*="#"]', {
+//   speed: 1000,
+//   speedAsDuration: true,
+// });
 
 function App() {
   const views = {
@@ -17,9 +23,10 @@ function App() {
     PROFILE: 2,
     LOGIN: 1,
     SIGNUP: 0,
+    LANDING: 6
   };
 
-  const [view, setView] = useState(views.SIGNUP);
+  const [view, setView] = useState(views.LANDING);
   const [userData, setUserData] = useState({});
 
   const renderView = () => {
@@ -34,8 +41,10 @@ function App() {
         return <PropertyView userData={userData}/>;
       case views.PROPERTYREGISTRATION:
         return<PropertyRegistration userData={userData}/>;
+      case views.LANDING:
+        return<LandingPage setView={setView} views={views}/>;
       default:
-        return <SignUp setView={setView} views={views} />;
+        return <LandingPage setView={setView} views={views} />;
     }
   };
 
