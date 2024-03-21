@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import UploadWidget from "./UploadWidget";
 import { Navigation } from "./LandingPageComponents/navigation";
 
-function SignUp() {
+function SignUp({setUserData}) {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
@@ -27,6 +27,21 @@ function SignUp() {
       });
       setErrMessage(tempError);
     }
+
+    const boilerplateUserData = {
+      id: 12,
+      username: "example_user",
+      email: "example@example.com",
+      fullName: "cooco Doe",
+      age: 30,
+      phone: 5146010320,
+      address: "232 jjjd street"
+    };
+    
+    // Store user data in localStorage
+    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    setUserData(boilerplateUserData);
+    navigate("/profile");
   };
 
   return (

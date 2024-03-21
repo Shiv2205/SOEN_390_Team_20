@@ -21,9 +21,9 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="*" element={<LandingPage />} />
-        <Route path="/signup" element={<SignUp />} /> 
+        <Route path="/signup" element={<SignUp setUserData={setUserData} />} /> 
         <Route path="/login" element={<Login setUserData={setUserData}/>} />
-        <Route path="/profile" element={<Profile userData={userData}/>} />
+        <Route path="/profile" element={<Profile userData={userData} setUserData={setUserData}/>} />
         <Route path="/propertyview" element={<PropertyView userData={userData}/>} />
         <Route path="/propertyregistration" element={<PropertyRegistration userData={userData}/>} />
       </Routes>

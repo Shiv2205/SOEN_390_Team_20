@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 export function Navigation(){
+  const storedUserData = localStorage.getItem("userData");
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -59,10 +60,24 @@ export function Navigation(){
               </a>
             </li>
             <li>
-              <a href="/login" className="page-scroll">
-                log in
+              { storedUserData ?  
+                  <a href="/profile" className="page-scroll">
+                    home
+                  </a>
+                : 
+                  <a href="/login" className="page-scroll">
+                    log in
+                  </a>
+              }
+            </li>
+            { storedUserData ?  
+            <li>
+              <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
+                Logout
               </a>
             </li>
+                : null
+            }
           </ul>
         </div>
       </div>

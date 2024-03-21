@@ -18,6 +18,22 @@ function Login({setUserData }) {
 
     console.log(userData);
 
+    const boilerplateUserData = {
+      id: 1,
+      username: "example_user",
+      email: "example@example.com",
+      fullName: "John Doe",
+      age: 30,
+      phone: 5146010320,
+      address: "232 jjjd street"
+    };
+    
+    // Store user data in localStorage
+    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    
+    // Set the boilerplate user data using setUserData
+    setUserData(boilerplateUserData);
+
     if (!userData)formErrors.push("Email or password is incorrect");
 
     if (formErrors.length > 0) {
