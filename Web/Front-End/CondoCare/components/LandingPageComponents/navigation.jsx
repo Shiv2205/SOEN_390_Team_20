@@ -1,17 +1,7 @@
 import React, { useState } from "react";
 
 
-export function Navigation({ views, setView }){
- const [loginClicked, setLoginClicked] = useState(false);
-
-  const handleLoginClick = () => {
-    setLoginClicked(!loginClicked); // Toggle the loginClicked state
-    // Additional logic to set view if necessary
-    if (!loginClicked) {
-      setView(views.LOGIN);
-    }
-  };
-
+export function Navigation(){
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -69,7 +59,7 @@ export function Navigation({ views, setView }){
               </a>
             </li>
             <li>
-              <a className="page-scroll" onClick={handleLoginClick}>
+              <a href="/login" className="page-scroll">
                 log in
               </a>
             </li>
