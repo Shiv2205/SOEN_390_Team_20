@@ -59,9 +59,12 @@ export function Navigation(){
               </a>
             </li>
             <li>
-              <a href="/login" className="page-scroll">
-                log in
+              <button className="btn btn-custom"> 
+              <a href="/signup" className="page-scroll" style={{color:"white"}}>
+              Sign Up
               </a>
+              </button>
+              
             </li>
           </ul>
         </div>
