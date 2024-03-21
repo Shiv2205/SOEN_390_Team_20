@@ -7,7 +7,7 @@ function SignUp({setUserData}) {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
     /* `event.preventDefault();` is used to prevent the default form submission.*/

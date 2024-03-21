@@ -65,9 +65,11 @@ export function Navigation(){
                     home
                   </a>
                 : 
-                  <a href="/login" className="page-scroll">
-                    log in
+                <button className="btn btn-custom"> 
+                  <a href="/login" className="page-scroll" style={{color:"white"}}>
+                  Sign in
                   </a>
+                </button>
               }
             </li>
             { storedUserData ?  
