@@ -6,7 +6,7 @@ function SignUp() {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
     /* `event.preventDefault();` is used to prevent the default form submission.*/
@@ -73,7 +73,7 @@ function SignUp() {
       </form>
       <p>
         Already have an account?{" "}
-        <button onClick={() => {navigate("/login")}}>Log in</button>
+        <a href="" onClick={() => {navigate("/login")}}>Log in</a>
       </p>
     </div>
   );
