@@ -21,7 +21,6 @@ function LandingPage() {
           <Header data={landingPageData.Header} />
           <Features data={landingPageData.Features} />
           <About data={landingPageData.About} />
-          <Services data={landingPageData.Services} />
           <Gallery data={landingPageData.Gallery} />
           <Testimonials data={landingPageData.Testimonials} />
           <Team data={landingPageData.Team} />
