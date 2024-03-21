@@ -28,11 +28,11 @@ jobs:
 
       - name: Install dependencies (Backend)
         run: npm install
-        working-directory: Back-End
+        working-directory: Web/Back-End
 
       - name: Run tests (Backend)
         run: npm test
-        working-directory: Back-End
+        working-directory: Web/Back-End
 
       - name: Cache dependencies (Frontend)
         uses: actions/cache@v2
@@ -49,11 +49,11 @@ jobs:
 
       - name: Install dependencies (Frontend)
         run: npm install
-        working-directory: CondoCare
+        working-directory: Web/Front-End/CondoCare
 
       - name: Run tests (Frontend)
         run: npm test
-        working-directory: CondoCare
+        working-directory: Web/Front-End/CondoCare
 
       - name: Handle test results
         if: failure()
