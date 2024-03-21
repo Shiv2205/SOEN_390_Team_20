@@ -65,7 +65,6 @@ function App() {
   }, [userData]);
 
   const renderView = () => {
-    console.log(store);
     switch (view) {
       case views.SIGNUP:
         return <SignUp setView={setView} views={views} />;
