@@ -61,7 +61,7 @@ export function Navigation(){
             </li>
             <li>
               { storedUserData ?  
-                  <a href="/profile" className="page-scroll">
+                  <a href="/userDashboard" className="page-scroll">
                     home
                   </a>
                 : 

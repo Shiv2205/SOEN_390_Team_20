@@ -41,7 +41,7 @@ const navigate = useNavigate(); // Hook for navigation
     // Store user data in localStorage
     localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
     setUserData(boilerplateUserData);
-    navigate("/profile");
+    navigate("/userDashboard");
   };
 
   return (

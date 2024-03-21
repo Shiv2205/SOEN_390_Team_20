@@ -44,7 +44,7 @@ function Login({setUserData }) {
       setErrMessage(tempError);
     } 
     else {
-      navigate("/profile");
+      navigate("/userDashboard");
     }
   };
 
