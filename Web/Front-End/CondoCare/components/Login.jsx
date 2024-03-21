@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Navigation } from "./LandingPageComponents/navigation";
 
 function Login({setUserData }) {
   const [errMessage, setErrMessage] = useState("");
@@ -14,6 +15,8 @@ function Login({setUserData }) {
 
     let formErrors = validateFormData(loginFormData);
     let userData = getUserData(loginFormData, setUserData);
+
+    console.log(userData);
 
     if (!userData)formErrors.push("Email or password is incorrect");
 
@@ -30,26 +33,30 @@ function Login({setUserData }) {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
 
-      <div className="error-message">{errMessage ? errMessage : ""}</div>
+    <div style={{ overflow: 'hidden' }}>
+      <Navigation />
+      <div className="login-container" style={{ marginTop: '110px'}}>
+        <h2>Login</h2>
 
-      <form onSubmit={(e) => handleLogin(e)}>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+        <div className="error-message">{errMessage ? errMessage : ""}</div>
 
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <form onSubmit={(e) => handleLogin(e)}>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" required />
 
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <a href="" onClick={(e) => {e. preventDefault(); navigate("/signup")}}>
-          Sign up
-        </a>
-      </p>
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">Login</button>
+        </form>
+        <p>
+          Don't have an account?{" "}
+          <a href="" onClick={(e) => {e. preventDefault(); navigate("/signup")}}>
+            Sign up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

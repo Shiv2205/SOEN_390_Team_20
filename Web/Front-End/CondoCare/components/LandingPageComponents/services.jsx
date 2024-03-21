@@ -26,7 +26,7 @@ export const Services = (props) => {
               ))
             : "loading"}
         </div>
-      <RequestForm data = {RequestForm} />
+      {/* <RequestForm data = {RequestForm} /> */}
       </div>
     </div>
   );
