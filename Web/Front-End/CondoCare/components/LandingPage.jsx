@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Navigation } from "./LandingPageComponents/navigation";
 import { Header } from "./LandingPageComponents/header";
 import { Features } from "./LandingPageComponents/features";
@@ -28,6 +28,6 @@ function LandingPage() {
           <Contact data={landingPageData.Contact} />
         </div>
       );
-};
+}
 
 export default LandingPage;

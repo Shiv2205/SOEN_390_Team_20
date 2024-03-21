@@ -51,6 +51,7 @@ const factoryMockSpy = jest
     getAllProperties: jest.fn(() => Promise.resolve(getAllPropertiesOutput)),
     createNewUnit: jest.fn(),
     getUnit: jest.fn(),
+    getOccupiedUnit: jest.fn(),
     getAllUnits: jest.fn(),
     createNewPost: jest.fn(),
     getAllUserPosts: jest.fn(),

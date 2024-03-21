@@ -38,7 +38,7 @@ export interface UserData extends IUserData {
 
 export interface PublicUserData extends IUserData {
   readonly account_id: string;
-  account_type: string;
+  readonly account_type: string;
 }
 
 interface IEmployeeData {
