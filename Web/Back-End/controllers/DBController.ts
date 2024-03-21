@@ -96,7 +96,9 @@ class DBController implements IDBController {
     phone_number = "",
     profile_picture = "",
     account_type = "Public",
-  }: UserData & { account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin" }): Promise<{ status: number; account_id?: string; message?: string }> {
+  }: UserData & {
+    account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin";
+  }): Promise<{ status: number; account_id?: string; message?: string }> {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise((resolve, reject) => {
       if (!existingUser) {
@@ -154,7 +156,11 @@ class DBController implements IDBController {
     password,
     property_id = null,
     type,
-  }: EmployeeData): Promise<{ status: number; employee_id?: string; message?: string }> {
+  }: EmployeeData): Promise<{
+    status: number;
+    employee_id?: string;
+    message?: string;
+  }> {
     let userExists = await this.recordExists("account", "email", email);
     return new Promise(async (resolve, reject) => {
       if (!userExists) {
@@ -199,8 +205,8 @@ class DBController implements IDBController {
             phone_number,
             profile_picture
           FROM employee_data 
-          WHERE email = ? `,//AND password = ?`,
-          [email],// password],
+          WHERE email = ? `, //AND password = ?`,
+          [email], // password],
           function (err, row: EmployeeDetails) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
@@ -248,7 +254,11 @@ class DBController implements IDBController {
     locker_count,
     address,
     picture = "",
-  }: PropertyData): Promise<{ status: number; property_id?: string; message?: string }> {
+  }: PropertyData): Promise<{
+    status: number;
+    property_id?: string;
+    message?: string;
+  }> {
     let propertyExists = await this.recordExists(
       "property",
       "address",
@@ -388,6 +398,41 @@ class DBController implements IDBController {
                     occupant_id
                     FROM unit WHERE unit_id = ?;`,
           unit_id,
+          function (err, row: UnitDetails) {
+            if (row) resolve({ status: 202, data: row });
+            if (err) reject(err);
+          }
+        );
+      } else {
+        reject({
+          status: 400,
+          message: "Unit does not exist in database.",
+        });
+      }
+    });
+  }
+
+  async getOccupiedUnit(
+    occupant_id: string
+  ): Promise<{ status: number; data?: UnitDetails; message?: string }> {
+    let unitExists = await this.recordExists(
+      "unit",
+      "occupant_id",
+      occupant_id
+    );
+    return new Promise(async (resolve, reject) => {
+      if (unitExists) {
+        this.db.get(
+          `SELECT 
+                    unit_id,
+                    property_id,
+                    size,
+                    monthly_rent,
+                    condo_fee,
+                    condo_balance,
+                    occupant_id
+                    FROM unit WHERE occupant_id = ?;`,
+          occupant_id,
           function (err, row: UnitDetails) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
@@ -544,7 +589,10 @@ class DBController implements IDBController {
         [request_id, "Unassigned", type, description, RequestStatus.Received],
         (err) => {
           if (err) {
-            reject({ status: 500, message: 'Error making request to database.' });
+            reject({
+              status: 500,
+              message: "Error making request to database.",
+            });
           } else {
             resolve({ status: 201, request_id });
           }
@@ -556,7 +604,11 @@ class DBController implements IDBController {
   async getRequest(
     request_id: string
   ): Promise<{ status: number; data?: RequestDetails; message?: string }> {
-    let requestExists = await this.recordExists("request", "request_id", request_id);
+    let requestExists = await this.recordExists(
+      "request",
+      "request_id",
+      request_id
+    );
     return new Promise(async (resolve, reject) => {
       if (requestExists) {
         this.db.get(
@@ -578,47 +630,69 @@ class DBController implements IDBController {
     });
   }
 
-  async getAllEmployeeRequests(employee_id: string): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
+  async getAllEmployeeRequests(
+    employee_id: string
+  ): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
     try {
-      const requests: RequestDetails[] = await new Promise((resolve, reject) => {
-        this.db.all(
-          `SELECT *
+      const requests: RequestDetails[] = await new Promise(
+        (resolve, reject) => {
+          this.db.all(
+            `SELECT *
           FROM request
           WHERE employee_id = ${employee_id};`,
-          function (err, rows: RequestDetails[]) {
-            if (err) {
-              reject({ status: 500, message: 'Error fetching requests from database.' });
-            } else {
-              resolve(rows);
+            function (err, rows: RequestDetails[]) {
+              if (err) {
+                reject({
+                  status: 500,
+                  message: "Error fetching requests from database.",
+                });
+              } else {
+                resolve(rows);
+              }
             }
-          }
-        );
-      });
+          );
+        }
+      );
 
-      return { status: 200, data: requests, message: 'All requests retrieved successfully.' };
+      return {
+        status: 200,
+        data: requests,
+        message: "All requests retrieved successfully.",
+      };
     } catch (error) {
       return { status: 500, message: (error as Error).message };
     }
   }
 
-  async getAllUnitRequests(unit_id: string): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
+  async getAllUnitRequests(
+    unit_id: string
+  ): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
     try {
-      const requests: RequestDetails[] = await new Promise((resolve, reject) => {
-        this.db.all(
-          `SELECT *
+      const requests: RequestDetails[] = await new Promise(
+        (resolve, reject) => {
+          this.db.all(
+            `SELECT *
           FROM request
           WHERE unit_id = ${unit_id};`,
-          function (err, rows: RequestDetails[]) {
-            if (err) {
-              reject({ status: 500, message: 'Error fetching requests from database.' });
-            } else {
-              resolve(rows);
+            function (err, rows: RequestDetails[]) {
+              if (err) {
+                reject({
+                  status: 500,
+                  message: "Error fetching requests from database.",
+                });
+              } else {
+                resolve(rows);
+              }
             }
-          }
-        );
-      });
+          );
+        }
+      );
 
-      return { status: 200, data: requests, message: 'All requests retrieved successfully.' };
+      return {
+        status: 200,
+        data: requests,
+        message: "All requests retrieved successfully.",
+      };
     } catch (error) {
       return { status: 500, message: (error as Error).message };
     }

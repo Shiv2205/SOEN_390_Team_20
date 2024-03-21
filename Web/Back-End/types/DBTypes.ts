@@ -145,6 +145,9 @@ export interface IDBController {
   getUnit(
     unit_id: string
   ): Promise<{ status: number; data?: UnitDetails; message?: string }>;
+  getOccupiedUnit(
+    occupant_id: string
+  ): Promise<{ status: number; data?: UnitDetails; message?: string }>;
   getAllUnits(
     property_id: string
   ): Promise<{ status: number; data?: UnitDetails[]; message?: string }>;
