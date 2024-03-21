@@ -10,14 +10,15 @@ import { Team } from "./LandingPageComponents/Team";
 import { Contact } from "./LandingPageComponents/contact";
 import JsonData from "./LandingPageComponents/data.json";
 
-function LandingPage() {
+
+function LandingPage({ views, setView }) {
     const [landingPageData, setLandingPageData] = useState({});
   useEffect(() => {
     setLandingPageData(JsonData);
   }, []);
     return (
         <div>
-          <Navigation />
+          <Navigation views={views}  setView={setView} />
           <Header data={landingPageData.Header} />
           <Features data={landingPageData.Features} />
           <About data={landingPageData.About} />
@@ -28,6 +29,6 @@ function LandingPage() {
           <Contact data={landingPageData.Contact} />
         </div>
       );
-};
+}
 
 export default LandingPage;

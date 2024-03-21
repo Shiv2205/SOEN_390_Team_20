@@ -13,7 +13,7 @@ const URGENCY_LEVELS = [
   'High',
 ];
 
-const RequestForm = ({ onSubmit }) => {
+const RequestForm = ({ onSubmit, views, setView, }) => {
   const [title, setTitle] = useState('');
   const [type, setType] = useState(REQUEST_TYPES[0]);
   const [urgency, setUrgency] = useState(URGENCY_LEVELS[0]);

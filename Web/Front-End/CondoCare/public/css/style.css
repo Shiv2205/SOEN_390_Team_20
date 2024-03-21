@@ -457,6 +457,40 @@ header .intro-text {
   padding: 10px 0 0;
   color: #888;
 }
+/* miniProfile Section */
+#miniProfile {
+  padding: 100px 0;
+  background: #f6f6f6;
+}
+#miniProfile i {
+  color: #e6e6e6;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+.miniProfile {
+  position: relative;
+  padding: 20px;
+}
+.miniProfile-image {
+  float: left;
+  margin-right: 15px;
+}
+.miniProfile-image,
+.miniProfile-image img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+.miniProfile-content {
+  position: relative;
+  overflow: hidden;
+}
+.miniProfile-content p {
+  margin-bottom: 0;
+  font-size: 14px;
+  font-style: italic;
+}
 /* Contact Section */
 #contact {
   padding: 100px 0 60px;

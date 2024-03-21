@@ -23,7 +23,7 @@ function Login({ views, setView, setUserData }) {
       setErrMessage(tempError);
     } 
     else {
-      setView(views.PROFILE);
+      setView(views.DASHBOARDOWNER);
     }
   };
 

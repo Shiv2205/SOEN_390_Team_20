@@ -1,0 +1,22 @@
+/* Dashboard.css */
+
+.logo {
+    height: 50px; /* Adjust based on your logo's size */
+    margin-right: 20px;
+}
+
+.dashboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+}
+
+/* The rest of your CSS */

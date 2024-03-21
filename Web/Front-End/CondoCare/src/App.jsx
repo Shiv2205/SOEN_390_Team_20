@@ -8,6 +8,9 @@ import PropertyPage from "../components/ListingPageComponent"
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";
+import DashboardOwner from "../components/DashboardOwner.jsx";
+import RequestForm from "../components/RequestForm.jsx";
+
 // import SmoothScroll from "smooth-scroll";
 
 // export const scroll = new SmoothScroll('a[href*="#"]', {
@@ -23,7 +26,9 @@ function App() {
     PROFILE: 2,
     LOGIN: 1,
     SIGNUP: 0,
-    LANDING: 6
+    LANDING: 6,
+    DASHBOARDOWNER: 7,
+    REQUESTFORUM : 8
   };
 
   const [view, setView] = useState(views.LANDING);
@@ -43,6 +48,10 @@ function App() {
         return<PropertyRegistration userData={userData}/>;
       case views.LANDING:
         return<LandingPage setView={setView} views={views}/>;
+      case views.DASHBOARDOWNER:
+        return<DashboardOwner userData={userData} setView={setView} views={views} />
+      case views.REQUESTFORUM:
+        return<RequestForm setView={setView} views={views} />
       default:
         return <LandingPage setView={setView} views={views} />;
     }
