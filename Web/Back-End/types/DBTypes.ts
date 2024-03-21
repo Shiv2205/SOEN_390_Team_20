@@ -81,7 +81,7 @@ export enum RequestStatus {
 }
 
 // RequestType enum
-enum RequestType {
+export enum RequestType {
   DailyOperations = "daily_operations",
   MoveIn = "move_in",
   IntercomChange = "intercom_change",
@@ -144,17 +144,17 @@ export interface IDBController {
     id_column_name: string,
     record_id: any
   ): Promise<boolean>;
-   /**
-   * The function creates a new public user in a database if the user does not already exist.
-   * @param  - The `createNewPublicUser` function is an asynchronous function that creates a new user
-   * in a database. It takes in the following parameters:
-   * @returns The `createNewPublicUser` function returns a Promise that resolves to an object with the
-   * following properties:
-   * - `status`: A number indicating the status of the operation (201 for success, 400 for failure).
-   * - `account_id`: A string representing the unique identifier of the newly created account (only
-   * included if the operation was successful).
-   * - `message`: A string providing additional information about the operation
-   */
+  /**
+  * The function creates a new public user in a database if the user does not already exist.
+  * @param  - The `createNewPublicUser` function is an asynchronous function that creates a new user
+  * in a database. It takes in the following parameters:
+  * @returns The `createNewPublicUser` function returns a Promise that resolves to an object with the
+  * following properties:
+  * - `status`: A number indicating the status of the operation (201 for success, 400 for failure).
+  * - `account_id`: A string representing the unique identifier of the newly created account (only
+  * included if the operation was successful).
+  * - `message`: A string providing additional information about the operation
+  */
   createNewPublicUser(
     userData: UserData & {
       account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin";

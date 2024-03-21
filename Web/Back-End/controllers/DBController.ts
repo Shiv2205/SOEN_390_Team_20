@@ -617,7 +617,7 @@ class DBController implements IDBController {
             WHERE request_id = ?;`,
           request_id,
           function (err, row: RequestDetails) {
-            if (row) resolve({ status: 202, data: row });
+            if (row) resolve({ status: 200, data: row });
             if (err) reject(err);
           }
         );
