@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from 'react-router-dom';
 
 export const Navigation = (props) => {
   return (
@@ -61,6 +61,11 @@ export const Navigation = (props) => {
             <li>
               <a href="#contact" className="page-scroll">
                 Contact
+              </a>
+            </li>
+            <li>
+              <a href="#blog" className="page-scroll">
+              <Link to="/blog">Blog</Link>
               </a>
             </li>
           </ul>
