@@ -26,7 +26,7 @@ function App() {
     LANDING: 6
   };
 
-  const [view, setView] = useState(views.LANDING);
+  const [view, setView] = useState(views.LandingPage);
   const [userData, setUserData] = useState({});
 
   const renderView = () => {
