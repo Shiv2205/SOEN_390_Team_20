@@ -14,6 +14,8 @@ import {
   UnitDetails,
   UserData,
   RequestDetails,
+  RequestStatus,
+  RequestData,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.txt"; // test_data.txt
@@ -31,8 +33,7 @@ class DBController implements IDBController {
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
       fs.stat(currentDBPath, undefined, (err, stats) => {
-        if (err) {
-          console.log("Database does not exist");
+        if (!err) {
           this.db.serialize(() => {
             let ddl = fs.readFileSync(ddlPath, "utf8");
             let tables = ddl.split(";--");
@@ -529,11 +530,10 @@ class DBController implements IDBController {
   }
 
   async createNewRequest({
-    employee_id,
+    unit_id,
     type,
     description,
-    status,
-  }: RequestDetails): Promise<{ status: number; request_id: string }> {
+  }: RequestData): Promise<{ status: number; request_id: string }> {
     return new Promise((resolve, reject) => {
       const request_id = uuid.v4(); // Generate a unique request_id using uuid
 
@@ -541,7 +541,7 @@ class DBController implements IDBController {
         `INSERT INTO request 
               (request_id, employee_id, type, description, status) 
               VALUES (?, ?, ?, ?, ?)`,
-        [request_id, employee_id, type, description, status],
+        [request_id, "Unassigned", type, description, RequestStatus.Received],
         (err) => {
           if (err) {
             reject({ status: 500, message: 'Error making request to database.' });
@@ -560,13 +560,9 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (requestExists) {
         this.db.get(
-          `SELECT 
-            request_id,
-            employee_id,
-            type,
-            description,
-            status
-            FROM request WHERE request_id = ?;`,
+          `SELECT *
+            FROM request 
+            WHERE request_id = ?;`,
           request_id,
           function (err, row: RequestDetails) {
             if (row) resolve({ status: 202, data: row });
@@ -582,17 +578,36 @@ class DBController implements IDBController {
     });
   }
 
-  async getAllRequests(): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
+  async getAllEmployeeRequests(employee_id: string): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
     try {
       const requests: RequestDetails[] = await new Promise((resolve, reject) => {
         this.db.all(
-          `SELECT 
-            request_id,
-            employee_id,
-            type,
-            description,
-            status
-            FROM request;`,
+          `SELECT *
+          FROM request
+          WHERE employee_id = ${employee_id};`,
+          function (err, rows: RequestDetails[]) {
+            if (err) {
+              reject({ status: 500, message: 'Error fetching requests from database.' });
+            } else {
+              resolve(rows);
+            }
+          }
+        );
+      });
+
+      return { status: 200, data: requests, message: 'All requests retrieved successfully.' };
+    } catch (error) {
+      return { status: 500, message: (error as Error).message };
+    }
+  }
+
+  async getAllUnitRequests(unit_id: string): Promise<{ status: number; data?: RequestDetails[]; message?: string }> {
+    try {
+      const requests: RequestDetails[] = await new Promise((resolve, reject) => {
+        this.db.all(
+          `SELECT *
+          FROM request
+          WHERE unit_id = ${unit_id};`,
           function (err, rows: RequestDetails[]) {
             if (err) {
               reject({ status: 500, message: 'Error fetching requests from database.' });

@@ -74,28 +74,32 @@ export interface UserCredentials {
 }
 
 // RequestStatus enum
-enum RequestStatus {
-  Received = 'Received',
-  InProgress = 'In progress',
-  Completed = 'Completed',
+export enum RequestStatus {
+  Received = "Received",
+  InProgress = "In progress",
+  Completed = "Completed",
 }
 
 // RequestType enum
 enum RequestType {
-  DailyOperations = 'daily_operations',
-  MoveIn = 'move_in',
-  IntercomChange = 'intercom_change',
-  Access = 'access',
-  CommonAreaReport = 'common_area_report',
-  Question = 'question',
+  DailyOperations = "daily_operations",
+  MoveIn = "move_in",
+  IntercomChange = "intercom_change",
+  Access = "access",
+  CommonAreaReport = "common_area_report",
+  Question = "question",
+}
+
+export interface RequestData {
+  unit_id: string;
+  type: RequestType;
+  description: string;
 }
 
 // RequestDetails interface
-export interface RequestDetails {
+export interface RequestDetails extends RequestData {
   request_id: string;
-  employee_id: number;
-  type: RequestType;
-  description: string;
+  employee_id: string;
   status: RequestStatus;
 }
 
@@ -156,5 +160,19 @@ export interface IDBController {
   getAllPostsReplies(
     post_id: string
   ): Promise<{ status: number; data?: PostDetails[]; message?: string }>;
+  createNewRequest(
+    requestData: RequestData
+  ): Promise<{ status: number; request_id: string }>;
+  getRequest(
+    request_id: string
+  ): Promise<{ status: number; data?: RequestDetails; message?: string }>;
+  getAllEmployeeRequests(employee_id: string): Promise<{
+    status: number;
+    data?: RequestDetails[];
+    message?: string;
+  }>;
+  getAllUnitRequests(
+    unit_id: string
+  ): Promise<{ status: number; data?: RequestDetails[]; message?: string }>;
   close(): void;
 }
