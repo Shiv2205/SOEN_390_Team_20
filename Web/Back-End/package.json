@@ -15,6 +15,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "socket.io": "^4.7.4",
     "sqlite3": "^5.1.7",
     "uuid": "^9.0.1"
   },

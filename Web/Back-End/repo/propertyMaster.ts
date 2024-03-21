@@ -20,8 +20,8 @@ class PropertyMaster {
     return result as {status: number; data: PropertyData};
   }
 
-  async getAllProperties(employee_id: string): Promise<{status: number; data: PropertyData[]} | Error> {
-    let result = await this.dbController.getAllProperties(employee_id);
+  async getAllProperties(admin_id: string): Promise<{status: number; data: PropertyData[]} | Error> {
+    let result = await this.dbController.getAllProperties(admin_id);
     if (result.message) return new Error(result.message);
     return result as {status: number; data: PropertyData[]};
   }

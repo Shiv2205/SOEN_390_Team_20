@@ -1,4 +1,5 @@
 import React from "react";
+import RequestForm from '../RequestForm';
 
 export const Services = (props) => {
   return (
@@ -25,6 +26,7 @@ export const Services = (props) => {
               ))
             : "loading"}
         </div>
+      <RequestForm data = {RequestForm} />
       </div>
     </div>
   );

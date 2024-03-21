@@ -101,8 +101,8 @@ describe("Public user tests", () => {
             testRecord.fullname,
             "test",
             testRecord.email,
-            null,
-            null,
+            "",
+            "",
             "Public",
           ]
       );

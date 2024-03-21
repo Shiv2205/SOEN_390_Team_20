@@ -4,10 +4,9 @@ export interface UnitData {
   monthly_rent: number;
   condo_fee: number;
   condo_balance: number;
-  owner_id?: string;
-  renter_id?: string;
-  owner_registration_key?: string;
-  renter_registration_key?: string;
+  occupant_id?: string;
+  occupant_registration_key?: string;
+  occupant_type?: "owner" | "renter";
 }
 
 export interface UnitDetails extends UnitData {
@@ -46,7 +45,7 @@ interface IEmployeeData {
   fullname: string;
   email: string;
   property_id?: string | null;
-  type: string;
+  type: "manager" | "accountant" | "daily_operator";
 }
 
 export interface EmployeeData extends IEmployeeData {
@@ -61,6 +60,7 @@ export interface EmployeeDetails extends IEmployeeData {
 
 export interface PropertyData {
   property_id?: string;
+  admin_id: string;
   unit_count: number;
   parking_count: number;
   locker_count: number;
@@ -73,6 +73,32 @@ export interface UserCredentials {
   password: string;
 }
 
+// RequestStatus enum
+enum RequestStatus {
+  Received = 'Received',
+  InProgress = 'In progress',
+  Completed = 'Completed',
+}
+
+// RequestType enum
+enum RequestType {
+  DailyOperations = 'daily_operations',
+  MoveIn = 'move_in',
+  IntercomChange = 'intercom_change',
+  Access = 'access',
+  CommonAreaReport = 'common_area_report',
+  Question = 'question',
+}
+
+// RequestDetails interface
+export interface RequestDetails {
+  request_id: string;
+  employee_id: number;
+  type: RequestType;
+  description: string;
+  status: RequestStatus;
+}
+
 export interface IDBController {
   initialize(DBPath?: string): Promise<{ init: string }>;
   populate(): Promise<{ populate: string }>;
@@ -82,7 +108,9 @@ export interface IDBController {
     record_id: any
   ): Promise<boolean>;
   createNewPublicUser(
-    userData: UserData
+    userData: UserData & {
+      account_type?: "Public" | "Owner" | "Renter" | "Employee" | "Admin";
+    }
   ): Promise<{ status: number; account_id?: string; message?: string }>;
   getPublicUser(
     email: string,
@@ -105,7 +133,7 @@ export interface IDBController {
     property_id: string
   ): Promise<{ status: number; data?: PropertyData; message?: string }>;
   getAllProperties(
-    employee_id: string
+    admin_id: string
   ): Promise<{ status: number; data?: PropertyData[]; message?: string }>;
   createNewUnit(
     unitData: UnitData
