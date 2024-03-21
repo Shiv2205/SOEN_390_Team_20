@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UploadWidget from "./UploadWidget";
 
-function SignUp({ views, setView }) {
+function SignUp() {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
     /* `event.preventDefault();` is used to prevent the default form submission.*/
@@ -71,15 +73,7 @@ function SignUp({ views, setView }) {
       </form>
       <p>
         Already have an account?{" "}
-        <a
-          href=""
-          onClick={(e) => {
-            e.preventDefault();
-            setView(views.LOGIN);
-          }}
-        >
-          Log in
-        </a>
+        <button onClick={() => {navigate("/login")}}>Log in</button>
       </p>
     </div>
   );

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Login({ views, setView, setUserData }) {
+function Login({setUserData }) {
   const [errMessage, setErrMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -23,7 +25,7 @@ function Login({ views, setView, setUserData }) {
       setErrMessage(tempError);
     } 
     else {
-      setView(views.PROFILE);
+      navigate("/profile");
     }
   };
 
@@ -44,7 +46,7 @@ function Login({ views, setView, setUserData }) {
       </form>
       <p>
         Don't have an account?{" "}
-        <a href="" onClick={(e) => {e. preventDefault(); setView(views.SIGNUP)}}>
+        <a href="" onClick={(e) => {e. preventDefault(); navigate("/signup")}}>
           Sign up
         </a>
       </p>

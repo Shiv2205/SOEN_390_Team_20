@@ -1,8 +1,10 @@
 import React,  { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "../src/PropertyRegistration.css";
 
 
 function PropertyRegistration() {
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         unit_count: '',
@@ -24,6 +26,8 @@ function PropertyRegistration() {
         e.preventDefault();
         // Handle form submission logic here, such as sending data to a server
         console.log(formData);
+        //navigate back to profile? 
+        navigate("/profile")
     };
     return (
 

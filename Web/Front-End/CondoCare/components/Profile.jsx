@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import blank from "../src/assets/blank.webp"
 
 
-function Profile( {userData, setView, views} ) {
-
-
+function Profile( {userData} ) {
+    const navigate = useNavigate();
     const [copyText, setCopyText] = useState('');
 
     const hardcodedCopyText = "aah123bxyhk123";
@@ -18,7 +18,7 @@ function Profile( {userData, setView, views} ) {
 
     return (
         <div className="profile-container">
-            <button onClick={() => setView(views.PROPERTYPAGE)}></button>
+            <button onClick={() => navigate("/propertyview")}></button>
             <h2> Profile </h2>
             <div className="profile-info">
                 <img src={userData.profile_picture} alt='Profile' />
@@ -46,8 +46,8 @@ function Profile( {userData, setView, views} ) {
                 </div>
             </div>
             <div>
-                <button onClick={() => {setView(views.PROPERTYVIEW);}}>Property View</button>
-                <button onClick={() => {setView(views.PROPERTYREGISTRATION);}}>Add new property</button>
+                <button onClick={() => {navigate("/propertyview")}}>Property View</button>
+                <button onClick={() => {navigate("/propertyregistration")}}>Add new property</button>
             </div>
         </div>
     );
