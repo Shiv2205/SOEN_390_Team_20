@@ -30,8 +30,9 @@ const RequestForm = ({ onSubmit, views, setView, }) => {
 
   return (
     <form onSubmit={handleSubmit} className="mb-3">
+      <h2 style={{ color: 'black' }}>Service Request</h2>
       <div className="form-group">
-        <label htmlFor="title" style={{ color: 'black' }}>Service Request </label>
+        <label htmlFor="title" style={{ color: 'black' }}>Title </label>
         <input
           type="text"
           className="form-control"
