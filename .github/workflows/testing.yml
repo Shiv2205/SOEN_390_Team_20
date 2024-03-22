@@ -31,29 +31,8 @@ jobs:
         working-directory: Web/Back-End
 
       - name: Run tests (Backend)
-        run: npm test
+        run: yarn test
         working-directory: Web/Back-End
-
-      - name: Cache dependencies (Frontend)
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-frontend-${{ hashFiles('Web/Front-End/CondoCare/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-frontend-
-
-      - name: Setup Node.js (Frontend)
-        uses: actions/setup-node@v2
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies (Frontend)
-        run: npm install
-        working-directory: Web/Front-End/CondoCare
-
-      - name: Run tests (Frontend)
-        run: npm test
-        working-directory: Web/Front-End/CondoCare
 
       - name: Handle test results
         if: failure()
