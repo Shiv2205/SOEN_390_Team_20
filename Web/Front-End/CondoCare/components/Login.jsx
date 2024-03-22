@@ -16,8 +16,6 @@ function Login({setUserData }) {
     let formErrors = validateFormData(loginFormData);
     let userData = getUserData(loginFormData, setUserData);
 
-    console.log(userData);
-
     const boilerplateUserData = {
       id: 1,
       username: "example_user",

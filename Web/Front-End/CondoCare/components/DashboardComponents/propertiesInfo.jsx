@@ -1,6 +1,8 @@
-import React from "react";
+import React from "react"; 
+import { useNavigate } from "react-router-dom";
 
 export const PropertiesInfo = ({properties, setProperties}) => {
+  const navigate = useNavigate();
     return (
         <div id="about">
       <div className="container">
@@ -15,7 +17,11 @@ export const PropertiesInfo = ({properties, setProperties}) => {
             </div>
             <div className="col-xs-12 col-md-6">
               <div className="about-text">
-                <h2>{property.name}</h2>
+              <h2>
+                <a onClick={() => navigate("/unitpage", { state: { propertyData: property } })}>
+                  {property.name}
+                </a>
+              </h2>
                 <p>{property.address}</p>
                 <p>Apartment: {property.unit}</p>
                 <p>Parking Spot: {property.parkingSpot}</p>

@@ -76,8 +76,6 @@ const DashboardOwner = ({userData, setUserData}) => {
         }
     }, []);
 
-    console.log(properties);
-
     // // Placeholder data - replace with actual data
     // const properties = [
     //     { id: 1, name: 'Property 1', address: '123 Main St', imageUrl: 'https://via.placeholder.com/100' },
