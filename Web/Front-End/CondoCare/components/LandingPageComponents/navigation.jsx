@@ -1,10 +1,8 @@
-import React from "react";
-import { useStore } from "../../store/store";
+import React, { useState, useEffect } from "react";
 
 
-export const Navigation = (props) => {
-  let store  = useStore()[0];
-  let { views, setView } = store;
+export function Navigation(){
+  const storedUserData = localStorage.getItem("userData");
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -21,7 +19,7 @@ export const Navigation = (props) => {
             <span className="icon-bar"></span>{" "}
             <span className="icon-bar"></span>{" "}
           </button>
-          <a className="navbar-brand page-scroll" href="#page-top">
+          <a className="navbar-brand page-scroll" href="/#page-top">
             CondoCare
           </a>{" "}
         </div>
@@ -31,49 +29,76 @@ export const Navigation = (props) => {
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            <li>
-              <a href="#features" className="page-scroll">
-                Features
+            { storedUserData ? null:
+              <li>
+                <a href="/#features" className="page-scroll">
+                  Features
+                </a>
+              </li>
+            }
+            { storedUserData ? null:
+              <li>
+                <a href="/#about" className="page-scroll">
+                  About
+                </a>
+              </li>
+            }
+            { storedUserData ? null:
+              <li>
+                <a href="/#portfolio" className="page-scroll">
+                  Gallery
+                </a>
+              </li>
+            }
+            { storedUserData ? 
+              <li>
+              <a href="/blog" className="page-scroll">
+                Forum
               </a>
             </li>
+            :
+              <li>
+                <a href="/#testimonials" className="page-scroll">
+                  Testimonials
+                </a>
+              </li>
+            }
             <li>
-              <a href="#about" className="page-scroll">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="#services" className="page-scroll">
-                Services
-              </a>
-            </li>
-            <li>
-              <a href="#portfolio" className="page-scroll">
-                Gallery
-              </a>
-            </li>
-            <li>
-              <a href="#testimonials" className="page-scroll">
-                Testimonials
-              </a>
-            </li>
-            <li>
-              <a href="#team" className="page-scroll">
-                Team
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="page-scroll">
+              <a href="/#contact" className="page-scroll">
                 Contact
               </a>
             </li>
+            { storedUserData ?  
             <li>
-              <a onClick={()=> setView(views.LOGIN)} className="page-scroll">
-                Login
+              <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
+                Logout
               </a>
             </li>
+                : 
+            <li>
+              <a href="/#team" className="page-scroll">
+                Team
+              </a>
+            </li>
+            }
+            <li>
+              { storedUserData ?  
+                  <a href="/userDashboard" className="page-scroll">
+                    home
+                  </a>
+                : 
+                <button className="btn btn-custom"> 
+                  <a href="/login" className="page-scroll" style={{color:"white"}}>
+                  Sign in
+                  </a>
+                </button>
+              }
+              </li>
           </ul>
         </div>
       </div>
     </nav>
   );
 };
+
+export default Navigation;

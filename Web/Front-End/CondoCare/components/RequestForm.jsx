@@ -12,8 +12,8 @@ const REQUEST_TYPES = [
 
 const URGENCY_LEVELS = ["Low", "Medium", "High"];
 
-const RequestForm = ({ onSubmit }) => {
-  const [title, setTitle] = useState("");
+const RequestForm = ({ onSubmit, views, setView, }) => {
+  const [title, setTitle] = useState('');
   const [type, setType] = useState(REQUEST_TYPES[0]);
   const [urgency, setUrgency] = useState(URGENCY_LEVELS[0]);
   const [description, setDescription] = useState("");
@@ -42,11 +42,10 @@ const RequestForm = ({ onSubmit }) => {
   };
 
   return (
-    <form onSubmit={(event) => handleSubmit(event)} className="mb-3">
+    <form onSubmit={handleSubmit} className="mb-3">
+      <h2 style={{ color: 'black' }}>Service Request</h2>
       <div className="form-group">
-        <label htmlFor="title" style={{ color: "black" }}>
-          Service Request{" "}
-        </label>
+        <label htmlFor="title" style={{ color: 'black' }}>Title </label>
         <input
           type="text"
           className="form-control"

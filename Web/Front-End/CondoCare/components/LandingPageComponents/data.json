@@ -20,135 +20,135 @@
   },
   "Gallery": [
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/01-large.jpg",
-      "smallImage": "img/portfolio/01-small.jpg"
+      "title": "Skyline Ridge, San Francisco Views",
+      "largeImage": "img/portfolio/p1_large.jpg",
+      "smallImage": "img/portfolio/p1_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/02-large.jpg",
-      "smallImage": "img/portfolio/02-small.jpg"
+      "title": "The Urban Nest, Seattle Charm",
+      "largeImage": "img/portfolio/p2_large.jpg",
+      "smallImage": "img/portfolio/p2_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/03-large.jpg",
-      "smallImage": "img/portfolio/03-small.jpg"
+      "title": "Peak Performance Club, Austin Fitness",
+      "largeImage": "img/portfolio/p3_large.jpg",
+      "smallImage": "img/portfolio/p3_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/04-large.jpg",
-      "smallImage": "img/portfolio/04-small.jpg"
+      "title": "The Sunset Oasis, Miami Rooftop",
+      "largeImage": "img/portfolio/p4_large.jpg",
+      "smallImage": "img/portfolio/p4_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/05-large.jpg",
-      "smallImage": "img/portfolio/05-small.jpg"
+      "title": "The Azure Lagoon, San Diego Sun",
+      "largeImage": "img/portfolio/p5_large.jpg",
+      "smallImage": "img/portfolio/p5_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/06-large.jpg",
-      "smallImage": "img/portfolio/06-small.jpg"
+      "title": "Parkside Place, Chicago Welcome",
+      "largeImage": "img/portfolio/p6_large.jpg",
+      "smallImage": "img/portfolio/p6_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/07-large.jpg",
-      "smallImage": "img/portfolio/07-small.jpg"
+      "title": "The Social Hub, Atlanta Fun",
+      "largeImage": "img/portfolio/p7_large.jpg",
+      "smallImage": "img/portfolio/p7_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/08-large.jpg",
-      "smallImage": "img/portfolio/08-small.jpg"
+      "title": "Serenity Gardens, Denver Escape",
+      "largeImage": "img/portfolio/p8_large.jpg",
+      "smallImage": "img/portfolio/p8_small.jpg"
     },
     {
-      "title": "Project Title",
-      "largeImage": "img/portfolio/09-large.jpg",
-      "smallImage": "img/portfolio/09-small.jpg"
+      "title": "The Executive Suite, Boston Focus",
+      "largeImage": "img/portfolio/p9_large.jpg",
+      "smallImage": "img/portfolio/p9_small.jpg"
     }
   ],
   "Services": [
     {
       "icon": "fa fa-wordpress",
       "name": "Lorem ipsum dolor",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     },
     {
       "icon": "fa fa-cart-arrow-down",
       "name": "Consectetur adipiscing",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     },
     {
       "icon": "fa fa-cloud-download",
       "name": "Lorem ipsum dolor",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     },
     {
       "icon": "fa fa-language",
       "name": "Consectetur adipiscing",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     },
     {
       "icon": "fa fa-plane",
       "name": "Lorem ipsum dolor",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     },
     {
       "icon": "fa fa-pie-chart",
       "name": "Consectetur adipiscing",
-      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at."
+      "text": "."
     }
   ],
   "Testimonials": [
     {
       "img": "img/testimonials/01.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "John Doe"
+      "text": "Condocare has been a lifesaver! I can easily book amenities, submit maintenance requests, and even pay my rent - all from my phone..",
+      "name": "David Lee"
     },
     {
       "img": "img/testimonials/02.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "Johnathan Doe"
+      "text": "As a busy professional, Condocare gives me peace of mind. I know my condo is well-managed and I can always reach someone if I have a question",
+      "name": "Michael Chen"
     },
     {
       "img": "img/testimonials/03.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "John Doe"
+      "text": "Condocare has helped improve the communication between residents and the management team. It's so much easier to stay informed now. I started recommending the app to all my bussiness partners",
+      "name": "William Brown"
     },
     {
       "img": "img/testimonials/04.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "Johnathan Doe"
+      "text": "The Condocare app is user-friendly and saves me time. No more waiting on hold or filling out paper forms - it's all right there at my fingertips",
+      "name": "Jessica Miller"
     },
     {
       "img": "img/testimonials/05.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "John Doe"
+      "text": "I love that Condocare allows me to track the status of my maintenance requests. It's reassuring to know exactly when things will be fixed",
+      "name": "Daniel Hernandez"
     },
     {
       "img": "img/testimonials/06.jpg",
-      "text": "\"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sed dapibus leo nec ornare diam sedasd commodo nibh ante facilisis bibendum dolor feugiat at.\"",
-      "name": "Johnathan Doe"
+      "text": "Condocare has made living in a condo so much more convenient. It's a great app that makes life easier for both residents and the management team",
+      "name": "Elizabeth Wright"
     }
   ],
   "Team": [
     {
       "img": "img/team/01.jpg",
-      "name": "John Doe",
-      "job": "Director"
-    },
-    {
-      "img": "img/team/02.jpg",
-      "name": "Mike Doe",
-      "job": "Senior Designer"
+      "name": "Charles Williams",
+      "job": "Senior Property Manager"
     },
     {
       "img": "img/team/03.jpg",
-      "name": "Jane Doe",
-      "job": "Senior Designer"
+      "name": "Emily Jones",
+      "job": "Community Engagement Specialist"
+    },
+    {
+      "img": "img/team/02.jpg",
+      "name": "David Lee",
+      "job": "Software Developer"
     },
     {
       "img": "img/team/04.jpg",
-      "name": "Karen Doe",
-      "job": "Project Manager"
+      "name": "Katherine Garcia",
+      "job": "Customer Support Specialist"
     }
   ],
   "Contact": {
