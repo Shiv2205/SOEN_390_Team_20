@@ -1,115 +1,124 @@
 
+/* ChatApp.css */
 
-.chatApp {
+/* Ensure the chat area takes up the entire height and the form sticks to the bottom */
+.chat-app {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #2c2f33;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 250px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 600px;
-  margin: auto;
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
+  background-color: #23272a;
 }
 
-.messageList {
-  flex-grow: 1;
-  overflow: auto;
-  padding: 10px;
-  background-color: #322c3d;
+.sidebar h1 {
+  color: #ffffff;
+  margin-bottom: auto; /* Pushes everything else down */
 }
 
-.messageItem {
-  border-bottom: 1px solid #eee;
-  padding: 8px 0;
-}
-
-.chatInput {
-  display: flex;
-  padding: 10px;
-}
-
-.chatInput input {
-  flex-grow: 1;
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.chatInput button {
-  padding: 10px 20px;
+.sidebar button {
+  padding: 10px 15px;
+  background-color: #7289da;
   border: none;
-  background-color: #5b88bd;
-  color: white;
   border-radius: 4px;
+  color: #ffffff;
   cursor: pointer;
 }
 
-/* ChatApp.css */
-.chat-app {
-  display: flex;
-  height: 100vh;
-}
-
-/* Add styles for Sidebar */
-.sidebar {
-  width: 240px;
-  background: #333;
-  color: blueviolet;
-}
-/* Add styles for MessageList */
+/* Message list container styles */
 .message-list {
   flex-grow: 1;
-  background: #322c3d;
+  overflow-y: auto; /* Enables scrolling for overflow content */
+  padding: 20px;
+  background-color: #36393f;
+}
+
+/* New message form container styles */
+.new-message-form {
+  position: absolute; /* Positions the form at the bottom */
+  bottom: 0; /* Aligns the form at the bottom of the chat-app container */
+  left: 250px; /* The same width as the sidebar to align with the message list */
+  right: 0; /* Ensures it fills the rest of the horizontal space */
+  display: flex;
+  background-color: #40444b;
+  padding: 10px;
+  box-shadow: 0 -1px 0 #000000; /* Adds a top border effect */
+}
+
+.new-message-form textarea {
+  flex: 1; /* Allows textarea to fill available space */
+  padding: 10px;
+  background-color: #2c2f33;
+  border: 1px solid #202225;
+  border-radius: 4px;
+  color: #ffffff;
+  resize: none; /* Disables manual resizing */
+  margin-right: 10px; /* Adds space between textarea and button */
+}
+
+.new-message-form button {
+  padding: 10px 15px;
+  background-color: #7289da;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.message-item {
+  border-bottom: 1px solid #ffffff; /* White line between messages */
+  padding: 10px 0; /* Space above and below the text */
+  margin-bottom: 10px; /* Space between each message item */
+}
+
+.message-author,
+.message-timestamp,
+.message-text {
+  display: block; /* This will make each span start on a new line */
+}
+
+/* If you have a dark background, you might want to ensure text is visible */
+.message-author,
+.message-timestamp,
+.message-text {
+  color: #ffffff; /* White text for better readability */
+}
+
+
+
+.message-list {
+  background-color: #2c2f33; /* Your chosen background color */
+  color: #ffffff; /* For white text */
+  padding: 20px;
 }
 
 .message {
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-  .message-author {
-    font-weight: bold;
-  }
-  .message-timestamp {
-    float: right;
-    color: #999;
-  }
-  .message-text {
-    clear: both;
-  }
+  border-bottom: 1px solid #ffffff; /* White separator line */
+  padding-bottom: 10px; /* Space above the line */
+  margin-bottom: 10px; /* Space below the line */
 }
 
-/*Sidebar*/
-.sidebar {
-  width: 280px;
-  background: #333;
-  color: #fff;
-  padding: 10px;
+.message-greeting,
+.message-author,
+.message-timestamp {
+  display: block; /* Ensures each part is on a new line */
 }
 
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #ffffff;
+/* Further style adjustments for author, timestamp, and text */
+.message-author {
+  font-weight: bold;
 }
 
-.sidebar-title {
-  margin: 0;
-  font-size: 3.2rem;
-  color: blueviolet;
+.message-timestamp {
+  color: #bbbbbb; /* Lighter text color for the timestamp */
+  margin-bottom: 5px; /* Space between timestamp and greeting or text */
 }
 
-.new-message-btn {
-  padding: 1px 3px;
-  background-color: #5b88bd;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  cursor: pointer;
-}
-
-/* Additional styles for .new-message-btn hover effect */
-.new-message-btn:hover {
-  background-color: #4a76a8;
-}
+/* Add any additional styles you need for padding, margins, colors, etc. */

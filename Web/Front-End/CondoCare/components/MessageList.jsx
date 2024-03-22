@@ -3,20 +3,54 @@ import React from 'react';
 import Message from './Message';
 
 const MessageList = () => {
-  // Mock data for messages, replace with actual data from your backend
+  // Mock data structure, it should match the prop names expected by the Message component
   const messages = [
-    { id: 1, author: 'Instructor', text: 'Welcome to the course Soen 390-R!', timestamp: '9:22 AM' },
-    { id: 2, author: 'Student', text: 'Thank you!', timestamp: '9:35 AM' },
-    // ... more messages
+    {
+      post_id: '1',
+      content: 'Welcome to CondoCare chat!',
+      creator_id: 'John Doe',
+      posted_at: '2023-03-20T14:00:00Z',
+    },
+    {
+      post_id: '2',
+      content: 'Welcome to CondoCare chat!',
+      creator_id: 'Alexander Doe',
+      posted_at: '2023-03-20T14:00:00Z',
+    },
+    {
+      post_id: '3',
+      content: 'Welcome to CondoCare chat!',
+      creator_id: 'James Doe',
+      posted_at: '2023-03-20T14:00:00Z',
+    },
+    {
+      post_id: '4',
+      content: 'Welcome to CondoCare chat!',
+      creator_id: 'Jeremiah Doe',
+      posted_at: '2023-03-20T14:00:00Z',
+    },
   ];
 
   return (
-    <section className="message-list">
-      {messages.map(message => (
-        <Message key={message.id} {...message} />
+    <div className="message-list">
+      {messages.map((msg) => (
+        <Message
+          key={msg.post_id}
+          timestamp={msg.posted_at}
+          author={msg.creator_id}
+          text={msg.content}
+         
+        />
       ))}
-    </section>
+    </div>
   );
 };
 
 export default MessageList;
+
+
+
+
+
+
+
