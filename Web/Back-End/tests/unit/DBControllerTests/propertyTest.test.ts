@@ -87,7 +87,7 @@ describe("property tests", () => {
       expect(propertySpy).toHaveBeenCalledWith(testRecord);
       expect(dbController.db.run).toHaveBeenCalled();
       expect(dbController.db.run).toHaveBeenCalledWith(
-        "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO property (property_id, admin_id, unit_count, parking_count, locker_count, address, picture) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [
           mockRes.property_id,
           testRecord.admin_id,

@@ -28,6 +28,7 @@ const errorHandler = (
 };
 
 // 1. /register
+
 router.post(
   "/register",
   async (

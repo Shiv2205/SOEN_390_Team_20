@@ -118,7 +118,7 @@ describe("Properties Router", () => {
   describe("POST /real-estate/company-assets", () => {
     it("retrieves all company assets successfully", async () => {
       const mockReq = {
-        body: { employee_id: "10e6d4f0-8476-431b-b39a-5e35e2a1b1db" },
+        body: { admin_id: "10e6d4f0-8476-431b-b39a-5e35e2a1b1db" },
       };
 
       const properties = {
@@ -146,7 +146,7 @@ describe("Properties Router", () => {
       expect(response.body).toEqual(properties);
       expect(response.status).toEqual(200);
       expect(propertyPrototype.getAllProperties).toHaveBeenCalledWith(
-        mockReq.body.employee_id
+        mockReq.body.admin_id
       );
     });
 
