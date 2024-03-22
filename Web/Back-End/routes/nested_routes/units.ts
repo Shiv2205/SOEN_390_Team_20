@@ -41,6 +41,18 @@ router.post('/get-unit', async (req: Request<{}, {}, { unit_id: string }>, res: 
     }
 });
 
+// Middleware endpoint handler for /get-user-unit route
+router.post('/get-user-unit', async (req: Request<{}, {}, { occupant_id: string }>, res: Response, next: NextFunction) => {
+    try {
+        const { occupant_id } = req.body;
+        const result = await unit.getUserUnit(occupant_id);
+        if(result instanceof Error) throw result as Error;
+        res.status(result.status).json(result);
+    } catch (error) {
+        errorHandler(error as Error, req, res, next);
+    }
+});
+
 // Middleware endpoint handler for /property-assets route
 router.post('/property-assets', async (req: Request<{}, {}, { property_id: string }>, res: Response, next: NextFunction) => {
     try {

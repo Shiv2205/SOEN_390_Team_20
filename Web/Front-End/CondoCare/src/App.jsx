@@ -4,6 +4,7 @@ import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import Profile from "../components/Profile";
+//import PropertyPage from "../components/ListingPageComponent";
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";

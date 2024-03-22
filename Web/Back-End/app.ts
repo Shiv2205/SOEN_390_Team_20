@@ -15,7 +15,11 @@ const socketIO = new WebSocket(server).getIO();
 socketIO.on("connection", (socket: Socket) => {
   let connRes = { response: "Websocket connection successful" };
   console.log(connRes);
-  socket.emit("connection response", JSON.stringify(connRes));
+  socket.emit("connected", JSON.stringify(connRes));
+
+  socket.on("test", (message: string) => {
+    console.log(socket.id + `: ${message}`);
+  });
 });
 
 
