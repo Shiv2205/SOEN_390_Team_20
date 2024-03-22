@@ -1,7 +1,10 @@
 import React from "react";
+import { useStore } from "../../store/store";
 
 
 export const Navigation = (props) => {
+  let store  = useStore()[0];
+  let { views, setView } = store;
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -61,6 +64,11 @@ export const Navigation = (props) => {
             <li>
               <a href="#contact" className="page-scroll">
                 Contact
+              </a>
+            </li>
+            <li>
+              <a onClick={()=> setView(views.LOGIN)} className="page-scroll">
+                Login
               </a>
             </li>
           </ul>

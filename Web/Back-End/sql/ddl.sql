@@ -1,9 +1,11 @@
 CREATE TABLE IF NOT EXISTS request (
     request_id TEXT PRIMARY KEY,
+    unit_id TEXT NOT NULL,
     employee_id TEXT,
     type TEXT CHECK (type IN ("daily_operations", "move_in", "intercom_change", "access", "common_area_report", "question")),
     description TEXT,
     status TEXT CHECK (status IN ("Received", "In progress", "Completed")),
+    FOREIGN KEY (unit_id) REFERENCES unit (unit_id),
     FOREIGN KEY (employee_id) REFERENCES employee (employee_id)
 );--
 
