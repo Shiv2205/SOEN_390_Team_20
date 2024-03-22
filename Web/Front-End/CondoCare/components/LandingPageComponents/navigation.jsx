@@ -29,36 +29,58 @@ export function Navigation(){
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            <li>
-              <a href="/#features" className="page-scroll">
-                Features
+            { storedUserData ? null:
+              <li>
+                <a href="/#features" className="page-scroll">
+                  Features
+                </a>
+              </li>
+            }
+            { storedUserData ? null:
+              <li>
+                <a href="/#about" className="page-scroll">
+                  About
+                </a>
+              </li>
+            }
+            { storedUserData ? null:
+              <li>
+                <a href="/#portfolio" className="page-scroll">
+                  Gallery
+                </a>
+              </li>
+            }
+            { storedUserData ? 
+              <li>
+              <a href="/blog" className="page-scroll">
+                Forum
               </a>
             </li>
-            <li>
-              <a href="/#about" className="page-scroll">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="/#portfolio" className="page-scroll">
-                Gallery
-              </a>
-            </li>
-            <li>
-              <a href="/#testimonials" className="page-scroll">
-                Testimonials
-              </a>
-            </li>
-            <li>
-              <a href="/#team" className="page-scroll">
-                Team
-              </a>
-            </li>
+            :
+              <li>
+                <a href="/#testimonials" className="page-scroll">
+                  Testimonials
+                </a>
+              </li>
+            }
             <li>
               <a href="/#contact" className="page-scroll">
                 Contact
               </a>
             </li>
+            { storedUserData ?  
+            <li>
+              <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
+                Logout
+              </a>
+            </li>
+                : 
+            <li>
+              <a href="/#team" className="page-scroll">
+                Team
+              </a>
+            </li>
+            }
             <li>
               { storedUserData ?  
                   <a href="/userDashboard" className="page-scroll">
@@ -71,15 +93,7 @@ export function Navigation(){
                   </a>
                 </button>
               }
-            </li>
-            { storedUserData ?  
-            <li>
-              <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
-                Logout
-              </a>
-            </li>
-                : null
-            }
+              </li>
           </ul>
         </div>
       </div>
