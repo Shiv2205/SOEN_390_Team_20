@@ -1,18 +1,18 @@
-**Class: PropertyMaster**
+## Class: PropertyMaster
 
 This class provides methods for managing properties, such as registering new properties, retrieving property details, and fetching all properties associated with a specific admin ID.
 
 ---
 
-**Properties:**
+## Properties:
 
 - `dbController`: An instance of the `IDBController` interface, responsible for database operations.
 
 ---
 
-**Methods:**
+## Methods:
 
-1. **`registerNewProperty(propertyDetails: PropertyData): Promise<{status: number; property_id: string} | Error>`**
+1. ### `registerNewProperty(propertyDetails: PropertyData): Promise<{status: number; property_id: string} | Error>`
 
    Registers a new property asynchronously and returns the status and property ID or an error.
 
@@ -32,7 +32,7 @@ This class provides methods for managing properties, such as registering new pro
 
 ---
 
-2. **`getProperty(property_id: string): Promise<{status: number; data: PropertyData} | Error>`**
+2. ### `getProperty(property_id: string): Promise<{status: number; data: PropertyData} | Error>`
 
    Retrieves property data from the database using a property ID and returns either the data or an error.
 
@@ -52,7 +52,7 @@ This class provides methods for managing properties, such as registering new pro
 
 ---
 
-3. **`getAllProperties(admin_id: string): Promise<{status: number; data: PropertyData[]} | Error>`**
+3. ### `getAllProperties(admin_id: string): Promise<{status: number; data: PropertyData[]} | Error>`
 
    Retrieves all properties associated with a specific admin ID from the database asynchronously.
 
