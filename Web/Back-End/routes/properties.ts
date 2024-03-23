@@ -29,6 +29,21 @@ const errorHandler = (
 
 // 1. /register
 
+/**
+ * API route handler that registers a new property.
+ *
+ * @param req - Request object with new property data in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ *
+ * @returns A Promise that resolves to an object with result status or rejects with an error.
+ * The returned object has the following structure:
+ *
+ * {
+ *   status: number;
+ *   property_id: string;
+ * }
+ */
 router.post(
   "/register",
   async (
@@ -38,7 +53,7 @@ router.post(
   ) => {
     try {
       const result = await property.registerNewProperty(req.body);
-      if (result instanceof Error) throw result as Error; 
+      if (result instanceof Error) throw result as Error;
       res.status(result.status).json(result);
     } catch (error) {
       errorHandler(error as Error, req, res, next); // Propagate the error to the error handler
@@ -47,6 +62,30 @@ router.post(
 );
 
 // 2. /real-estate
+/**
+ * API route handler that retrieves details for a property by property ID.
+ * 
+ * @param req - Request object with property ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with property details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     property_id?: string;
+ *     admin_id: string;
+ *     unit_count: number;
+ *     parking_count: number;
+ *     locker_count: number;
+ *     address: string;
+ *     picture?: string;
+ *   };
+ *   message?: string;
+ * }
+ */
 router.post(
   "/real-estate",
   async (
@@ -56,7 +95,7 @@ router.post(
   ) => {
     try {
       const property_data = await property.getProperty(req.body.property_id);
-      if (property_data instanceof Error) throw property_data as Error; 
+      if (property_data instanceof Error) throw property_data as Error;
       res.status(property_data.status).json(property_data);
     } catch (error) {
       errorHandler(error as Error, req, res, next);
@@ -65,6 +104,31 @@ router.post(
 );
 
 // 3. /real-estate/company-assets
+/**
+ * API route handler that retrieves assets (properties) associated with a real estate company by admin ID.
+ * 
+ * @param req - Request object with admin ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with company properties or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     property_id?: string;
+ *     admin_id: string;
+ *     unit_count: number;
+ *     parking_count: number;
+ *     locker_count: number;
+ *     address: string;
+ *     picture?: string;
+ *   }[];
+ *   message?: string;
+ * }
+ */
+
 router.post(
   "/real-estate/company-assets",
   async (

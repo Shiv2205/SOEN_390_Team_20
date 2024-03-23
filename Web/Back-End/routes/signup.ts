@@ -4,6 +4,20 @@ import { UserData } from "../types/DBTypes";
 
 const router: Router = express.Router();
 
+/**
+ * API route handler for registering a new user.
+ * 
+ * @param req - Request object with user data in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with a response message indicating the result of user registration.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   response: string;
+ * }
+ */
 router.post(
   "/",
   async (req: Request<{}, {}, UserData>, res: Response, next: NextFunction) => {

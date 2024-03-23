@@ -5,6 +5,29 @@ import { RequestDetails } from "../types/DBTypes";
 const router: Router = express.Router();
 const requestsMaster = new RequestsMaster();
 
+/**
+ * API route handler that retrieves details for a request by ID.
+ * 
+ * @param req - Request object with request ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with request details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     request_id: string;
+ *     unit_id: string;
+ *     type: RequestType;
+ *     description: string;
+ *     employee_id: string;
+ *     status: RequestStatus;
+ *   };
+ *   message?: string;
+ * }
+ */
 router.post(
     "/",
     async function (
@@ -26,6 +49,29 @@ router.post(
     }
 );
 
+/**
+ * API route handler that retrieves all requests associated with a specific unit ID.
+ * 
+ * @param req - Request object with unit ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with requests data or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     request_id: string;
+ *     unit_id: string;
+ *     type: RequestType;
+ *     description: string;
+ *     employee_id: string;
+ *     status: RequestStatus;
+ *   }[];
+ *   message?: string;
+ * }
+ */
 router.post(
     "/unit",
     async function (
@@ -47,6 +93,29 @@ router.post(
     }
 );
 
+/**
+ * API route handler that retrieves all requests associated with a specific employee by ID.
+ * 
+ * @param req - Request object with employee ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with employee requests or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     request_id: string;
+ *     unit_id: string;
+ *     type: RequestType;
+ *     description: string;
+ *     employee_id: string;
+ *     status: RequestStatus;
+ *   }[];
+ *   message?: string;
+ * }
+ */
 router.post(
     "/employee",
     async function (

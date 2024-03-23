@@ -23,3 +23,39 @@ export const useStore = () => {
     
     return [appState, addToStore];
 }
+
+/**
+ * const initialState = appState;
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE':
+      return { ...state, ...action.payload };
+    default:
+      throw new Error(
+        `Unhandled action type: ${action.type}`
+  }
+}
+
+export const useStore = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const listener = (newState) => {
+      dispatch({ type: 'UPDATE', payload: newState });
+    }
+    listeners.push(listener);
+    listener(appState);
+
+    return () =>(
+      listeners = listeners.filter(l => l !== listener);
+    }
+  }, [appState));
+
+  const addToStore = (newState) => {
+    dispatch({ type: 'UPDATE', payload: newState });
+  }
+
+  return [state, addToStore]
+}
+ */
