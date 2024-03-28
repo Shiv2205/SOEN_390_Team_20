@@ -1,61 +1,56 @@
 import { useState, useEffect } from "react";
 
 let appState = {};
-let listeners = [];
-
-const addToStore = (data)  => {
-  appState = {...appState, ...data};
-
-  for(const listener of listeners) listener(appState);
-}
-
-export const useStore = () => {
-    const [store, setStore] = useState(appState);
-
-    useEffect(() => {
-      listeners.push(setStore);
-      setStore();
-    
-      return () => {
-        listeners = listeners.filter(listener => listener !== setStore);
-      }
-    }, []);
-    
-    return [appState, addToStore];
-}
+let listeners = new Set();
+const initialState = appState;
 
 /**
- * const initialState = appState;
-
-const reducer = (state, action) => {
+ * ## Custom React hook that provides access to global app state and dispatch.
+ *---
+ * - ### Returns an array with the current state and dispatch function:
+ *
+ * @example 
+ * ```js 
+ * const [state, dispatch] = useStore();
+ * ```
+ *---
+ * - ### dispatch can be used to update state by passing an action and new state:
+ * 
+ * @example 
+ * ```js
+ * dispatch('CREATE', {some: 'newState'})
+ * ```
+ *---
+ *  ***State is persisted using useState and useEffect hooks. Listeners
+ * are notified of changes.***
+ */
+const reducer = (action, setState) => {
   switch (action.type) {
-    case 'UPDATE':
-      return { ...state, ...action.payload };
+    case "CREATE":
+      console.log(action);
+      appState = { ...appState, ...action.payload };
+      setState(appState);
+    case "DELETE":
+      delete appState[action.payload];
+      return appState;
     default:
-      throw new Error(
-        `Unhandled action type: ${action.type}`
+      throw new Error(`Unhandled action type: ${action.type}`);
   }
-}
+};
 
 export const useStore = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  const [state, setState] = useState(appState);
   useEffect(() => {
-    const listener = (newState) => {
-      dispatch({ type: 'UPDATE', payload: newState });
-    }
-    listeners.push(listener);
-    listener(appState);
+    const listener = () => {
+      setState(appState);
+    };
+    listeners.add(listener);
+    listener(); // in case it's already changed
+    return () => listeners.delete(listener); // cleanup
+  }, []);
 
-    return () =>(
-      listeners = listeners.filter(l => l !== listener);
-    }
-  }, [appState));
-
-  const addToStore = (newState) => {
-    dispatch({ type: 'UPDATE', payload: newState });
-  }
-
-  return [state, addToStore]
-}
- */
+  const dispatch = (action, newState) => {
+    reducer({ type: action, payload: { ...newState } }, setState);
+  };
+  return [state, dispatch];
+};
