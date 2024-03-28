@@ -29,7 +29,7 @@ function App() {
         <Route path="/userDashboard" element={<DashboardOwner userData={userData} setUserData={setUserData} />} />
         <Route path="/requestService" element={<RequestForm />} />
         <Route path="/unitPage" element={<UnitPage />} />
-        <Route path="blog" element={<ChatApp />} />
+        <Route path="/blog" element={<ChatApp />} />
       </Routes>
     </Router>
   );
