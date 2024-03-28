@@ -457,6 +457,75 @@ header .intro-text {
   padding: 10px 0 0;
   color: #888;
 }
+/* mediumProfile Section */
+#mediumProfile {
+  padding: 120px 0; /* Increase padding for larger profile */
+  background: #f6f6f6;
+}
+#mediumProfile i {
+  color: #e6e6e6;
+  font-size: 36px; /* Increase font size */
+  margin-bottom: 25px; /* Increase margin */
+}
+.mediumProfile {
+  position: relative;
+  padding: 30px; /* Increase padding */
+}
+.mediumProfile-image {
+  float: left;
+  margin-right: 20px; /* Increase margin */
+}
+.mediumProfile-image,
+.mediumProfile-image img {
+  display: block;
+  width: 80px; /* Increase image size */
+  height: 80px; /* Increase image size */
+  border-radius: 50%;
+}
+.mediumProfile-content {
+  position: relative;
+  overflow: hidden;
+}
+.mediumProfile-content p {
+  margin-bottom: 0;
+  font-size: 16px; /* Increase font size */
+  font-style: italic;
+}
+
+/* miniProfile Section */
+#miniProfile {
+  padding: 100px 0;
+  background: #f6f6f6;
+}
+#miniProfile i {
+  color: #e6e6e6;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+.miniProfile {
+  position: relative;
+  padding: 20px;
+}
+.miniProfile-image {
+  float: left;
+  margin-right: 15px;
+}
+.miniProfile-image,
+.miniProfile-image img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+.miniProfile-content {
+  position: relative;
+  overflow: hidden;
+}
+.miniProfile-content p {
+  margin-bottom: 0;
+  font-size: 14px;
+  font-style: italic;
+}
 /* Contact Section */
 #contact {
   padding: 100px 0 60px;

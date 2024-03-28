@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Navigation } from "./LandingPageComponents/navigation";
 
-function Login({ views, setView, setUserData }) {
+function Login({setUserData }) {
   const [errMessage, setErrMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -13,6 +16,22 @@ function Login({ views, setView, setUserData }) {
     let formErrors = validateFormData(loginFormData);
     let userData = getUserData(loginFormData, setUserData);
 
+    const boilerplateUserData = {
+      id: 1,
+      username: "example_user",
+      email: "example@example.com",
+      fullName: "John Doe",
+      age: 30,
+      phone: 5146010320,
+      address: "232 jjjd street"
+    };
+    
+    // Store user data in localStorage
+    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    
+    // Set the boilerplate user data using setUserData
+    setUserData(boilerplateUserData);
+
     if (!userData)formErrors.push("Email or password is incorrect");
 
     if (formErrors.length > 0) {
@@ -23,31 +42,35 @@ function Login({ views, setView, setUserData }) {
       setErrMessage(tempError);
     } 
     else {
-      setView(views.PROFILE);
+      navigate("/userDashboard");
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
 
-      <div className="error-message">{errMessage ? errMessage : ""}</div>
+    <div style={{ overflow: 'hidden' }}>
+      <Navigation />
+      <div className="login-container" style={{ marginTop: '110px'}}>
+        <h2>Login</h2>
 
-      <form onSubmit={(e) => handleLogin(e)}>
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+        <div className="error-message">{errMessage ? errMessage : ""}</div>
 
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+        <form onSubmit={(e) => handleLogin(e)}>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" required />
 
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Don't have an account?{" "}
-        <a href="" onClick={(e) => {e. preventDefault(); setView(views.SIGNUP)}}>
-          Sign up
-        </a>
-      </p>
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">Login</button>
+        </form>
+        <p>
+          Don't have an account?{" "}
+          <a href="" onClick={(e) => {e. preventDefault(); navigate("/signup")}}>
+            Sign up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

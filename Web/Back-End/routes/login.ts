@@ -4,6 +4,35 @@ import { PublicUserData, UserCredentials } from "../types/DBTypes";
 
 const router: Router = express.Router();
 
+/**
+ * API route handler for user login.
+ * 
+ * @param req - Request object with user credentials in body
+ * @param res - Response object with optional login data
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with login response or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * If login is successful:
+ * {
+ *   response: string;
+ *   loginData: {
+ *     fullname: string;
+ *     email: string;
+ *     phone_number?: string;
+ *     profile_picture?: string;
+ *     account_id: string;
+ *     account_type: string;
+ *   };
+ * }
+ * 
+ * If login fails:
+ * {
+ *   response: string;
+ * }
+ */
+
 router.post(
   "/",
   async function (

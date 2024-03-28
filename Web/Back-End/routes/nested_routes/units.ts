@@ -18,18 +18,60 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
 };
 
 // Middleware endpoint handler for /register route
-router.post('/register', async (req: Request<{}, {}, UnitData>, res: Response, next: NextFunction) => {
+/**
+ * API route handler that registers a new unit.
+ *
+ * @param req - Request object with UnitData in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ *
+ * @returns A Promise that resolves to an object with status
+ * and result of registerUnit() call.
+ * The returned object has the following structure:
+ *
+ * {
+ *   status: number;
+ *   unit_id: string
+ * }
+ */
+router.post(
+  "/register",
+  async (req: Request<{}, {}, UnitData>, res: Response, next: NextFunction) => {
     try {
-        const unitData: UnitData = req.body;
-        const result = await unit.registerUnit(unitData);
-        if(result instanceof Error) throw result as Error;
-        res.status(result.status).json(result);
+      const unitData: UnitData = req.body;
+      const result = await unit.registerUnit(unitData);
+      if (result instanceof Error) throw result as Error;
+      res.status(result.status).json(result);
     } catch (error) {
-        errorHandler(error as Error, req, res, next);
+      errorHandler(error as Error, req, res, next);
     }
-});
+  }
+);
 
 // Middleware endpoint handler for /get-unit route
+/**
+ * API route handler that retrieves details for a unit by ID.
+ * 
+ * @param req - Request object with unit ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with unit details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     unit_id: string;
+ *     property_id: string;
+ *     size: number;
+ *     monthly_rent: number;
+ *     condo_fee: number;
+ *     condo_balance: number;
+ *   };
+ *   message?: string;
+ * }
+ */
 router.post('/get-unit', async (req: Request<{}, {}, { unit_id: string }>, res: Response, next: NextFunction) => {
     try {
         const { unit_id } = req.body;
@@ -41,7 +83,65 @@ router.post('/get-unit', async (req: Request<{}, {}, { unit_id: string }>, res: 
     }
 });
 
+// Middleware endpoint handler for /get-user-unit route
+/**
+ * API route handler that retrieves details for a unit associated with a user by occupant ID.
+ * 
+ * @param req - Request object with occupant ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with unit details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     unit_id: string;
+ *     property_id: string;
+ *     size: number;
+ *     monthly_rent: number;
+ *     condo_fee: number;
+ *     condo_balance: number;
+ *   };
+ *   message?: string;
+ * }
+ */
+router.post('/get-user-unit', async (req: Request<{}, {}, { occupant_id: string }>, res: Response, next: NextFunction) => {
+    try {
+        const { occupant_id } = req.body;
+        const result = await unit.getUserUnit(occupant_id);
+        if(result instanceof Error) throw result as Error;
+        res.status(result.status).json(result);
+    } catch (error) {
+        errorHandler(error as Error, req, res, next);
+    }
+});
+
 // Middleware endpoint handler for /property-assets route
+/**
+ * API route handler that retrieves assets (units) associated with a property by property ID.
+ * 
+ * @param req - Request object with property ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with property units or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     unit_id: string;
+ *     property_id: string;
+ *     size: number;
+ *     monthly_rent: number;
+ *     condo_fee: number;
+ *     condo_balance: number;
+ *   }[];
+ *   message?: string;
+ * }
+ */
 router.post('/property-assets', async (req: Request<{}, {}, { property_id: string }>, res: Response, next: NextFunction) => {
     try {
         const { property_id } = req.body;

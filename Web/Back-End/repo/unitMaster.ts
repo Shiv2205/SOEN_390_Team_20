@@ -39,6 +39,23 @@ class UnitMaster {
   }
 
   /**
+   * The function `getUserUnit` asynchronously retrieves unit details for a given occupant ID from a
+   * database controller.
+   * @param {string} occupant_id - The `occupant_id` parameter is a string that represents the unique
+   * identifier of the occupant for whom you want to retrieve the unit details.
+   * @returns The `getUserUnit` function returns a Promise that resolves to an object with the
+   * following structure: `{ status: number; data?: UnitDetails; message?: string }`. The `data`
+   * property may contain details about the unit, and the `message` property may contain additional
+   * information. If an error occurs during the execution of the function, an `Error` object is
+   * returned.
+   */
+  async getUserUnit(occupant_id: string): Promise<{ status: number; data?: UnitDetails; message?: string } | Error> {
+    let result = await this.dbController.getOccupiedUnit(occupant_id);
+    if (result instanceof Error) return result as Error;
+    return result;
+  }
+
+  /**
    * The function `getPropertyUnits` asynchronously retrieves all units associated with a given
    * property ID using a database controller.
    * @param property_id - The `property_id` parameter is the unique identifier or key associated with a

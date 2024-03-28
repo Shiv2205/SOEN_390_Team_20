@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UploadWidget from "./UploadWidget";
+import { Navigation } from "./LandingPageComponents/navigation";
 
-function SignUp({ views, setView }) {
+function SignUp({setUserData}) {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
+const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
     /* `event.preventDefault();` is used to prevent the default form submission.*/
@@ -24,63 +27,73 @@ function SignUp({ views, setView }) {
       });
       setErrMessage(tempError);
     }
+
+    const boilerplateUserData = {
+      id: 12,
+      username: "example_user",
+      email: "example@example.com",
+      fullName: "cooco Doe",
+      age: 30,
+      phone: 5146010320,
+      address: "232 jjjd street"
+    };
+    
+    // Store user data in localStorage
+    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    setUserData(boilerplateUserData);
+    navigate("/userDashboard");
   };
 
   return (
-    <div className="signup-container">
-      <h2>Create an Account</h2>
+    <div style={{ overflow: 'hidden' }}>
+      <Navigation />
+      <div className="signup-container" style={{ marginTop: '120px'}}>
+        <h2>Create an Account</h2>
 
-      <div className="error-message">{errMessage ? errMessage : ""}</div>
+        <div className="error-message">{errMessage ? errMessage : ""}</div>
 
-      <form onSubmit={(e) => handleSignUp(e)}>
-        <label htmlFor="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" required />
+        <form onSubmit={(e) => handleSignUp(e)}>
+          <label htmlFor="fullname">Full Name:</label>
+          <input type="text" id="fullname" name="fullname" required />
 
-        <label htmlFor="email">Email:</label>
-        <input type="email" id="email" name="email" required />
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" required />
 
-        <label htmlFor="password">Password:</label>
-        <input type="password" id="password" name="password" required />
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" required />
 
-        <label htmlFor="confirmPassword">Confirm Password:</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          required
-        />
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+          />
 
-        <label htmlFor="phoneNumber">Phone Number:</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" />
+          <label htmlFor="phoneNumber">Phone Number:</label>
+          <input type="tel" id="phoneNumber" name="phoneNumber" />
 
-        <div className="profile-picture-wrapper">
-          <label htmlFor="profilePicture">Profile Picture:</label>
-          {!thumbnail ? (
-            <UploadWidget
-              setProfilePic={setProfilePic}
-              setThumbnail={setThumbnail}
-            />
-          ) : (
-            <img src={thumbnail} />
-          )}
-        </div>
+          <div className="profile-picture-wrapper">
+            <label htmlFor="profilePicture">Profile Picture:</label>
+            {!thumbnail ? (
+              <UploadWidget
+                setProfilePic={setProfilePic}
+                setThumbnail={setThumbnail}
+              />
+            ) : (
+              <img src={thumbnail} />
+            )}
+          </div>
 
-        <br />
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
-      <p>
-        Already have an account?{" "}
-        <a
-          href=""
-          onClick={(e) => {
-            e.preventDefault();
-            setView(views.LOGIN);
-          }}
-        >
-          Log in
-        </a>
-      </p>
+          <br />
+          <br />
+          <button type="submit">Sign Up</button>
+        </form>
+        <p>
+          Already have an account?{" "}
+          <button onClick={() => {navigate("/login")}}>Log in</button>
+        </p>
+      </div>
     </div>
   );
 }

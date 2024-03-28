@@ -22,15 +22,14 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   text-align: center;
+  align-items: center;
   height: auto;
-  max-width: 400px; 
+  max-width: 500px; 
   width: 90%; 
   margin: auto;
   display: flex; 
   flex-direction: column;
-  justify-content: center;
   overflow: hidden; 
-  justify-content: flex-start;
 }
 
 .signup-container h2 {
@@ -38,7 +37,7 @@ body {
 }
 
 .signup-container form {
-  max-width: 300px;
+  width: 400px;
   max-height: 100vh;
   margin: auto 0; 
   display: flex;
@@ -61,6 +60,7 @@ body {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
+  color:#fff;
 }
 
 .signup-container button {
@@ -84,7 +84,7 @@ body {
 }
 
 .signup-container a {
-  color: #3e5beb;
+  color: #4caf50;
   text-decoration: none;
 }
 
@@ -118,6 +118,7 @@ body {
 }
 
 .login-container input {
+  color:white;
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;

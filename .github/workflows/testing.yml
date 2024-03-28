@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies (Backend)
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-backend-${{ hashFiles('Web/Back-End/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-backend-
+
+      - name: Setup Node.js (Backend)
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.x"
+
+      - name: Install dependencies (Backend)
+        run: npm install
+        working-directory: Web/Back-End
+
+      - name: Run tests (Backend)
+        run: yarn test
+        working-directory: Web/Back-End
+
+      - name: Handle test results
+        if: failure()
+        run: echo "Tests failed. Please check the logs for more details."

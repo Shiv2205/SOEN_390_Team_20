@@ -1,10 +1,10 @@
 -- Dummy data for the "request" table
-INSERT INTO request (request_id, employee_id, type, description, status) VALUES
-    ('8d95c41e-96cb-4d8b-bf64-40ffed7f88d5', '6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'daily_operations', 'Fixing broken intercom', 'Completed'),
-    ('b90c066a-3c54-4c20-9f0d-1aa77d73a7e0', 'cb29c3c8-936d-4a67-9c0a-2902349c07f7', 'move_in', 'New tenant moving in', 'In progress'),
-    ('e67a739d-56b0-4c9b-b4b8-201f78c0cb5c', 'f25d45e1-f4b6-40d3-aae5-7781ffefb57e', 'access', 'Issue with access card', 'Received'),
-    ('9fd7c4d5-fcb5-44c8-a1b3-460f2fc83ed2', '6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'common_area_report', 'Report of damaged elevator', 'In progress'),
-    ('12d4fe96-7556-49cc-848f-b8cf0c8f1402', 'cb29c3c8-936d-4a67-9c0a-2902349c07f7', 'question', 'Inquiry about parking allocation', 'Received');
+INSERT INTO request (request_id, unit_id, employee_id, type, description, status) VALUES
+    ('8d95c41e-96cb-4d8b-bf64-40ffed7f88d5', '43cc3d25-5297-4a5e-8b23-7dc246042cb2', '6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'daily_operations', 'Fixing broken intercom', 'Completed'),
+    ('b90c066a-3c54-4c20-9f0d-1aa77d73a7e0', '9f401f02-89da-47a3-b79d-9534d7c36b90', 'cb29c3c8-936d-4a67-9c0a-2902349c07f7', 'move_in', 'New tenant moving in', 'In progress'),
+    ('e67a739d-56b0-4c9b-b4b8-201f78c0cb5c', '43cc3d25-5297-4a5e-8b23-7dc246042cb2', 'f25d45e1-f4b6-40d3-aae5-7781ffefb57e', 'access', 'Issue with access card', 'Received'),
+    ('9fd7c4d5-fcb5-44c8-a1b3-460f2fc83ed2', '851ae35e-648b-4487-bdc3-d2ec8333bc40', '6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'common_area_report', 'Report of damaged elevator', 'In progress'),
+    ('12d4fe96-7556-49cc-848f-b8cf0c8f1402', '9cf98c1d-6766-4d5c-80a7-d0f601460e61', 'cb29c3c8-936d-4a67-9c0a-2902349c07f7', 'question', 'Inquiry about parking allocation', 'Received');
 
 -- Dummy data for the "property" table
 INSERT INTO property (property_id, admin_id, unit_count, locker_count, parking_count, address, picture) VALUES
