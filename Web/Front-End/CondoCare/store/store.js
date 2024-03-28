@@ -9,12 +9,14 @@ const reducer = (action, setState) => {
       console.log(action);
       appState = { ...appState, ...action.payload };
       setState(appState);
+      break;
     case "DELETE":
       delete appState[action.payload];
       return appState;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
+  listeners.forEach(listener => listener()); // Notify all the listeners of any state change
 };
 
 /**

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
@@ -8,7 +8,6 @@ import Profile from "../components/Profile";
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DashboardOwner from "../components/DashboardOwner.jsx";
 import RequestForm from "../components/RequestForm.jsx";
 import UnitPage from "../components/UnitPage.jsx";
