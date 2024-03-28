@@ -2,7 +2,20 @@ import { useState, useEffect } from "react";
 
 let appState = {};
 let listeners = new Set();
-const initialState = appState;
+
+const reducer = (action, setState) => {
+  switch (action.type) {
+    case "CREATE":
+      console.log(action);
+      appState = { ...appState, ...action.payload };
+      setState(appState);
+    case "DELETE":
+      delete appState[action.payload];
+      return appState;
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+};
 
 /**
  * ## Custom React hook that provides access to global app state and dispatch.
@@ -18,26 +31,12 @@ const initialState = appState;
  * 
  * @example 
  * ```js
- * dispatch('CREATE', {some: 'newState'})
+ * dispatch('CREATE', {userData: {...newState}})
  * ```
  *---
  *  ***State is persisted using useState and useEffect hooks. Listeners
  * are notified of changes.***
  */
-const reducer = (action, setState) => {
-  switch (action.type) {
-    case "CREATE":
-      console.log(action);
-      appState = { ...appState, ...action.payload };
-      setState(appState);
-    case "DELETE":
-      delete appState[action.payload];
-      return appState;
-    default:
-      throw new Error(`Unhandled action type: ${action.type}`);
-  }
-};
-
 export const useStore = () => {
   const [state, setState] = useState(appState);
   useEffect(() => {

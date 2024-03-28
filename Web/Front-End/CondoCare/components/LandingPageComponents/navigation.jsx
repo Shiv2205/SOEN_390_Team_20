@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-export function Navigation(){
+export function Navigation() {
   const storedUserData = localStorage.getItem("userData");
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
@@ -29,81 +29,94 @@ export function Navigation(){
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            { storedUserData ? null:
+            {storedUserData ? null : (
               <li>
                 <a href="/#features" className="page-scroll">
                   Features
                 </a>
               </li>
-            }
-            { storedUserData ? null:
+            )}
+            {storedUserData ? null : (
               <li>
                 <a href="/#about" className="page-scroll">
                   About
                 </a>
               </li>
-            }
-            { storedUserData ? null:
+            )}
+            {storedUserData ? null : (
               <li>
                 <a href="/#portfolio" className="page-scroll">
                   Gallery
                 </a>
               </li>
-            }
-            { storedUserData ? 
+            )}
+            {storedUserData ? (
               <li>
-              <a href="/blog" className="page-scroll">
-                Forum
-              </a>
-            </li>
-            :
+                <Link to="/blog" className="page-scroll">
+                  Blog
+                </Link>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <a href="/#testimonials" className="page-scroll">
+                    Testimonials
+                  </a>
+                </li>
+                <li>
+                  <a href="/#contact" className="page-scroll">
+                    Contact
+                  </a>
+                </li>
+              </>
+            )}
+            {storedUserData ? (
               <li>
-                <a href="/#testimonials" className="page-scroll">
-                  Testimonials
+                <a
+                  href="/"
+                  className="page-scroll"
+                  onClick={() => localStorage.removeItem("userData")}
+                >
+                  Logout
                 </a>
               </li>
-            }
+            ) : (
+              <li>
+                <a href="/#team" className="page-scroll">
+                  Team
+                </a>
+              </li>
+            )}
             <li>
-              <a href="/#contact" className="page-scroll">
-                Contact
-              </a>
-            </li>
-            { storedUserData ?  
-            <li>
-              <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
-                Logout
-              </a>
-            </li>
-                : 
-            <li>
-              <a href="/#team" className="page-scroll">
-                Team
-              </a>
-            </li>
-            }
-            <li>
-              { storedUserData ?  
-                  <a href="/userDashboard" className="page-scroll">
-                    home
-                  </a>
-                : 
-                <button className="btn btn-custom"> 
-                  <a href="/login" className="page-scroll" style={{color:"white"}}>
-                  Sign in
+              {storedUserData ? (
+                <a href="/userDashboard" className="page-scroll">
+                  home
+                </a>
+              ) : (
+                <button className="btn btn-custom">
+                  <a
+                    href="/login"
+                    className="page-scroll"
+                    style={{ color: "white" }}
+                  >
+                    Sign in
                   </a>
                 </button>
-              }
-              </li>
-            <li>
-              <a href="#blog" className="page-scroll">
-              <Link to="/blog">Blog</Link>
-              </a>
+              )}
             </li>
+            {
+              /**  FOR TESTING ONLY   */
+              <li>
+                <Link to="/blog" className="page-scroll">
+                  Blog
+                </Link>
+              </li>
+            }
           </ul>
         </div>
       </div>
     </nav>
   );
-};
+}
 
 export default Navigation;
