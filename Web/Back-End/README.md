@@ -49,14 +49,16 @@ This is the back-end component of the web application. It provides the server, A
 ## Project Structure
 
 ```bash
-src/
+Back-End/
 ├── app.ts         # Entry point, app setup
 ├── routes/        # API routes
-├── controllers/   # Route controllers
-├── models/        # Data models
-├── services/      # Business logic services 
-├── utils/         # Utility functions
-└── config.ts      # Configuration
+├── controllers/   # DB controllers
+├── data/          # SQLite database
+├── Factory/       # Factory to create and share instance of DB controller
+├── repo/          # Repository classes
+├── sql/           # DDL and DML
+├── test/          # Jest test suites
+└── types/         # User-defined types for the app
 ```
 
 ## API Documentation
