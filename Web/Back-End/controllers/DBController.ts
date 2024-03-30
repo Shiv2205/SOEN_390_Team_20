@@ -33,7 +33,7 @@ class DBController implements IDBController {
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
       fs.stat(currentDBPath, undefined, (err, stats) => {
-        if (err) {
+        // if (!err) {
           this.db.serialize(() => {
             let ddl = fs.readFileSync(ddlPath, "utf8");
             let tables = ddl.split(";--");
@@ -42,9 +42,9 @@ class DBController implements IDBController {
             });
           });
           resolve({ init: "Database initialized" });
-        } else {
-          resolve({ init: "Database ready" });
-        }
+        // } else {
+        //   resolve({ init: "Database ready" });
+        // }
       });
     });
   }
@@ -508,7 +508,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE creator_id = ?;",
+          "SELECT * FROM post_data WHERE creator_id = ?;",
           creator_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -531,7 +531,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE replied_to = ?;",
+          "SELECT * FROM post_data WHERE replied_to = ?;",
           post_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -558,7 +558,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE property_id = ?;",
+          "SELECT * FROM post_data WHERE property_id = ?;",
           property_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);

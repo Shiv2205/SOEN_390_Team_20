@@ -7,6 +7,9 @@ const MessageList = () => {
 
   const [state, dispatch] = useStore();
   // Mock data structure, it should match the prop names expected by the Message component
+
+  const { postData } = state;
+  console.log(postData);
   const messages = [
     {
       post_id: '1',
@@ -36,11 +39,11 @@ const MessageList = () => {
 
   return (
     <div className="message-list">
-      {messages.map((msg) => (
+      {postData.map((msg) => (
         <Message
           key={msg.post_id}
           timestamp={msg.posted_at}
-          author={msg.creator_id}
+          author={msg.creator_name}
           text={msg.content}
          
         />

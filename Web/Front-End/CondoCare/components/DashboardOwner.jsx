@@ -172,7 +172,7 @@ function getPostData(property_id, dispatch) {
     .then((response) => response.json())
     .then((res) => {
       // Handle the response from the server
-      dispatch("CREATE", { postData: { ...res.data } });
+      dispatch("CREATE", { postData: res.data  });
     })
     .catch((error) => {
       // Handle error

@@ -22,6 +22,7 @@ export interface PostData {
 
 export interface PostDetails extends PostData {
   readonly post_id: string;
+  readonly creator_name: string;
   posted_at: string;
 }
 

@@ -13,6 +13,7 @@ const getUserPostsOutput: { status: number; data?: PostDetails[] } = {
     {
       post_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       creator_id: "user_id",
+      creator_name: "User Name",
       property_id: "Property id test",
       content: "Post Content",
       posted_at: "2024-02-29T12:00:00Z",
@@ -26,6 +27,7 @@ const getPropertyPostsOutput: { status: number; data?: PostDetails[] } = {
     {
       post_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
       creator_id: "user_id",
+      creator_name: "User Name",
       property_id: "Property id test",
       content: "Post Content",
       posted_at: "2024-02-29T12:00:00Z",
