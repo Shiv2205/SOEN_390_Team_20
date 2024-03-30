@@ -91,3 +91,9 @@ CREATE VIEW employee_data AS
     SELECT employee_id, property_id, type, A.fullname, A.email, A.phone_number, A.profile_picture, A.created_at
     FROM employee
     JOIN account A ON employee.employee_id = A.account_id
+
+--:--
+CREATE VIEW post_data AS
+    SELECT post_id, property_id, creator_id, A.fullname as creator_name, content, replied_to, posted_at
+    FROM post
+    JOIN account A ON post.creator_id = A.account_id
