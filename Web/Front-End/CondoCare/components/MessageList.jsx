@@ -1,8 +1,11 @@
 
 import React from 'react';
 import Message from './Message';
+import { useStore } from '../store/store';
 
 const MessageList = () => {
+
+  const [state, dispatch] = useStore();
   // Mock data structure, it should match the prop names expected by the Message component
   const messages = [
     {

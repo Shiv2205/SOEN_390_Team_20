@@ -122,3 +122,39 @@
 }
 
 /* Add any additional styles you need for padding, margins, colors, etc. */
+/* Styles for the message container */
+.discord-message {
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  background-color: #f7f7f7;
+}
+
+/* Styles for the message author */
+.discord-message-author {
+  font-weight: bold;
+  color: #002979;
+  margin-bottom: 4px;
+}
+
+/* Styles for the message timestamp */
+.discord-message-timestamp {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+/* Styles for the message text */
+.discord-message-text {
+  color: #000;
+  font-size: 14px;
+}
+
+/* Styles for the message avatar */
+.discord-message-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
