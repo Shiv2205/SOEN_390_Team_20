@@ -109,7 +109,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
 
   return (
     <div className="dashboard-owner">
-      {console.log(state)}
       <Navigation />
       {state.userData ? (
         <>
@@ -153,6 +152,27 @@ function getUnitData(occupant_id, dispatch) {
     .then((res) => {
       // Handle the response from the server
       dispatch("CREATE", { unitData: { ...res.data } });
+      getPostData(res.data.property_id, dispatch);
+    })
+    .catch((error) => {
+      // Handle error
+      console.error("Error:", error);
+    });
+}
+
+function getPostData(property_id, dispatch) {
+  fetch(`${import.meta.env.VITE_SERVER_BASE_URL}/properties/posts/property-channel-posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      // Add any other headers you need
+    },
+    body: JSON.stringify({property_id: property_id}),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      // Handle the response from the server
+      dispatch("CREATE", { postData: { ...res.data } });
     })
     .catch((error) => {
       // Handle error
