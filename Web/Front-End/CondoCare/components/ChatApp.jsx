@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
-import MessageList from './MessageList';
-import NewMessageForm from './NewMessageForm';
+import Sidebar from './ChatAppComponents/Sidebar';
+import MessageList from './ChatAppComponents/MessageList';
+import NewMessageForm from './ChatAppComponents/NewMessageForm';
 import "../styles/ChatApp.css";
 import { useStore } from '../store/store';
 import { useSocket } from '../socket/socket';

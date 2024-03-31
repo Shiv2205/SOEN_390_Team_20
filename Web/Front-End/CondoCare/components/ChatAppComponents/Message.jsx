@@ -1,16 +1,16 @@
 
 import React from 'react';
-import blank from '../src/assets/blank.webp' 
+import blank from '../../src/assets/blank.webp' 
 
-const Message = ({ author, timestamp, text }) => {
-  const formattedTimestamp = new Date(timestamp).toLocaleString();
+const Message = ({ creator_name, posted_at, content }) => {
+  const formattedTimestamp = new Date(posted_at).toLocaleString();
   
   return (
     <div className="discord-message">
       <img src={blank} className="discord-message-avatar" alt="Avatar" />
       <div className="discord-message-content">
-        <div className="discord-message-author">{author}</div>
-        {text && <p className="discord-message-text">{text}</p>}
+        <div className="discord-message-author">{creator_name}</div>
+        {content && <p className="discord-message-text">{content}</p>}
         <div className="discord-message-timestamp">{formattedTimestamp}</div>
       </div>
     </div>

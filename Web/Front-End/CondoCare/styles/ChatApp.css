@@ -158,3 +158,8 @@
   border-radius: 50%;
   margin-right: 12px;
 }
+
+.collapse-thread-button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
