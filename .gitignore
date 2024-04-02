@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 *yarn.lock*
 .env
-*/yarn.lock
+Web\Front-End\CondoCare\yarn.lock
