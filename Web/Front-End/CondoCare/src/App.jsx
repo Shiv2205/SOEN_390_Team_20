@@ -10,7 +10,7 @@ import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DashboardOwner from "../components/DashboardOwner.jsx";
-import RequestForm from "../components/RequestForm.jsx";
+import RequestForm from "../components/UnitPageComponents/RequestForm.jsx";
 import UnitPage from "../components/UnitPage.jsx";
 
 
@@ -26,7 +26,6 @@ function App() {
         <Route path="/propertyview" element={<PropertyView userData={userData}/>} />
         <Route path="/propertyregistration" element={<PropertyRegistration userData={userData}/>} />
         <Route path="/userDashboard" element={<DashboardOwner userData={userData} setUserData={setUserData} />} />
-        <Route path="/requestService" element={<RequestForm />} />
         <Route path="/unitPage" element={<UnitPage />} />
       </Routes>
     </Router>

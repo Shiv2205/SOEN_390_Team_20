@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSocket } from "../socket/socket";
+import { useSocket } from "../../socket/socket";
 
 const REQUEST_TYPES = [
   "Access",
