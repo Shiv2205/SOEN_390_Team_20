@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Message from "./Message";
 
 const Threads = ({ replies }) => {
@@ -11,7 +11,7 @@ const Threads = ({ replies }) => {
   return (
     <div className="thread-message">
       {collapsed ? (
-        <span className="collapse-thread-button" onClick={() => toggleCollapse()}>+ Show all</span>
+        <span className="collapse-thread-button" onClick={toggleCollapse}>+ Show all</span>
       ) : (
         <>
           {replies.map((message) => (

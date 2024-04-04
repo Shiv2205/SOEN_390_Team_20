@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 let appState = {};
 let listeners = new Set();
 
+/**
+ * Reducer function that handles state updates based on passed action.
+ * Handles CREATE, DELETE, and default case.
+ * Notifies listeners on any state change.
+ */
 const reducer = (action, setState) => {
   switch (action.type) {
     case "CREATE":
@@ -16,7 +21,7 @@ const reducer = (action, setState) => {
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
-  listeners.forEach(listener => listener()); // Notify all the listeners of any state change
+  listeners.forEach((listener) => listener()); // Notify all the listeners of any state change
 };
 
 /**

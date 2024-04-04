@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSocket } from "../../socket/socket";
 
 export function Navigation() {
   const storedUserData = localStorage.getItem("userData");
+  const [socket, dispatch] = useSocket();
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -75,7 +77,7 @@ export function Navigation() {
                 <a
                   href="/"
                   className="page-scroll"
-                  onClick={() => localStorage.removeItem("userData")}
+                  onClick={() => logout(dispatch)}
                 >
                   Logout
                 </a>
@@ -104,14 +106,6 @@ export function Navigation() {
                 </button>
               )}
             </li>
-            {
-              /**  FOR TESTING ONLY   */
-              <li>
-                <Link to="/blog" className="page-scroll">
-                  Blog
-                </Link>
-              </li>
-            }
           </ul>
         </div>
       </div>
@@ -120,3 +114,8 @@ export function Navigation() {
 }
 
 export default Navigation;
+
+function logout(dispatch) {
+    dispatch("DISCONNECT", "");
+    localStorage.removeItem("userData");
+}

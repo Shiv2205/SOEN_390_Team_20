@@ -1,25 +1,31 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-let webSocket;
+const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+let webSocket = getConnection();
 let listeners = new Set();
+
+function getConnection() {
+    return io(SERVER, {transports: ['websocket']});
+}
 
 const reducer = (action, setSocket) => {
   switch (action.type) {
     case "CONNECT":
-      setSocket(webSocket);
+      webSocket = getConnection();
       break;
     case "JOIN_ROOM":
       let { room_id, username } = action.payload;
       webSocket.emit("join_room", { room_id, username });
-      setSocket(webSocket);
       break;
     case "DISCONNECT":
-      /** To be implemented */
-      return webSocket;
+      setSocket(webSocket.disconnect());
+      console.log("Disconnected from server");
+      break;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
+  setSocket(webSocket);
 };
 
 /**
@@ -47,7 +53,15 @@ const reducer = (action, setSocket) => {
  * ```
  */
 export const useSocket = () => {
-  const [socket, setSocket] = useState(io(import.meta.env.VITE_SERVER_BASE_URL, {transports: ['websocket']}));
+  const [socket, setSocket] = useState(io(SERVER, {transports: ['websocket']}));
+  // useEffect(() => {
+  //   const listener = () => {
+  //     setSocket(webSocket);
+  //   };
+  //   listeners.add(listener);
+  //   listener(); // in case it's already changed
+  //   return () => listeners.delete(listener); // cleanup
+  // }, []);
 
   const dispatch = (action, packet) => {
     reducer({ type: action, payload: packet }, setSocket);

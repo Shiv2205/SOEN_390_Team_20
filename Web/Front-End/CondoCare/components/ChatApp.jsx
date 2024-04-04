@@ -26,7 +26,7 @@ const ChatApp = () => {
     });
 
     // return () => {
-    //   socket.disconnect();
+    //   dispatch("DISCONNECT", "");
     // };
   }, [socket]);
   

@@ -10,40 +10,11 @@ const MessageList = () => {
    *  replies: PostData[] (sort by posted_at)
    * }[]
    */
-  const posts = [];
+  let posts = [];
   const [state, dispatch] = useStore();
 
   const { postData } = state;
   filterPostData(postData, posts);
-
-  console.log(posts);
-
-  const messages = [
-    {
-      post_id: "1",
-      content: "Welcome to CondoCare chat!",
-      creator_id: "John Doe",
-      posted_at: "2023-03-20T14:00:00Z",
-    },
-    {
-      post_id: "2",
-      content: "Welcome to CondoCare chat!",
-      creator_id: "Alexander Doe",
-      posted_at: "2023-03-20T14:00:00Z",
-    },
-    {
-      post_id: "3",
-      content: "Welcome to CondoCare chat!",
-      creator_id: "James Doe",
-      posted_at: "2023-03-20T14:00:00Z",
-    },
-    {
-      post_id: "4",
-      content: "Welcome to CondoCare chat!",
-      creator_id: "Jeremiah Doe",
-      posted_at: "2023-03-20T14:00:00Z",
-    },
-  ];
 
   return (
     <div className="message-list">
@@ -93,6 +64,12 @@ function filterPostData(postData, posts) {
     });
     count++;
   }
+
+  posts = posts.sort((a, b) => {
+    if (new Date(a.post.posted_at) > new Date(b.post.posted_at)) return -1;
+    else if (new Date(a.post.posted_at) < new Date(b.post.posted_at)) return 1;
+    return 0;
+  });
 
   for (let i = count; i < sortedPosts.length; i++) {
     posts[
