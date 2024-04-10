@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../styles/DashboardOwner.css";
 import { Navigation } from "./LandingPageComponents/navigation";
 import {PropertiesInfo} from "./DashboardComponents/propertiesInfo.jsx";
-import JsonData from "./LandingPageComponents/data.json";
 import {MiniProfile} from "./DashboardComponents/miniProfile.jsx";
 const DashboardOwner = ({userData, setUserData}) => {
-    const [landingPageData, setLandingPageData] = useState({});
     const [properties, setProperties] = useState([]);
 
     // Fetch user properties from serever
@@ -69,29 +67,11 @@ const DashboardOwner = ({userData, setUserData}) => {
       
       useEffect(() => {
         setProperties(propertyData);
-        setLandingPageData(JsonData);
-        const storedUserData = localStorage.getItem("userData");
-        if (storedUserData) {
-          setUserData(JSON.parse(storedUserData));
-        }
-    }, []);
-
-    // // Placeholder data - replace with actual data
-    // const properties = [
-    //     { id: 1, name: 'Property 1', address: '123 Main St', imageUrl: 'https://via.placeholder.com/100' },
-    //     { id: 2, name: 'Property 2', address: '456 Oak St', imageUrl: 'https://via.placeholder.com/100' },
-    //     // More properties...
-    // ];
-    //
-    // // Placeholder for user data
-    // const user = {
-    //     name: 'John Doe',
-    //     imageUrl: 'https://via.placeholder.com/50'
-    // };
+      }, []);
 
     return (
         <div className="dashboard-owner">
-            <Navigation  />
+            <Navigation userData={userData} />
             <MiniProfile userData={userData} setUserData={setUserData}/>
             <PropertiesInfo properties={properties} setProperties={setProperties}/>
 

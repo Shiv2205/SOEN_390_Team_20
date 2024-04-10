@@ -10,14 +10,14 @@ import { Team } from "./LandingPageComponents/Team";
 import { Contact } from "./LandingPageComponents/contact";
 import JsonData from "./LandingPageComponents/data.json";
 
-function LandingPage() {
+function LandingPage({userData}) {
   const [landingPageData, setLandingPageData] = useState({});
   useEffect(() => {
     setLandingPageData(JsonData);
   }, []);
   return (
     <div>
-      <Navigation />
+      <Navigation userData={userData}/>
       <Header data={landingPageData.Header} />
       <Features data={landingPageData.Features} id="features" />
       <About data={landingPageData.About} id="about" />

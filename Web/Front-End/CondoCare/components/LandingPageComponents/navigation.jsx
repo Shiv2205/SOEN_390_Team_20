@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
 
-export function Navigation(){
-  const storedUserData = localStorage.getItem("userData");
+export function Navigation({ userData}){
+  // const userData = localStorage.getItem("userData");
+    console.log(userData);
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -29,28 +30,28 @@ export function Navigation(){
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            { storedUserData ? null:
+            { userData != "" ? null:
               <li>
                 <a href="/#features" className="page-scroll">
                   Features
                 </a>
               </li>
             }
-            { storedUserData ? null:
+            { userData != "" ? null:
               <li>
                 <a href="/#about" className="page-scroll">
                   About
                 </a>
               </li>
             }
-            { storedUserData ? null:
+            { userData != "" ? null:
               <li>
                 <a href="/#portfolio" className="page-scroll">
                   Gallery
                 </a>
               </li>
             }
-            { storedUserData ? 
+            { userData != "" ? 
               <li>
               <a href="/blog" className="page-scroll">
                 Forum
@@ -68,7 +69,7 @@ export function Navigation(){
                 Contact
               </a>
             </li>
-            { storedUserData ?  
+            { userData != "" ?  
             <li>
               <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
                 Logout
@@ -82,7 +83,7 @@ export function Navigation(){
             </li>
             }
             <li>
-              { storedUserData ?  
+              { userData != "" ?  
                   <a href="/userDashboard" className="page-scroll">
                     home
                   </a>
