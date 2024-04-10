@@ -1,0 +1,19 @@
+.events-table {
+  padding-left: 15px;
+}
+
+.events-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-table th,
+.events-table td {
+  text-align: left;
+  padding: 10px;
+}
+
+.table-headers {
+  font-size: 20px;
+  font-weight: 600;
+}
