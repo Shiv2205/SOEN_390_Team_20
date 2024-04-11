@@ -160,7 +160,7 @@ function getUnitData(occupant_id, dispatch) {
     });
 }
 
-function getPostData(property_id, dispatch) {
+export function getPostData(property_id, dispatch) {
   fetch(`${import.meta.env.VITE_SERVER_BASE_URL}/properties/posts/property-channel-posts`, {
     method: "POST",
     headers: {
