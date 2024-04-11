@@ -87,13 +87,44 @@ CREATE TABLE IF NOT EXISTS CMC_Admin (
     FOREIGN KEY (admin_id) REFERENCES account (account_id)
 );--
 
+CREATE TABLE IF NOT EXISTS events (
+    event_id TEXT PRIMARY KEY,
+    host_id TEXT,
+    title TEXT,
+    description TEXT,
+    location TEXT,
+    date_and_time TIMESTAMP,
+    FOREIGN KEY (host_id) REFERENCES unit (occupant_id)
+);--
+
+CREATE TABLE IF NOT EXISTS event_attendees (
+    event_id TEXT,
+    attendee_id TEXT,
+    FOREIGN KEY (event_id) REFERENCES events (event_id),
+    FOREIGN KEY (attendee_id) REFERENCES unit (occupant_id),
+    PRIMARY KEY (event_id, attendee_id)
+);--
+
 CREATE VIEW employee_data AS
     SELECT employee_id, property_id, type, A.fullname, A.email, A.phone_number, A.profile_picture, A.created_at
     FROM employee
     JOIN account A ON employee.employee_id = A.account_id
 
---:--
+--
 CREATE VIEW post_data AS
     SELECT post_id, property_id, creator_id, A.fullname as creator_name, content, replied_to, posted_at
     FROM post
     JOIN account A ON post.creator_id = A.account_id
+
+--
+CREATE VIEW events_data AS
+    SELECT event_id, A.fullname as host_name, U.property_id, title, description, location, date_and_time
+    FROM events
+    JOIN account A ON events.host_id = A.account_id
+    JOIN unit U ON events.host_id = U.occupant_id
+
+--
+CREATE VIEW attendees_data AS
+    SELECT event_id, attendee_id, A.fullname as attendee_name
+    FROM event_attendees
+    JOIN account A ON event_attendees.attendee_id = A.account_id

@@ -32,11 +32,11 @@ class DBController implements IDBController {
 
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, undefined, (err, stats) => {
+      fs.stat(currentDBPath, (err, stats) => {
         // if (!err) {
           this.db.serialize(() => {
             let ddl = fs.readFileSync(ddlPath, "utf8");
-            let tables = ddl.split(";--");
+            let tables = ddl.split("--");
             tables.map((createTable) => {
               if (createTable) this.db.run(createTable.trim() + ";"); // DDL to create table
             });
