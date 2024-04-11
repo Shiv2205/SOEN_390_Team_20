@@ -10,7 +10,6 @@ import UnitPage from "../components/UnitPage.jsx";
 
 function App() {
   const storedUserData = JSON.parse(localStorage.getItem("userData"));
-  // Set initial value of userData state to storedUserData if available, otherwise set it to an empty object
   const [userData, setUserData] = useState(storedUserData || {});
   return (
     <Router>
