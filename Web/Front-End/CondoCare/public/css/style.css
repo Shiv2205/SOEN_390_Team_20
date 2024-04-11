@@ -673,3 +673,20 @@ label {
     margin: 50px 0;
   }
 }
+
+.google-button {
+  display: inline-block;
+  max-width: 250px;
+  margin-top: 50px;
+  border: 0;
+  padding: 0 18px;
+  text-align: center;
+  width: 100%;
+  height: 37px;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.84) !important;
+  fill: rgba(0, 0, 0, 0.84) !important;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.05);
+  font: inherit;
+  outline: none;
+}
