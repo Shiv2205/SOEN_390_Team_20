@@ -34,7 +34,7 @@ class DBController implements IDBController {
 
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, (err, stats) => {
+      //fs.stat(currentDBPath, (err, stats) => {
         // if (!err) {
           this.db.serialize(() => {
             let ddl = fs.readFileSync(ddlPath, "utf8");
@@ -47,14 +47,14 @@ class DBController implements IDBController {
         // } else {
         //   resolve({ init: "Database ready" });
         // }
-      });
+      //});
     });
   }
 
   async populate(): Promise<{ populate: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, undefined, (err, stats) => {
-        if (!err) {
+      // fs.stat(currentDBPath, undefined, (err, stats) => {
+      //   if (!err) {
           // console.log("Database ready");
           // this.db = new sqlite3.Database(currentDBPath);
           this.db.serialize(() => {
@@ -67,10 +67,10 @@ class DBController implements IDBController {
             });
           });
           resolve({ populate: "Database populated" });
-        } else {
-          reject({ populate: "Database does not exist" });
-        }
-      });
+        // } else {
+        //   reject({ populate: "Database does not exist" });
+        // }
+      //});
     });
   }
 

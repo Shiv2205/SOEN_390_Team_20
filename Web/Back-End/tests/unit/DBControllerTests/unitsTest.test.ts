@@ -94,7 +94,12 @@ describe("units tests", () => {
       expect(unitSpy).toHaveBeenCalledWith(testRecord);
       expect(dbController.db.run).toHaveBeenCalled();
       expect(dbController.db.run).toHaveBeenCalledWith(
-        (dbController.db.run as jest.Mock).mock.calls[0][0],
+        //(dbController.db.run as jest.Mock).mock.calls[0][0],
+        `INSERT INTO unit 
+                (unit_id, property_id, size, monthly_rent, condo_fee, condo_balance, occupant_id,
+                occupant_registration_key,
+                occupant_type) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           mockRes.unit_id,
           testRecord.property_id,

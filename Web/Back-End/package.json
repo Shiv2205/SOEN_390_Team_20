@@ -6,7 +6,7 @@
     "build": "npx tsc",
     "start": "node --watch ./dist/app.js",
     "dev": "yarn build && concurrently \"npx tsc -w\" \"node --watch dist/app.js\"",
-    "test": "jest --noStackTrace --json",
+    "test": "jest",
     "coverage": "jest --coverage"
   },
   "dependencies": {

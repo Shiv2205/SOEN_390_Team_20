@@ -82,7 +82,9 @@ describe("posts tests", () => {
       expect(postSpy).toHaveBeenCalledWith(testRecord);
       expect(dbController.db.run).toHaveBeenCalled();
       expect(dbController.db.run).toHaveBeenCalledWith(
-        (dbController.db.run as jest.Mock).mock.calls[0][0],
+        `INSERT INTO post 
+                (post_id, property_id, creator_id, content, replied_to) 
+                VALUES (?, ?, ?, ?, ?)`,
         [
           mockRes.post_id,
           testRecord.property_id,
@@ -129,7 +131,7 @@ describe("posts tests", () => {
       ).resolves.toBeTruthy();
       expect(dbController.db.all).toHaveBeenCalled();
       expect(dbController.db.all).toHaveBeenCalledWith(
-        "SELECT * FROM post WHERE creator_id = ?;",
+        "SELECT * FROM post_details WHERE creator_id = ?;",
         testCreatorID,
         (dbController.db.all as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
@@ -178,7 +180,7 @@ describe("posts tests", () => {
       ).resolves.toBeTruthy();
       expect(dbController.db.all).toHaveBeenCalled();
       expect(dbController.db.all).toHaveBeenCalledWith(
-        "SELECT * FROM post WHERE replied_to = ?;",
+        "SELECT * FROM post_details WHERE replied_to = ?;",
         testPostID,
         (dbController.db.all as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
@@ -227,7 +229,7 @@ describe("posts tests", () => {
       ).resolves.toBeTruthy();
       expect(dbController.db.all).toHaveBeenCalled();
       expect(dbController.db.all).toHaveBeenCalledWith(
-        "SELECT * FROM post WHERE property_id = ?;",
+        "SELECT * FROM post_details WHERE property_id = ?;",
         testPropertyID,
         (dbController.db.all as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
