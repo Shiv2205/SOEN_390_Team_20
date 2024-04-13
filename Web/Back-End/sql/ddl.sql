@@ -105,26 +105,26 @@ CREATE TABLE IF NOT EXISTS event_attendees (
     PRIMARY KEY (event_id, attendee_id)
 );--
 
-CREATE VIEW employee_data AS
+CREATE VIEW employee_details AS
     SELECT employee_id, property_id, type, A.fullname, A.email, A.phone_number, A.profile_picture, A.created_at
     FROM employee
     JOIN account A ON employee.employee_id = A.account_id
 
 --
-CREATE VIEW post_data AS
+CREATE VIEW post_details AS
     SELECT post_id, property_id, creator_id, A.fullname as creator_name, content, replied_to, posted_at
     FROM post
     JOIN account A ON post.creator_id = A.account_id
 
 --
-CREATE VIEW events_data AS
+CREATE VIEW events_details AS
     SELECT event_id, A.fullname as host_name, U.property_id, title, description, location, date_and_time
     FROM events
     JOIN account A ON events.host_id = A.account_id
     JOIN unit U ON events.host_id = U.occupant_id
 
 --
-CREATE VIEW attendees_data AS
+CREATE VIEW attendees_details AS
     SELECT event_id, attendee_id, A.fullname as attendee_name
     FROM event_attendees
     JOIN account A ON event_attendees.attendee_id = A.account_id

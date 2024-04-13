@@ -104,10 +104,16 @@ export interface RequestDetails extends RequestData {
   status: RequestStatus;
 }
 
+//Events table data
 export interface EventData {
   host_id: string;
   title: string;
   description: string;
   location: string;
   date_and_time: string;
+}
+
+//Events Details
+export interface EventDetails extends EventData {
+  event_id: string;
 }

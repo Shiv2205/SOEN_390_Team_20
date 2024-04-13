@@ -2,7 +2,7 @@ import * as sqlite3 from "sqlite3";
 import * as fs from "fs";
 import * as uuid from "uuid";
 import * as path from "path";
-import { IDBController } from "../interfaces/IDBController";
+import IDBController from "../interfaces/IDBController";
 import {
   EmployeeData,
   EmployeeDetails,
@@ -17,9 +17,10 @@ import {
   RequestStatus,
   RequestData,
   EventData,
+  EventDetails,
 } from "../types/DBTypes";
 
-const currentDB = "test_data.txt"; // test_data.txt
+const currentDB = "test_data.sqlite3"; // test_data.txt
 const ddlPath = path.join(process.cwd(), "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
 const currentDBPath = path.join(process.cwd(), `/data/${currentDB}`);
@@ -194,7 +195,7 @@ class DBController implements IDBController {
     email: string,
     password: string
   ): Promise<{ status: number; data?: EmployeeDetails; message?: string }> {
-    let existingUser = await this.recordExists("employee_data", "email", email);
+    let existingUser = await this.recordExists("employee_details", "email", email);
     return new Promise(async (resolve, reject) => {
       if (existingUser) {
         this.db.get(
@@ -205,7 +206,7 @@ class DBController implements IDBController {
             email,
             phone_number,
             profile_picture
-          FROM employee_data 
+          FROM employee_details 
           WHERE email = ? `, //AND password = ?`,
           [email], // password],
           function (err, row: EmployeeDetails) {
@@ -231,7 +232,7 @@ class DBController implements IDBController {
       if (propertyExists) {
         this.db.all(
           `SELECT *
-           FROM employee_data 
+           FROM employee_details 
            WHERE property_id = ?;`,
           property_id,
           function (err, rows: EmployeeDetails[]) {
@@ -509,7 +510,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post_data WHERE creator_id = ?;",
+          "SELECT * FROM post_details WHERE creator_id = ?;",
           creator_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -532,7 +533,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post_data WHERE replied_to = ?;",
+          "SELECT * FROM post_details WHERE replied_to = ?;",
           post_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -559,7 +560,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post_data WHERE property_id = ?;",
+          "SELECT * FROM post_details WHERE property_id = ?;",
           property_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -722,7 +723,30 @@ class DBController implements IDBController {
     });
   }
 
-  async getHostEvents(){}
+  async getHostEvents(host_id: string) {
+    let eventExists = await this.recordExists(
+      "events",
+      "host_id",
+      host_id
+    );
+    return new Promise(async (resolve, reject) => {
+      if (eventExists) {
+        this.db.all(
+          "SELECT * FROM events_details WHERE host_id = ?;",
+          host_id,
+          function (err, rows: EventDetails[]) {
+            if (err) reject(err);
+            if (rows.length > 0) resolve({ status: 200, data: rows });
+          }
+        );
+      } else {
+        resolve({
+          status: 204,
+          message: "Property has no posts in database.",
+        });
+      }
+    });
+  }
 
   async registerNewAttendee(){}
 

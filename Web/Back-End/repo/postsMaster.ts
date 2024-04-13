@@ -1,6 +1,6 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
+import IDBController from "../interfaces/IDBController";
 import {
-  IDBController,
   PostData,
   PostDetails,
   UnitDetails,

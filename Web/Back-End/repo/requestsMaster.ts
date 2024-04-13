@@ -1,5 +1,6 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
-import { IDBController, RequestDetails } from "../types/DBTypes";
+import IDBController from "../interfaces/IDBController";
+import { RequestDetails } from "../types/DBTypes";
 
 class RequestsMaster {
     readonly dbController: IDBController;

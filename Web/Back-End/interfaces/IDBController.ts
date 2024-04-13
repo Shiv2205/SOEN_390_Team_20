@@ -13,7 +13,7 @@ import {
     RequestData,
   } from "../types/DBTypes";
 
-export interface IDBController {
+export default interface IDBController {
     /**
      * This TypeScript function initializes a database by checking its existence, reading DDL from a
      * file, and creating tables based on the DDL.

@@ -1,6 +1,6 @@
 // DBControllerFactory.js
 import DBController from "../controllers/DBController";
-import { IDBController } from "../types/DBTypes";
+import IDBController from "../interfaces/IDBController";
 
 /* The `DBControllerFactory` class in TypeScript provides a static method to create instances of
 `DBController`. */
