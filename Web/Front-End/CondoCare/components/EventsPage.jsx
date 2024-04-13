@@ -38,6 +38,7 @@ const EventsPage = ({ userData, setUserData }) => {
             <tr className="table-headers">
               <th>Name</th>
               <th>Date</th>
+              <th>Description</th>
             </tr>
           </thead>
           <tbody>
@@ -45,11 +46,6 @@ const EventsPage = ({ userData, setUserData }) => {
               <tr key={index}>
                 <td>{event.name}</td>
                 <td>{event.date}</td>
-                <td>
-                  <button onClick={() => handleRegister(event.name)}>
-                    Register
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -66,10 +62,5 @@ function randomDate(start, end) {
     .toISOString()
     .split("T")[0];
 }
-
-const handleRegister = (eventName) => {
-  // Implement event registration logic here
-  alert(`You have registered for ${eventName}`);
-};
 
 export default EventsPage;
