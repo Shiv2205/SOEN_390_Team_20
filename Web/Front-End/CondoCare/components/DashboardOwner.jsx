@@ -94,19 +94,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
     }
   }, [state.userData]);
 
-  // // Placeholder data - replace with actual data
-  // const properties = [
-  //     { id: 1, name: 'Property 1', address: '123 Main St', imageUrl: 'https://via.placeholder.com/100' },
-  //     { id: 2, name: 'Property 2', address: '456 Oak St', imageUrl: 'https://via.placeholder.com/100' },
-  //     // More properties...
-  // ];
-  //
-  // // Placeholder for user data
-  // const user = {
-  //     name: 'John Doe',
-  //     imageUrl: 'https://via.placeholder.com/50'
-  // };
-
   return (
     <div className="dashboard-owner">
       <Navigation />
