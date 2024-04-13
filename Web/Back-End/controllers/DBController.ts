@@ -2,10 +2,10 @@ import * as sqlite3 from "sqlite3";
 import * as fs from "fs";
 import * as uuid from "uuid";
 import * as path from "path";
+import { IDBController } from "../interfaces/IDBController";
 import {
   EmployeeData,
   EmployeeDetails,
-  IDBController,
   PostData,
   PostDetails,
   PropertyData,
@@ -16,6 +16,7 @@ import {
   RequestDetails,
   RequestStatus,
   RequestData,
+  EventData,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.txt"; // test_data.txt
@@ -697,6 +698,35 @@ class DBController implements IDBController {
       return { status: 500, message: (error as Error).message };
     }
   }
+
+  async createNewEvent({host_id, title, description, date_and_time}: EventData): Promise<{ status: number; event_id: string }> {
+    return new Promise((resolve, reject) => {
+      const event_id = uuid.v4(); // Generate a unique event_id using uuid
+
+      this.db.run(
+        `INSERT INTO events 
+              (event_id, host_id, title, description, date_and_time) 
+              VALUES (?, ?, ?, ?, ?)`,
+        [event_id, host_id, title, description, date_and_time],
+        (err) => {
+          if (err) {
+            reject({
+              status: 500,
+              message: "Error creating event in database.",
+            });
+          } else {
+            resolve({ status: 201, event_id });
+          }
+        }
+      );
+    });
+  }
+
+  async getHostEvents(){}
+
+  async registerNewAttendee(){}
+
+  async getAttendeeEvents(){}
 
   close(): void {
     this.db.close((err) => {
