@@ -23,6 +23,22 @@ const errorHandler = (
 router.use(errorHandler);
 
 // 1. /register
+/**
+ * API route handler for user registration.
+ * 
+ * @param req - Request object containing user registration data
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with registration status or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   account_id?: string;
+ *   message?: string;
+ * }
+ */
 router.post(
   "/register",
   async (req: Request<{}, {}, UserData>, res: Response, next: NextFunction) => {
@@ -37,6 +53,29 @@ router.post(
 );
 
 // 2. /users
+/**
+ * API route handler for retrieving user details.
+ * 
+ * @param req - Request object containing user credentials (email and password)
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with user details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     account_id: string;
+ *     account_type: string;
+ *     fullname: string;
+ *     email: string;
+ *     phone_number?: string;
+ *     profile_picture?: string;
+ *   };
+ *   message?: string;
+ * }
+ */
 router.post(
   "/users",
   async (
@@ -60,6 +99,22 @@ router.post(
 );
 
 // 3. /register/employee
+/**
+ * API route handler for registering a new employee.
+ * 
+ * @param req - Request object containing employee data
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with the status of the registration operation,
+ * employee ID, and optional message. The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   employee_id?: string;
+ *   message?: string;
+ * }
+ */
 router.post(
   "/register/employee",
   async (
@@ -78,6 +133,30 @@ router.post(
 );
 
 // 4. /employees
+/**
+ * API route handler that retrieves employee details based on provided credentials.
+ * 
+ * @param req - Request object with user credentials in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with employee details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     employee_id: string;
+ *     fullname: string;
+ *     email: string;
+ *     property_id?: string | null;
+ *     type: "manager" | "accountant" | "daily_operator";
+ *     phone_number: string;
+ *     profile_picture: string;
+ *   };
+ *   message?: string;
+ * }
+ */
 router.post(
   "/employees",
   async (
@@ -99,6 +178,30 @@ router.post(
 );
 
 // 5. /employees/property-agents
+/**
+ * API route handler that retrieves property agents (employees) associated with a specific property.
+ * 
+ * @param req - Request object with property ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with property agents' details or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   data?: {
+ *     employee_id: string;
+ *     fullname: string;
+ *     email: string;
+ *     property_id?: string | null;
+ *     type: "manager" | "accountant" | "daily_operator";
+ *     phone_number: string;
+ *     profile_picture: string;
+ *   }[];
+ *   message?: string;
+ * }
+ */
 router.post(
   "/employees/property-agents",
   async (

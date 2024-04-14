@@ -84,10 +84,9 @@ export const MiniProfile = ({ userData, setUserData }) => {
                     </div>
                   ) : (
                     <div>
-                      <p>{userData.fullName}</p>
+                      <p>{userData.fullname}</p>
                       <p>{userData.email}</p>
-                      <p>{userData.address}</p>
-                      <p>{userData.phone}</p>
+                      <p>{userData.phone_number}</p>
                     </div>
                   )}
                 </div>

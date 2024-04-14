@@ -1,5 +1,6 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
-import { IDBController, PropertyData } from "../types/DBTypes";
+import IDBController from "../interfaces/IDBController";
+import { PropertyData } from "../types/DBTypes";
 
 class PropertyMaster {
   readonly dbController: IDBController; 

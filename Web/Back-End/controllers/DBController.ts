@@ -2,10 +2,10 @@ import * as sqlite3 from "sqlite3";
 import * as fs from "fs";
 import * as uuid from "uuid";
 import * as path from "path";
+import IDBController from "../interfaces/IDBController";
 import {
   EmployeeData,
   EmployeeDetails,
-  IDBController,
   PostData,
   PostDetails,
   PropertyData,
@@ -16,9 +16,11 @@ import {
   RequestDetails,
   RequestStatus,
   RequestData,
+  EventData,
+  EventDetails,
 } from "../types/DBTypes";
 
-const currentDB = "test_data.txt"; // test_data.txt
+const currentDB = "test_data.sqlite3"; // test_data.txt
 const ddlPath = path.join(process.cwd(), "/sql/ddl.sql");
 const testData = path.join(process.cwd(), "/sql/populate.sql");
 const currentDBPath = path.join(process.cwd(), `/data/${currentDB}`);
@@ -32,27 +34,27 @@ class DBController implements IDBController {
 
   async initialize(DBPath: string = currentDBPath): Promise<{ init: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, undefined, (err, stats) => {
-        if (err) {
+      //fs.stat(currentDBPath, (err, stats) => {
+        // if (!err) {
           this.db.serialize(() => {
             let ddl = fs.readFileSync(ddlPath, "utf8");
-            let tables = ddl.split(";--");
+            let tables = ddl.split("--");
             tables.map((createTable) => {
               if (createTable) this.db.run(createTable.trim() + ";"); // DDL to create table
             });
           });
           resolve({ init: "Database initialized" });
-        } else {
-          resolve({ init: "Database ready" });
-        }
-      });
+        // } else {
+        //   resolve({ init: "Database ready" });
+        // }
+      //});
     });
   }
 
   async populate(): Promise<{ populate: string }> {
     return new Promise((resolve, reject) => {
-      fs.stat(currentDBPath, undefined, (err, stats) => {
-        if (!err) {
+      // fs.stat(currentDBPath, undefined, (err, stats) => {
+      //   if (!err) {
           // console.log("Database ready");
           // this.db = new sqlite3.Database(currentDBPath);
           this.db.serialize(() => {
@@ -65,10 +67,10 @@ class DBController implements IDBController {
             });
           });
           resolve({ populate: "Database populated" });
-        } else {
-          reject({ populate: "Database does not exist" });
-        }
-      });
+        // } else {
+        //   reject({ populate: "Database does not exist" });
+        // }
+      //});
     });
   }
 
@@ -193,7 +195,7 @@ class DBController implements IDBController {
     email: string,
     password: string
   ): Promise<{ status: number; data?: EmployeeDetails; message?: string }> {
-    let existingUser = await this.recordExists("employee_data", "email", email);
+    let existingUser = await this.recordExists("employee_details", "email", email);
     return new Promise(async (resolve, reject) => {
       if (existingUser) {
         this.db.get(
@@ -204,7 +206,7 @@ class DBController implements IDBController {
             email,
             phone_number,
             profile_picture
-          FROM employee_data 
+          FROM employee_details 
           WHERE email = ? `, //AND password = ?`,
           [email], // password],
           function (err, row: EmployeeDetails) {
@@ -230,7 +232,7 @@ class DBController implements IDBController {
       if (propertyExists) {
         this.db.all(
           `SELECT *
-           FROM employee_data 
+           FROM employee_details 
            WHERE property_id = ?;`,
           property_id,
           function (err, rows: EmployeeDetails[]) {
@@ -508,7 +510,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE creator_id = ?;",
+          "SELECT * FROM post_details WHERE creator_id = ?;",
           creator_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -531,7 +533,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE replied_to = ?;",
+          "SELECT * FROM post_details WHERE replied_to = ?;",
           post_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -558,7 +560,7 @@ class DBController implements IDBController {
     return new Promise(async (resolve, reject) => {
       if (postsExists) {
         this.db.all(
-          "SELECT * FROM post WHERE property_id = ?;",
+          "SELECT * FROM post_details WHERE property_id = ?;",
           property_id,
           function (err, rows: PostDetails[]) {
             if (err) reject(err);
@@ -697,6 +699,58 @@ class DBController implements IDBController {
       return { status: 500, message: (error as Error).message };
     }
   }
+
+  async createNewEvent({host_id, title, description, date_and_time}: EventData): Promise<{ status: number; event_id: string }> {
+    return new Promise((resolve, reject) => {
+      const event_id = uuid.v4(); // Generate a unique event_id using uuid
+
+      this.db.run(
+        `INSERT INTO events 
+              (event_id, host_id, title, description, date_and_time) 
+              VALUES (?, ?, ?, ?, ?)`,
+        [event_id, host_id, title, description, date_and_time],
+        (err) => {
+          if (err) {
+            reject({
+              status: 500,
+              message: "Error creating event in database.",
+            });
+          } else {
+            resolve({ status: 201, event_id });
+          }
+        }
+      );
+    });
+  }
+
+  async getHostEvents(host_id: string) {
+    let eventExists = await this.recordExists(
+      "events",
+      "host_id",
+      host_id
+    );
+    return new Promise(async (resolve, reject) => {
+      if (eventExists) {
+        this.db.all(
+          "SELECT * FROM events_details WHERE host_id = ?;",
+          host_id,
+          function (err, rows: EventDetails[]) {
+            if (err) reject(err);
+            if (rows.length > 0) resolve({ status: 200, data: rows });
+          }
+        );
+      } else {
+        resolve({
+          status: 204,
+          message: "Property has no posts in database.",
+        });
+      }
+    });
+  }
+
+  async registerNewAttendee(){}
+
+  async getAttendeeEvents(){}
 
   close(): void {
     this.db.close((err) => {

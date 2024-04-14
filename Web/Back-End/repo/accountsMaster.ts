@@ -1,11 +1,11 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
 import bcrypt from "bcryptjs";
+import IDBController from "../interfaces/IDBController";
 import {
   UserData,
   EmployeeData,
   PublicUserData,
   EmployeeDetails,
-  IDBController,
 } from "../types/DBTypes";
 
 class AccountsMaster {

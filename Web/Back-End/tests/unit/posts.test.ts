@@ -78,6 +78,7 @@ describe("Posts Router", () => {
         {
           property_id: "test-prop-id",
           creator_id: "test-creator-id",
+          creator_name: "User Name",
           content: "test constent",
           post_id: "test-port-id",
           posted_at: "test-timestamp",
@@ -85,6 +86,7 @@ describe("Posts Router", () => {
         {
           property_id: "test-prop-id-2",
           creator_id: "test-creator-id-2",
+          creator_name: "User Name",
           content: "test constent 2",
           post_id: "test-port-id-2",
           posted_at: "test-timestamp-2",
@@ -117,12 +119,14 @@ describe("Posts Router", () => {
           property_id: "test-prop-id",
           creator_id: "test-creator-id",
           content: "test constent",
+          creator_name: "User Name",
           post_id: "test-port-id",
           posted_at: "test-timestamp",
         },
         {
           property_id: "test-prop-id-2",
           creator_id: "test-creator-id-2",
+          creator_name: "User Name",
           content: "test constent 2",
           post_id: "test-port-id-2",
           posted_at: "test-timestamp-2",

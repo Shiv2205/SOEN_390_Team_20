@@ -1,25 +1,62 @@
 import { useState, useEffect } from "react";
 
 let appState = {};
-let listeners = [];
+let listeners = new Set();
 
-const addToStore = (data)  => {
-  appState = {...appState, ...data};
+/**
+ * Reducer function that handles state updates based on passed action.
+ * Handles CREATE, DELETE, and default case.
+ * Notifies listeners on any state change.
+ */
+const reducer = (action, setState) => {
+  switch (action.type) {
+    case "CREATE":
+      console.log(action);
+      appState = { ...appState, ...action.payload };
+      setState(appState);
+      break;
+    case "DELETE":
+      delete appState[action.payload];
+      return appState;
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+  listeners.forEach((listener) => listener()); // Notify all the listeners of any state change
+};
 
-  for(const listener of listeners) listener(appState);
-}
-
+/**
+ * ## Custom React hook that provides access to global app state and dispatch.
+ *---
+ * - ### Returns an array with the current state and dispatch function:
+ *
+ * @example 
+ * ```js 
+ * const [state, dispatch] = useStore();
+ * ```
+ *---
+ * - ### dispatch can be used to update state by passing an action and new state:
+ * 
+ * @example 
+ * ```js
+ * dispatch('CREATE', {userData: {...newState}})
+ * ```
+ *---
+ *  ***State is persisted using useState and useEffect hooks. Listeners
+ * are notified of changes.***
+ */
 export const useStore = () => {
-    const [store, setStore] = useState(appState);
+  const [state, setState] = useState(appState);
+  useEffect(() => {
+    const listener = () => {
+      setState(appState);
+    };
+    listeners.add(listener);
+    listener(); // in case it's already changed
+    return () => listeners.delete(listener); // cleanup
+  }, []);
 
-    useEffect(() => {
-      listeners.push(setStore);
-      setStore();
-    
-      return () => {
-        listeners = listeners.filter(listener => listener !== setStore);
-      }
-    }, []);
-    
-    return [appState, addToStore];
-}
+  const dispatch = (action, newState) => {
+    reducer({ type: action, payload: { ...newState } }, setState);
+  };
+  return [state, dispatch];
+};

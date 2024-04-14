@@ -24,26 +24,32 @@ INSERT INTO file (file_id, title, content, property_id) VALUES
 
 -- Dummy data for the "unit" table
 INSERT INTO unit (unit_id, property_id, occupant_id, occupant_registration_key, occupant_type, size, monthly_rent, condo_fee, condo_balance) VALUES
-    ('43cc3d25-5297-4a5e-8b23-7dc246042cb2', '25e44531-6e47-4c70-a488-8f0c08e48c50', NULL, NULL, 'owner', 1000, 1200.00, 300.00, 0.00),
+    ('43cc3d25-5297-4a5e-8b23-7dc246042cb2', '25e44531-6e47-4c70-a488-8f0c08e48c50', "f41f13cf-9434-47a0-b01e-4e4b8d4d746e", NULL, 'owner', 1000, 1200.00, 300.00, 0.00),
     ('9f401f02-89da-47a3-b79d-9534d7c36b90', '61d0c979-8e84-4c71-8b7a-bd306f261fe5', NULL, NULL, 'renter', 800, 900.00, 200.00, 0.00),
     ('fe524cd1-1ad3-47de-929d-8a49b20033a2', '5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', NULL, NULL, 'owner', 1200, 1500.00, 350.00, 0.00),
     ('9cf98c1d-6766-4d5c-80a7-d0f601460e61', '91df8580-912d-48d3-9e42-2b238aee3b22', NULL, NULL, 'renter', 900, 1000.00, 250.00, 0.00),
-    ('851ae35e-648b-4487-bdc3-d2ec8333bc40', '2faa684a-bf1c-4b92-a56d-77a4a5a4b278', NULL, NULL, 'owner', 950, 1300.00, 320.00, 0.00);
+    ('851ae35e-648b-4487-bdc3-d2ec8333bc40', '25e44531-6e47-4c70-a488-8f0c08e48c50', "e319c0b2-f4cd-4f58-a306-b0b0f8050713", NULL, 'owner', 950, 1300.00, 320.00, 0.00);
 
 -- Dummy data for the "post" table
-INSERT INTO post (post_id, property_id, creator_id, content, replied_to) VALUES
-    ('b0793701-1f24-4d2a-a9f0-91463d83a7b2', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'Reminder: Maintenance scheduled for tomorrow.', NULL),
-    ('a7eb80eb-4f94-426f-b6bb-624063d38fd4', '61d0c979-8e84-4c71-8b7a-bd306f261fe5', '2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Community BBQ this Saturday! Dont miss out!', NULL),
-    ('f738ebfd-871e-420b-8ab8-3fd5a445a04d', '5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Anyone interested in forming a book club?', NULL),
-    ('e5787a82-2b07-43f8-b8d4-68916e74e27e', '91df8580-912d-48d3-9e42-2b238aee3b22', 'd595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Reminder: Rent due by end of the month.', NULL),
-    ('f192146a-2079-4380-8a9e-7a04d01a3775', '2faa684a-bf1c-4b92-a56d-77a4a5a4b278', '2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Lost and found: A set of keys was found at the entrance.', NULL);
+INSERT INTO post (post_id, property_id, creator_id, content, replied_to, posted_at) VALUES
+('b0793701-1f24-4d2a-a9f0-91463d83a7b2', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'Reminder: Maintenance scheduled for tomorrow.', NULL, '2024-03-30 22:51:11'),
+('a7eb80eb-4f94-426f-b6bb-624063d38fd4', '61d0c979-8e84-4c71-8b7a-bd306f261fe5', '2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Community BBQ this Saturday! Dont miss out!', NULL, '2024-03-30 22:51:11'),
+('f738ebfd-871e-420b-8ab8-3fd5a445a04d', '5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Anyone interested in forming a book club?', NULL, '2024-03-30 22:51:11'),
+('e5787a82-2b07-43f8-b8d4-68916e74e27e', '91df8580-912d-48d3-9e42-2b238aee3b22', 'd595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Reminder: Rent due by end of the month.', NULL, '2024-03-30 22:51:11'),
+('f192146a-2079-4380-8a9e-7a04d01a3775', '2faa684a-bf1c-4b92-a56d-77a4a5a4b278', '2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Lost and found: A set of keys was found at the entrance.', NULL, '2024-03-30 22:51:11'),
+('0fcf24d4-7acb-4610-9d4b-1597a3f57d3e', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum lobortis sem at congue. Cras ac ligula vitae mi efficitur condimentum. Curabitur mollis lectus justo. Quisque ullamcorper fringilla orci a ullamcorper. Etiam quis turpis tincidunt turpis finibus vulputate ut et sapien. Vivamus semper tortor sed venenatis tincidunt. Duis pharetra mattis ultrices. Phasellus tristique lacus quis ante pulvinar, nec tempus enim venenatis. Morbi dapibus tortor vel augue aliquam suscipit. Nam in magna arcu.', NULL, '2024-03-30 22:55:57'),
+('10ac5346-1f64-45e6-b350-4fdcd9429fbd', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum lobortis sem at congue. Cras ac ligula vitae mi efficitur condimentum. Curabitur mollis lectus justo. Quisque ullamcorper fringilla orci a ullamcorper. Etiam quis turpis tincidunt turpis finibus vulputate ut et sapien. Vivamus semper tortor sed venenatis tincidunt. Duis pharetra mattis ultrices. Phasellus tristique lacus quis ante pulvinar, nec tempus enim venenatis. Morbi dapibus tortor vel augue aliquam suscipit. Nam in magna arcu.', NULL, '2024-03-30 22:56:22'),
+('87ea2eee-5b32-4b58-8b75-aa158a92e72f', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum lobortis sem at congue. Cras ac ligula vitae mi efficitur condimentum. Curabitur mollis lectus justo. Quisque ullamcorper fringilla orci a ullamcorper. Etiam quis turpis tincidunt turpis finibus vulputate ut et sapien. Vivamus semper tortor sed venenatis tincidunt. Duis pharetra mattis ultrices. Phasellus tristique lacus quis ante pulvinar, nec tempus enim venenatis. Morbi dapibus tortor vel augue aliquam suscipit. Nam in magna arcu.', '0fcf24d4-7acb-4610-9d4b-1597a3f57d3e', '2024-03-30 22:56:48'),
+('f5030947-9770-4c43-9d9f-ae5004b94a6a', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum lobortis sem at congue. Cras ac ligula vitae mi efficitur condimentum. Curabitur mollis lectus justo. Quisque ullamcorper fringilla orci a ullamcorper. Etiam quis turpis tincidunt turpis finibus vulputate ut et sapien. Vivamus semper tortor sed venenatis tincidunt. Duis pharetra mattis ultrices. Phasellus tristique lacus quis ante pulvinar, nec tempus enim venenatis. Morbi dapibus tortor vel augue aliquam suscipit. Nam in magna arcu.', '0fcf24d4-7acb-4610-9d4b-1597a3f57d3e', '2024-03-30 22:57:28'),
+('953e20e4-f2fd-4ac5-9f45-9f3e76a435b0', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis condimentum lobortis sem at congue. Cras ac ligula vitae mi efficitur condimentum. Curabitur mollis lectus justo. Quisque ullamcorper fringilla orci a ullamcorper.', '0fcf24d4-7acb-4610-9d4b-1597a3f57d3e', '2024-03-30 22:57:28');
+
 
 -- Dummy data for the "account" table
 INSERT INTO account (account_id, fullname, password, email, phone_number, profile_picture, registration_key, account_type) VALUES
     ('f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'John Doe', 'password1', 'john@example.com', '+1234567890', 'https://example.com/john.jpg', NULL, 'Owner'),
     ('2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Jane Smith', 'password2', 'jane@example.com', '+1987654321', 'https://example.com/jane.jpg', NULL, 'Renter'),
-    ('e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Alice Johnson', 'password3', 'alice@example.com', NULL, NULL, NULL, 'Public'),
-    ('d595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Bob Brown', 'password4', 'bob@example.com', NULL, NULL, NULL, 'Renter'),
+    ('e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Alice Johnson', 'password3', 'alice@example.com', NULL, NULL, NULL, 'Owner'),
+    ('d595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Bob Brown', 'password4', 'bob@example.com', NULL, NULL, NULL, 'Public'),
     ('6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'Emily Wilson', 'password5', 'emily@example.com', NULL, NULL, NULL, 'Employee');
 
 -- Dummy data for the "employee" table

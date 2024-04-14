@@ -43,7 +43,6 @@ jest.mock("fs", () => ({
   stat: jest.fn(
     (
       path,
-      undefined, 
       callback: (err: NodeJS.ErrnoException | null, stats: fs.Stats) => void
     ) =>{ callback(null, {} as fs.Stats)}
   ), //((path, callback) => callback(null, {})),
@@ -172,7 +171,7 @@ describe("employee tests", () => {
       );
 
       recordExistsTest(spy, {
-        tableName: "employee_data",
+        tableName: "employee_details",
         fieldName: "email",
         value: testRecord.email,
       });

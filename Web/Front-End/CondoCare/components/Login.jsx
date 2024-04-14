@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navigation } from "./LandingPageComponents/navigation";
+import { useStore } from "../store/store";
 
 function Login({setUserData }) {
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
+  const dispatch = useStore()[1];
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -14,7 +16,7 @@ function Login({setUserData }) {
     };
 
     let formErrors = validateFormData(loginFormData);
-    let userData = getUserData(loginFormData, setUserData);
+    let userData = getUserData(loginFormData, dispatch);
 
     const boilerplateUserData = {
       id: 1,
@@ -91,7 +93,7 @@ function validateFormData(formData) {
   return errors;
 }
 
-function getUserData(formData, setUserData) {
+function getUserData(formData, dispatch) {
   let userData = {};
   fetch("http://localhost:3000/login", {
     method: "POST",
@@ -104,7 +106,8 @@ function getUserData(formData, setUserData) {
     .then((response) => response.json())
     .then((data) => {
       // Handle the response from the server
-      setUserData(data.loginData); 
+      // Add user data to App-wide state
+      dispatch("CREATE", {userData: {...data.loginData}});
       if (data.response === "Email or password is incorrect") throw new Error(data.response);
     })
     .catch((error) => {
