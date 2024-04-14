@@ -95,7 +95,8 @@ function validateFormData(formData) {
 
 function getUserData(formData, dispatch) {
   let userData = {};
-  fetch("http://localhost:3000/login", {
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  fetch(`${SERVER}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
