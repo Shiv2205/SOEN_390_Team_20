@@ -16,6 +16,7 @@ describe("Express route handlers", () => {
     data: {
       account_id: "test-account-id",
       fullname: "John Doe",
+      password: "password1",
       email: "john@example.com",
       account_type: "Public",
     }

@@ -132,8 +132,7 @@ export default interface IDBController {
    * ```
    */
   getEmployee(
-    email: string,
-    password: string
+    email: string
   ): Promise<{ status: number; data?: EmployeeDetails; message?: string }>;
   /**
    * This TypeScript function retrieves all employees associated with a specific property ID, handling

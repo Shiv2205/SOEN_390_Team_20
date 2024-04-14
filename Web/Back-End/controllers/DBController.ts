@@ -195,7 +195,6 @@ class DBController implements IDBController {
 
   async getEmployee(
     email: string,
-    password: string
   ): Promise<{ status: number; data?: EmployeeDetails; message?: string }> {
     let existingUser = await this.recordExists("employee_details", "email", email);
     return new Promise(async (resolve, reject) => {
