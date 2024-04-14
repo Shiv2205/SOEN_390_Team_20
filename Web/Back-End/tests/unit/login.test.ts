@@ -35,6 +35,7 @@ describe("Login middleware", () => {
       data: {
         account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
         fullname: "Michael Scott",
+        password: "password6",
         email: "michael@example.com",
         account_type: "Public",
       },

@@ -84,6 +84,7 @@ describe("employee tests", () => {
             account_id: "6e8f4b3c-4103-44b3-b694-cb9f6e3e3fc9",
             fullname: "Michael Scott",
             email: "michael@example.com",
+            password: "password1",
             account_type: "Public",
           },
         });
@@ -93,8 +94,7 @@ describe("employee tests", () => {
       );
       expect(employeeSpy).toHaveBeenCalled();
       expect(employeeSpy).toHaveBeenCalledWith(
-        testRecord.email,
-        testRecord.password
+        testRecord.email
       );
       expect(dbController.db.run).toHaveBeenCalled();
       expect(dbController.db.run).toHaveBeenCalledWith(
@@ -157,7 +157,7 @@ describe("employee tests", () => {
       let getEmployeeSPy = jest.spyOn(dbController, "getEmployee");
 
       await expect(
-        dbController.getEmployee(testRecord.email, testRecord.password)
+        dbController.getEmployee(testRecord.email)
       ).resolves.toBeTruthy();
       expect(dbController.db.get).toHaveBeenCalled();
       expect(dbController.db.get).toHaveBeenCalledWith(
@@ -166,8 +166,7 @@ describe("employee tests", () => {
         (dbController.db.get as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
       expect(getEmployeeSPy).toHaveBeenCalledWith(
-        testRecord.email,
-        testRecord.password
+        testRecord.email
       );
 
       recordExistsTest(spy, {
@@ -183,7 +182,7 @@ describe("employee tests", () => {
         .mockResolvedValueOnce(false);
 
       await expect(
-        dbController.getEmployee(testRecord.email, testRecord.password)
+        dbController.getEmployee(testRecord.email)
       ).rejects.toEqual({
         status: 400,
         message: "User does not have an account.",

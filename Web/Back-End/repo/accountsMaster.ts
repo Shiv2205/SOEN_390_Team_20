@@ -9,7 +9,7 @@ import {
 } from "../types/DBTypes";
 
 class AccountsMaster {
-  readonly dbController: IDBController; // You might want to replace 'any' with the actual type of dbController
+  readonly dbController: IDBController; 
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();
@@ -60,7 +60,7 @@ class AccountsMaster {
     email: string,
     password: string
   ): Promise<{ status: number; data: EmployeeDetails } | Error> {
-    let result = await this.dbController.getEmployee(email, password);
+    let result = await this.dbController.getEmployee(email);
     if (result.message) return new Error(result.message);
     return result as { status: number; data: EmployeeDetails };
   }
