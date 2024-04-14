@@ -6,7 +6,7 @@ import { useStore } from "../store/store";
 function Login({setUserData }) {
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-  const dispatch = useStore()[1];
+  const [state, dispatch] = useStore();
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -29,10 +29,10 @@ function Login({setUserData }) {
     };
     
     // Store user data in localStorage
-    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    localStorage.setItem("userData", JSON.stringify(state.userData));
     
     // Set the boilerplate user data using setUserData
-    setUserData(boilerplateUserData);
+    setUserData(state.userData);
 
     if (!userData)formErrors.push("Email or password is incorrect");
 
@@ -105,10 +105,11 @@ function getUserData(formData, dispatch) {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
       // Handle the response from the server
       // Add user data to App-wide state
+      if (!data.loginData) throw new Error(data.response);
       dispatch("CREATE", {userData: {...data.loginData}});
-      if (data.response === "Email or password is incorrect") throw new Error(data.response);
     })
     .catch((error) => {
       // Handle error

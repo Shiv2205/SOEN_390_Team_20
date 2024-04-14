@@ -129,16 +129,15 @@ describe("Public user tests", () => {
 
       let getPublicUserSPy = jest.spyOn(dbController, "getPublicUser");
 
-      await expect(dbController.getPublicUser(testRecord.email, testRecord.password)).resolves.toBeTruthy();
+      await expect(dbController.getPublicUser(testRecord.email)).resolves.toBeTruthy();
       expect(dbController.db.get).toHaveBeenCalled();
       expect(dbController.db.get).toHaveBeenCalledWith(
         (dbController.db.get as jest.Mock).mock.calls[0][0],
-        [testRecord.email, testRecord.password],
+        [testRecord.email],
         (dbController.db.get as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
       );
       expect(getPublicUserSPy).toHaveBeenCalledWith(
-        testRecord.email,
-        testRecord.password
+        testRecord.email
       );
 
       recordExistsTest(spy, {
@@ -154,7 +153,7 @@ describe("Public user tests", () => {
         .mockResolvedValueOnce(false);
 
       await expect(
-        dbController.getPublicUser(testRecord.email, testRecord.password)
+        dbController.getPublicUser(testRecord.email)
       ).resolves.toEqual({
         status: 400,
         message: "User does not have an account.",

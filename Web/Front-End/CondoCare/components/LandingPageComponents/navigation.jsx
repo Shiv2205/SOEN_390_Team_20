@@ -52,7 +52,7 @@ export function Navigation() {
                 </a>
               </li>
             )}
-            {storedUserData ? (
+            {storedUserData && (storedUserData.account_type === "Owner" || storedUserData.account_type === "Renter") ? (
               <li>
                 <Link to="/blog" className="page-scroll">
                   Blog

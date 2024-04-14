@@ -11,6 +11,9 @@ const DashboardOwner = ({ userData, setUserData }) => {
   const [properties, setProperties] = useState([]);
   const [state, dispatch] = useStore();
 
+  // Store user data in localStorage
+  localStorage.setItem("userData", JSON.stringify(state.userData));
+
   // Fetch user properties from serever
   const propertyData = [
     {
@@ -106,6 +109,7 @@ const DashboardOwner = ({ userData, setUserData }) => {
   //     name: 'John Doe',
   //     imageUrl: 'https://via.placeholder.com/50'
   // };
+  console.log(state.userData)
 
   return (
     <div className="dashboard-owner">
