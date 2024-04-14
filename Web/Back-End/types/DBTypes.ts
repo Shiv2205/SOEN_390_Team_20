@@ -1,3 +1,5 @@
+export type NotFound = { status: number; message: string };
+
 export interface UnitData {
   readonly property_id: string;
   size: number;
@@ -116,4 +118,10 @@ export interface EventData {
 //Events Details
 export interface EventDetails extends EventData {
   event_id: string;
+}
+
+export interface EventAttendee {
+  attendee_id: string;
+  attendee_name: string;
+  attendee_profile_picture: string;
 }

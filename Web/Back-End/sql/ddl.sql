@@ -125,6 +125,6 @@ CREATE VIEW events_details AS
 
 --
 CREATE VIEW attendees_details AS
-    SELECT event_id, attendee_id, A.fullname as attendee_name
+    SELECT event_id, attendee_id, A.fullname as attendee_name, A.profile_picture as attendee_profile_picture
     FROM event_attendees
     JOIN account A ON event_attendees.attendee_id = A.account_id

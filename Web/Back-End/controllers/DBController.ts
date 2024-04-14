@@ -18,6 +18,8 @@ import {
   RequestData,
   EventData,
   EventDetails,
+  EventAttendee,
+  NotFound,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.sqlite3"; // test_data.txt
@@ -700,7 +702,12 @@ class DBController implements IDBController {
     }
   }
 
-  async createNewEvent({host_id, title, description, date_and_time}: EventData): Promise<{ status: number; event_id: string }> {
+  async createNewEvent({
+    host_id,
+    title,
+    description,
+    date_and_time,
+  }: EventData): Promise<{ status: number; event_id: string } | NotFound> {
     return new Promise((resolve, reject) => {
       const event_id = uuid.v4(); // Generate a unique event_id using uuid
 
@@ -723,12 +730,10 @@ class DBController implements IDBController {
     });
   }
 
-  async getHostEvents(host_id: string) {
-    let eventExists = await this.recordExists(
-      "events",
-      "host_id",
-      host_id
-    );
+  async getHostEvents(
+    host_id: string
+  ): Promise<{ status: number; data: EventDetails[] } | NotFound> {
+    let eventExists = await this.recordExists("events", "host_id", host_id);
     return new Promise(async (resolve, reject) => {
       if (eventExists) {
         this.db.all(
@@ -742,15 +747,81 @@ class DBController implements IDBController {
       } else {
         resolve({
           status: 204,
-          message: "Property has no posts in database.",
+          message: "User has no events in database.",
         });
       }
     });
   }
 
-  async registerNewAttendee(){}
+  async registerNewAttendee(
+    event_id: string,
+    attendee_id: string
+  ): Promise<{ status: number; event_id: string; attendee_id: string }> {
+    return new Promise((resolve, reject) => {
+      this.db.run(
+        `INSERT INTO events_attendees
+              (event_id, attendee_id)
+              VALUES (?, ?)`,
+        [event_id, attendee_id],
+        (err) => {
+          if (err) {
+            reject({
+              status: 500,
+              message: "Error adding event attendee in database.",
+            });
+          } else {
+            resolve({ status: 201, event_id, attendee_id });
+          }
+        }
+      );
+    });
+  }
 
-  async getAttendeeEvents(){}
+  async getAttendeeEvents(
+    attendee_id: string
+  ): Promise<{ status: number; data: EventDetails[] } | NotFound> {
+    let eventAttendeeExists = await this.recordExists(
+      "events_attendees",
+      "attendee_id",
+      attendee_id
+    );
+    return new Promise(async (resolve, reject) => {
+      if (eventAttendeeExists) {
+        this.db.all(
+          "SELECT * FROM events_details WHERE event_id IN (SELECT event_id FROM events_attendees WHERE attendee_id = ?);",
+          attendee_id,
+          function (err, rows: EventDetails[]) {
+            if (err) reject(err);
+            if (rows.length > 0) resolve({ status: 200, data: rows });
+            else resolve({ status: 404, message: "No events found." });
+          }
+        );
+      } else {
+        resolve({ status: 404, message: "No events found." });
+      }
+    });
+  }
+
+  async getAttendeeList(
+    event_id: string
+  ): Promise<{ status: number; data: EventAttendee[] } | NotFound> {
+    let eventExists = await this.recordExists("events", "event_id", event_id);
+    return new Promise(async (resolve, reject) => {
+      if (eventExists) {
+        this.db.all(
+          "SELECT * FROM events_attendees WHERE event_id = ?;",
+          event_id,
+          function (err, rows: EventAttendee[]) {
+            if (err) reject(err);
+            if (rows.length > 0) resolve({ status: 200, data: rows });
+            else resolve({ status: 404, message: "No attendees found." });
+          }
+        );
+      } else {
+        resolve({ status: 404, message: "No attendees found." });
+      }
+    });
+  }
 
   close(): void {
     this.db.close((err) => {
