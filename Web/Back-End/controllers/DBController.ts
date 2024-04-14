@@ -126,8 +126,7 @@ class DBController implements IDBController {
   }
 
   async getPublicUser(
-    email: string,
-    password: string
+    email: string
   ): Promise<{ status: number; data?: PublicUserData; message?: string }> {
     let existingUser = await this.recordExists("account", "email", email);
     return new Promise(async (resolve, reject) => {
@@ -137,12 +136,13 @@ class DBController implements IDBController {
                     account_id,
                     fullname,
                     email,
+                    password,
                     phone_number,
                     profile_picture,
                     account_type 
                     FROM account 
-                    WHERE email = ? AND password = ?`,
-          [email, password],
+                    WHERE email = ?`,
+          [email],
           function (err, row: PublicUserData) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
@@ -182,7 +182,7 @@ class DBController implements IDBController {
         );
         resolve({ status: 201, employee_id: employee_id });
       } else {
-        let existingUser = await this.getPublicUser(email, password);
+        let existingUser = await this.getPublicUser(email);
         let account_id = existingUser.data?.account_id;
         this.db.run(
           "INSERT INTO employee (employee_id, property_id, type) VALUES (?, ?, ?)",

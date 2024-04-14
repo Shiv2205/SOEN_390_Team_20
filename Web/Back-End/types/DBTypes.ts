@@ -31,12 +31,13 @@ export interface PostDetails extends PostData {
 interface IUserData {
   fullname: string;
   email: string;
+  password: string;
   phone_number?: string;
   profile_picture?: string;
 }
 
 export interface UserData extends IUserData {
-  password: string;
+  
 }
 
 export interface PublicUserData extends IUserData {

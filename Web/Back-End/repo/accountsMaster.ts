@@ -32,10 +32,17 @@ class AccountsMaster {
     email: string,
     password: string
   ): Promise<{ status: number; data: PublicUserData } | Error> {
-    let result = await this.dbController.getPublicUser(email, password);
+    let result = await this.dbController.getPublicUser(email);
     if (result.message) return new Error(result.message);
 
-    return result as { status: number; data: PublicUserData };
+    let isMatch: boolean = false;
+    if(result.data)
+      isMatch= await bcrypt.compare(password, result.data.password);
+
+    if(isMatch)
+      return result as { status: number; data: PublicUserData };
+
+    return new Error("Incorrect email or password");
   }
 
   /**

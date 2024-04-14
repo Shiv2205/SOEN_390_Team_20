@@ -95,8 +95,7 @@ export default interface IDBController {
    * and `400` indicates an error. The `data` property contains public user data if
    */
   getPublicUser(
-    email: string,
-    password: string
+    email: string
   ): Promise<{ status: number; data?: PublicUserData; message?: string }>;
   /**
    * This TypeScript function creates a new employee record in a database, handling cases where the
@@ -410,66 +409,6 @@ export default interface IDBController {
   getAllUnitRequests(
     unit_id: string
   ): Promise<{ status: number; data?: RequestDetails[]; message?: string }>;
-
-  /**
-   * Creates a new event in the database.
-   *
-   * @param {EventData} - An object containing the event data.
-   * @param {string} host_id - The ID of the event host.
-   * @param {string} title - The title of the event.
-   * @param {string} description - The description of the event.
-   * @param {string} date_and_time - The date and time of the event.
-   * @returns {Promise<{ status: number; event_id: string } | NotFound>} - A promise that resolves with the status and the generated event ID, or rejects with a NotFound error.
-   */
-  createNewEvent({
-    host_id,
-    title,
-    description,
-    date_and_time,
-  }: EventData): Promise<{ status: number; event_id: string } | NotFound>;
-
-  /**
-   * Retrieves all events associated with the specified host ID.
-   *
-   * @param {string} host_id - The ID of the event host.
-   * @returns {Promise<{ status: number; data: EventDetails[] } | NotFound>} - A promise that resolves with the status and an array of event details, or rejects with a NotFound error if the user has no events in the database.
-   */
-  getHostEvents(
-    host_id: string
-  ): Promise<{ status: number; data: EventDetails[] } | NotFound>;
-
-  /**
-   * Registers a new attendee for the specified event.
-   *
-   * @param {string} event_id - The ID of the event.
-   * @param {string} attendee_id - The ID of the attendee.
-   * @returns {Promise<{ status: number; event_id: string; attendee_id: string;}>} - A promise that resolves with the status, event ID, and attendee ID, or rejects with an error if there was a problem adding the attendee to the database.
-   */
-  registerNewAttendee(
-    event_id: string,
-    attendee_id: string
-  ): Promise<{ status: number; event_id: string; attendee_id: string }>;
-
-  /**
-   * Retrieves all events associated with the specified attendee ID.
-   *
-   * @param {string} attendee_id - The ID of the event attendee.
-   * @returns {Promise<{ status: number; data: EventDetails[];} | NotFound>} - A promise that resolves with the status and an array of event details, or rejects with a NotFound error if the attendee has no events in the database.
-   */
-  getAttendeeEvents(
-    attendee_id: string
-  ): Promise<{ status: number; data: EventDetails[] } | NotFound>;
-
-  /**
-   * Retrieves a list of event attendees for the specified event.
-   *
-   * @param {string} event_id - The ID of the event.
-   * @returns {Promise<{ status: number; data: EventAttendee[];} | NotFound>} - A promise that resolves with the status and an array of event attendees, or rejects with a NotFound error if the event has no attendees in the database.
-   */
-  getAttendeeList(
-    event_id: string
-  ): Promise<{ status: number; data: EventAttendee[] } | NotFound>;
-
   /**
    * The close function closes the database connection and logs an error message if there is an error.
    */
