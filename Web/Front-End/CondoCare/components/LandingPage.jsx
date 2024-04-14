@@ -26,6 +26,7 @@ function LandingPage() {
       <Testimonials data={landingPageData.Testimonials} id="testimonials" />
       <Team data={landingPageData.Team} id="team" />
       <Contact data={landingPageData.Contact} id="contact" />
+          
     </div>
   );
 }

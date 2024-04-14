@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
@@ -8,11 +8,11 @@ import Profile from "../components/Profile";
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DashboardOwner from "../components/DashboardOwner.jsx";
 import RequestForm from "../components/RequestForm.jsx";
 import UnitPage from "../components/UnitPage.jsx";
 
+import ChatApp from "../components/ChatApp"; // Assuming you have a ChatApp component
 
 function App() {
   const [userData, setUserData] = useState({});
@@ -28,6 +28,7 @@ function App() {
         <Route path="/userDashboard" element={<DashboardOwner userData={userData} setUserData={setUserData} />} />
         <Route path="/requestService" element={<RequestForm />} />
         <Route path="/unitPage" element={<UnitPage />} />
+        <Route path="/blog" element={<ChatApp />} />
       </Routes>
     </Router>
   );
