@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navigation } from "./LandingPageComponents/navigation";
 import { useStore } from "../store/store";
 
-function Login({setUserData }) {
+function Login({ setUserData }) {
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
   const [state, dispatch] = useStore();
@@ -16,59 +16,52 @@ function Login({setUserData }) {
     };
 
     let formErrors = validateFormData(loginFormData);
-    let userData = getUserData(loginFormData, dispatch);
 
-    const boilerplateUserData = {
-      id: 1,
-      username: "example_user",
-      email: "example@example.com",
-      fullName: "John Doe",
-      age: 30,
-      phone: 5146010320,
-      address: "232 jjjd street"
-    };
-    
-    // Store user data in localStorage
-    localStorage.setItem("userData", JSON.stringify(state.userData));
-    
-    // Set the boilerplate user data using setUserData
-    setUserData(state.userData);
-
-    if (!userData)formErrors.push("Email or password is incorrect");
-
-    if (formErrors.length > 0) {
-      let tempError = "Please fix the following to continue:\n";
-      formErrors.forEach((err, index) => {
-        tempError += `  ${index + 1}. ${err}\n`;
+    fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Add any other headers you need
+      },
+      body: JSON.stringify(loginFormData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid credentials");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the response from the server
+        console.log(data);
+        dispatch("CREATE", { userData: { ...data.loginData } });
+        localStorage.setItem("userData", JSON.stringify(data.loginData));
+        setUserData(data.loginData);
+        navigate("/userDashboard");
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error:", error);
+        setErrMessage("Email or password is incorrect");
       });
-      setErrMessage(tempError);
-    } 
-    else {
-      navigate("/userDashboard");
-    }
   };
 
   return (
-
     <div style={{ overflow: 'hidden' }}>
       <Navigation />
-      <div className="login-container" style={{ marginTop: '110px'}}>
+      <div className="login-container" style={{ marginTop: '110px' }}>
         <h2>Login</h2>
-
-        <div className="error-message">{errMessage ? errMessage : ""}</div>
-
+        <div className="error-message">{errMessage}</div>
         <form onSubmit={(e) => handleLogin(e)}>
           <label htmlFor="email">Email:</label>
           <input type="email" id="email" name="email" required />
-
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
-
           <button type="submit">Login</button>
         </form>
         <p>
           Don't have an account?{" "}
-          <a href="" onClick={(e) => {e. preventDefault(); navigate("/signup")}}>
+          <a href="" onClick={(e) => { e.preventDefault(); navigate("/signup") }}>
             Sign up
           </a>
         </p>
@@ -79,43 +72,11 @@ function Login({setUserData }) {
 
 function validateFormData(formData) {
   const errors = [];
-
-  // Check if email is not empty and has a valid email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!formData.email.trim() || !emailRegex.test(formData.email.trim()))
     errors.push("Email address is invalid");
-
-  // Check if password is not empty
   if (!formData.password.trim()) errors.push("Password is required");
-
-  // Add additional validation rules as needed
-
   return errors;
-}
-
-function getUserData(formData, dispatch) {
-  let userData = {};
-  fetch("http://localhost:3000/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      // Add any other headers you need
-    },
-    body: JSON.stringify(formData),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      // Handle the response from the server
-      // Add user data to App-wide state
-      if (!data.loginData) throw new Error(data.response);
-      dispatch("CREATE", {userData: {...data.loginData}});
-    })
-    .catch((error) => {
-      // Handle error
-      console.error("Error:", error);
-    });
-    return userData;
 }
 
 export default Login;

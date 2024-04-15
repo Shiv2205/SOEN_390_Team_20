@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import UploadWidget from "./UploadWidget";
 import { Navigation } from "./LandingPageComponents/navigation";
 
-function SignUp({setUserData}) {
+function SignUp({ setUserData }) {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
-const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
     /* `event.preventDefault();` is used to prevent the default form submission.*/
@@ -19,6 +19,7 @@ const navigate = useNavigate(); // Hook for navigation
     formData.profilePicture = profilePic;
 
     /* This part of the code in the `handleSignUp` function is performing form validation. */
+    console.log("---" + validateFormData(formData));
     let formErrors = validateFormData(formData);
     if (formErrors.length > 0) {
       let tempError = "The fix the following to continue: {\n}";
@@ -26,6 +27,10 @@ const navigate = useNavigate(); // Hook for navigation
         tempError += `&#9; ${index + 1}. ${err}<br/>`;
       });
       setErrMessage(tempError);
+    } else {
+      localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+      setUserData(boilerplateUserData);
+      navigate("/userDashboard");
     }
 
     const boilerplateUserData = {
@@ -37,17 +42,15 @@ const navigate = useNavigate(); // Hook for navigation
       phone: 5146010320,
       address: "232 jjjd street"
     };
-    
-    // Store user data in localStorage
-    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
-    setUserData(boilerplateUserData);
-    navigate("/userDashboard");
+
+
+
   };
 
   return (
     <div style={{ overflow: 'hidden' }}>
       <Navigation />
-      <div className="signup-container" style={{ marginTop: '120px'}}>
+      <div className="signup-container" style={{ marginTop: '120px' }}>
         <h2>Create an Account</h2>
 
         <div className="error-message">{errMessage ? errMessage : ""}</div>
@@ -91,7 +94,7 @@ const navigate = useNavigate(); // Hook for navigation
         </form>
         <p>
           Already have an account?{" "}
-          <button onClick={() => {navigate("/login")}}>Log in</button>
+          <button onClick={() => { navigate("/login") }}>Log in</button>
         </p>
       </div>
     </div>
