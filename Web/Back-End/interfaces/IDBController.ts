@@ -408,10 +408,6 @@ export default interface IDBController {
   getAllUnitRequests(
     unit_id: string
   ): Promise<{ status: number; data?: RequestDetails[]; message?: string }>;
-  /**
-   * The close function closes the database connection and logs an error message if there is an error.
-   */
-  close(): void;
 
   /**
    * Creates a new event in the database.

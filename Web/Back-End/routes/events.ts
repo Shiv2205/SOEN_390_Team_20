@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction, Router } from "express";
-const { EventData, NotFound } = require('./EventData');
 import EventsMaster from "../repo/eventsMaster";
-import { EventData } from "../types/DBTypes";
+import { EventData, NotFound } from "../types/DBTypes";
 
 const events = new EventsMaster();
 const router = express.Router();
@@ -39,7 +38,7 @@ router.post("/newEvent", async function (
     let eventResult = await events.createNewEvent(eventData);
 
     // Check if the result is a NotFound error
-    if (eventResult instanceof NotFound) {
+    if ('message' in eventResult) {
       res.status(404).json({ response: "Host not found" });
       return;
     }

@@ -70,6 +70,12 @@ const factoryMockSpy = jest
     getRequest: jest.fn(),
     getAllEmployeeRequests: jest.fn(),
     getAllUnitRequests: jest.fn(),
+    createNewEvent: jest.fn(),
+    getAllEvents: jest.fn(),
+    getHostEvents: jest.fn(),
+    registerNewAttendee: jest.fn(),
+    getAttendeeEvents: jest.fn(),
+    getAttendeeList: jest.fn(),
     close: jest.fn(),
   }));
 
