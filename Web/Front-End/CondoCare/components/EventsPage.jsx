@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useStore } from "../store/store.js";
 import { Navigation } from "./DashboardComponents/navigation.jsx";
 import "../styles/EventsPage.css";
 
-const EventsPage = ({ userData, setUserData }) => {
+const EventsPage = () => {
   const [events, setEvents] = useState([]);
+  const [state, dispatch] = useStore();
+
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
-      // const response = await fetch("/events/getAllEvents");
-      //   const data = await response.json();
-      //   setEvents(data);
-
+      // setEvents(getAllEvents());
       const listOfEvents = [
         {
           title: "Birthday Party",
@@ -55,6 +56,16 @@ const EventsPage = ({ userData, setUserData }) => {
     fetchData();
   }, []);
 
+  const getAllEvents = async () => {
+    const response = await fetch(`${SERVER}/events/getEvents`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.json();
+  };
+
   const handleAddEvent = async () => {
     try {
       // Prompt user for event details
@@ -89,19 +100,18 @@ const EventsPage = ({ userData, setUserData }) => {
       ).toISOString();
 
       //Get host from userDate:
-      const host = userData.account_id;
+      const host = state.userData.account_id;
 
       // Create event data object
       const eventData = {
-        name: eventName,
-        host: host,
+        title: eventName,
+        host_id: host,
         description: eventDescription,
         location: eventLocation,
-        timestamp: eventTimestamp,
+        date_and_time: eventTimestamp,
       };
 
       // Send POST request to backend
-      const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
       const response = await fetch(`${SERVER}/events/newEvent`, {
         method: "POST",
         headers: {
