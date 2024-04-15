@@ -5,11 +5,13 @@ import NewMessageForm from './ChatAppComponents/NewMessageForm';
 import "../styles/ChatApp.css";
 import { useStore } from '../store/store';
 import { useSocket } from '../socket/socket';
+import { getPostData } from './DashboardOwner';
 
 const ChatApp = () => {
   const [showNewMessageForm, setShowNewMessageForm] = useState(false);
-  const state = useStore()[0];
-  const [socket, dispatch] = useSocket();
+  const [state, dispatch] = useStore();
+  const [postData, setPostData] = useState(state.postData);
+  const socket = useSocket()[0];
 
   useEffect(() => {
     if (!socket) return; // Not connected yet
@@ -23,6 +25,11 @@ const ChatApp = () => {
       socket.on('user_connected', (message) => {
         console.log(message);
       });
+
+      socket.on("post_added", message => {
+        getPostData(state.unitData.property_id, dispatch);
+        setPostData(state.postData);
+      })
     });
 
     // return () => {
@@ -41,7 +48,7 @@ const ChatApp = () => {
       {showNewMessageForm ? (
         <NewMessageForm onClose={handleNewMessageToggle} />
       ) : (
-        <MessageList />
+        <MessageList postData={postData} />
       )}
     </div>
   );

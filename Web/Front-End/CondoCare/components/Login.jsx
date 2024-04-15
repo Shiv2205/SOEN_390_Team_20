@@ -114,6 +114,7 @@ function getUserData(formData, dispatch) {
     })
     .catch((error) => {
       // Handle error
+      console.log("Error caught")
       console.error("Error:", error);
     });
     return userData;

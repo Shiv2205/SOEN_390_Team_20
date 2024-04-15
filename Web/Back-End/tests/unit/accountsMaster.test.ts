@@ -4,6 +4,7 @@ import { EmployeeData, EmployeeDetails } from "../../types/DBTypes";
 
 jest.mock("bcryptjs", () => ({
   hash: jest.fn(() => "password456"),
+  compare: jest.fn(() => Promise.resolve(true))
 }));
 
 const getPublicUserOutput = {
@@ -12,6 +13,7 @@ const getPublicUserOutput = {
     account_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
     fullname: "John Doe",
     email: "john@example.com",
+    password: "password456",
     phone_number: "1234567890",
     profile_picture: "profile.jpg",
     account_type: "Public"
@@ -59,9 +61,9 @@ const factoryMockSpy = jest
     populate: jest.fn(),
     recordExists: jest.fn(),
     createNewPublicUser: jest.fn((userData) => Promise.resolve(createNewPublicUserOutput)),
-    getPublicUser: jest.fn(async (email, password) => Promise.resolve(getPublicUserOutput)),
+    getPublicUser: jest.fn(async (email) => Promise.resolve(getPublicUserOutput)),
     createNewEmployee: jest.fn((employeeData) => Promise.resolve(createNewEmployeeOutput)),
-    getEmployee: jest.fn(async (email, password) => Promise.resolve(getEmployeeOutput)),
+    getEmployee: jest.fn(async (email) => Promise.resolve(getEmployeeOutput)),
     getAllEmployees: jest.fn(() => Promise.resolve(getAllEmployeesOutput)),
     createNewProperty: jest.fn(),
     getProperty: jest.fn(),
@@ -177,7 +179,7 @@ describe("AccountsMaster", () => {
       expect(accountsController.dbController.getPublicUser).toHaveBeenCalled();
       expect(
         accountsController.dbController.getPublicUser
-      ).toHaveBeenCalledWith(email, password);
+      ).toHaveBeenCalledWith(email);
     });
 
     errorHandler("getPublicUser");
@@ -196,8 +198,7 @@ describe("AccountsMaster", () => {
       expect(result).toEqual(getEmployeeOutput);
       expect(accountsController.dbController.getEmployee).toHaveBeenCalled();
       expect(accountsController.dbController.getEmployee).toHaveBeenCalledWith(
-        email,
-        password
+        email
       );
     });
 

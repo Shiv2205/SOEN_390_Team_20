@@ -28,6 +28,11 @@ socketIO.on("connection", (socket: Socket) => {
 
     socketIO.to(roomID).emit("user_connected", `${roomsHandler.getUsername(fullname)} has joined the room.`);
   });
+
+  socket.on("new_post", property_id => {
+    console.log("new_post received", property_id);
+    socketIO.to(property_id).emit("post_added", "New post added");
+  })
 });
 
 // Start the server
