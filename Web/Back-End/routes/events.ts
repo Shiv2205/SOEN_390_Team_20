@@ -50,7 +50,7 @@ router.post("/newEvent", async function (
   }
 });
 
-router.post('/getEvents', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/getEvents', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const result = await events.getAllEvents();
         if(result instanceof Error) throw result as Error;

@@ -11,59 +11,31 @@ const EventsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // setEvents(getAllEvents());
-      const listOfEvents = [
-        {
-          title: "Birthday Party",
-          date_and_time: "2024-06-15 18:00",
-          location: "123 Main Street, Anytown",
-          description:
-            "Come celebrate my birthday with food, drinks, and music!",
-        },
-        {
-          title: "Conference",
-          date_and_time: "2024-07-20 09:00",
-          location: "Conference Center, Downtown",
-          description:
-            "Join us for a day of insightful talks and networking opportunities.",
-        },
-        {
-          title: "Workshop",
-          date_and_time: "2024-08-10 13:30",
-          location: "Community Center, Park Avenue",
-          description:
-            "Learn new skills and techniques in our hands-on workshop.",
-        },
-        {
-          title: "Music Festival",
-          date_and_time: "2024-09-05 16:00",
-          location: "City Park, Riverside",
-          description:
-            "Enjoy live music from various artists and food from local vendors.",
-        },
-        {
-          title: "Art Exhibition",
-          date_and_time: "2024-10-15 11:00",
-          location: "Art Gallery, Downtown",
-          description:
-            "Explore stunning artworks from emerging and established artists.",
-        },
-      ];
-
-      setEvents(listOfEvents);
+      try {
+        const eventsData = await getAllEvents(); // Wait for the promise to resolve
+        console.log(eventsData.data);
+        setEvents(eventsData.data); // Update the events state with the fetched data
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
     };
 
     fetchData();
   }, []);
 
   const getAllEvents = async () => {
-    const response = await fetch(`${SERVER}/events/getEvents`, {
-      method: "POST",
+    const response = await fetch(`${SERVER}events/getEvents`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    return response.json();
+    if (!response.ok) {
+      throw new Error("Failed to fetch events");
+    }
+
+    const data = await response.json();
+    return data;
   };
 
   const handleAddEvent = async () => {
@@ -100,7 +72,7 @@ const EventsPage = () => {
       ).toISOString();
 
       //Get host from userDate:
-      const host = state.userData.account_id;
+      const host = JSON.parse(localStorage.getItem("userData")).account_id;
 
       // Create event data object
       const eventData = {
@@ -112,7 +84,7 @@ const EventsPage = () => {
       };
 
       // Send POST request to backend
-      const response = await fetch(`${SERVER}/events/newEvent`, {
+      const response = await fetch(`${SERVER}events/newEvent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -160,17 +132,5 @@ const EventsPage = () => {
     </div>
   );
 };
-
-// function randomDateTime(start, end) {
-//   const randomDate = new Date(
-//     start.getTime() + Math.random() * (end.getTime() - start.getTime())
-//   );
-//   const hours = String(Math.floor(Math.random() * 24)).padStart(2, "0");
-//   const minutes = String(Math.floor(Math.random() * 60)).padStart(2, "0");
-//   const dateTimeString = `${
-//     randomDate.toISOString().split("T")[0]
-//   } ${hours}:${minutes}`;
-//   return dateTimeString;
-// }
 
 export default EventsPage;
