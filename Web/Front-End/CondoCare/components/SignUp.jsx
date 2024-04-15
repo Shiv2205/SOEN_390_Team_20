@@ -18,8 +18,17 @@ function SignUp({ setUserData }) {
     let formData = Object.fromEntries(data.entries());
     formData.profilePicture = profilePic;
 
+    const boilerplateUserData = {
+      id: 12,
+      username: "example_user",
+      email: "example@example.com",
+      fullName: "cooco Doe",
+      age: 30,
+      phone: 5146010320,
+      address: "232 jjjd street"
+    };
+
     /* This part of the code in the `handleSignUp` function is performing form validation. */
-    console.log("---" + validateFormData(formData));
     let formErrors = validateFormData(formData);
     if (formErrors.length > 0) {
       let tempError = "The fix the following to continue: {\n}";
@@ -30,18 +39,9 @@ function SignUp({ setUserData }) {
     } else {
       localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
       setUserData(boilerplateUserData);
-      navigate("/userDashboard");
+      navigate("/login");
     }
 
-    const boilerplateUserData = {
-      id: 12,
-      username: "example_user",
-      email: "example@example.com",
-      fullName: "cooco Doe",
-      age: 30,
-      phone: 5146010320,
-      address: "232 jjjd street"
-    };
 
 
 
@@ -145,6 +145,7 @@ function sendFormData(formData) {
     .then((data) => {
       // Handle the response from the server
       console.log(data);
+      // navigate("/userDashboard");
     })
     .catch((error) => {
       // Handle errors
