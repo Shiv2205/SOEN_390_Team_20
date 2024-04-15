@@ -1,1 +1,3 @@
 .vscode
+Web/Back-End/data/test_data.sqlite3
+*.sqlite3
