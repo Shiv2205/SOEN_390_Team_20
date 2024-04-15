@@ -35,6 +35,12 @@ class EventsMaster {
     return result;
   }
 
+  async getAllEvents(
+  ): Promise<{ status: number; data: EventDetails[] } | NotFound> {
+    const result = await this.dbController.getAllEvents();
+    return result;
+  }
+
   async registerNewAttendee(
     event_id: string,
     attendee_id: string

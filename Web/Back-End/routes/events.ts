@@ -22,7 +22,7 @@ const errorHandler = (
   res.status(status).send({ message: err.message || "Something went wrong!" });
 };
 
-router.post("/events", async function (
+router.post("/newEvent", async function (
     req: Request<{}, {}, EventData>,
     res: Response,
   next: NextFunction
@@ -51,4 +51,14 @@ router.post("/events", async function (
   }
 });
 
-module.exports = router;
+router.post('/getEvents', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await events.getAllEvents();
+        if(result instanceof Error) throw result as Error;
+        res.status(result.status).json(result);
+    } catch (error) {
+        errorHandler(error as Error, req, res, next);
+    }
+});
+
+export default router;

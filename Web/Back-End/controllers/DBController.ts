@@ -729,7 +729,20 @@ class DBController implements IDBController {
       );
     });
   }
+  async getAllEvents(
+  ): Promise<{ status: number; data: EventDetails[] } | NotFound> {
+    return new Promise(async (resolve, reject) => {
+      this.db.all(
+          "SELECT * FROM events;",
+          function (err, rows: EventDetails[]) {
+            if (err) reject(err);
+            if (rows.length > 0) resolve({ status: 200, data: rows });
+          }
+      )
+        })
+      } 
 
+  
   async getHostEvents(
     host_id: string
   ): Promise<{ status: number; data: EventDetails[] } | NotFound> {
@@ -752,6 +765,8 @@ class DBController implements IDBController {
       }
     });
   }
+
+
 
   async registerNewAttendee(
     event_id: string,

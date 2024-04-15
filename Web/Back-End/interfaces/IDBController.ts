@@ -440,7 +440,6 @@ export default interface IDBController {
   getHostEvents(
     host_id: string
   ): Promise<{ status: number; data: EventDetails[] } | NotFound>;
-
   /**
    * Registers a new attendee for the specified event.
    *
@@ -472,6 +471,13 @@ export default interface IDBController {
   getAttendeeList(
     event_id: string
   ): Promise<{ status: number; data: EventAttendee[] } | NotFound>;
+
+    /**
+   * Retrieves all events from the database.
+   *
+   * @returns {Promise<{ status: number; data: EventDetails[] }>} - A promise that resolves with the status and an array of event details.
+   */
+    getAllEvents(): Promise<{ status: number; data: EventDetails[] } | NotFound>;
 
   /**
    * The close function closes the database connection and logs an error message if there is an error.
