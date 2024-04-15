@@ -18,8 +18,8 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'chrome-extension://amknoiejhlmhancpahfcfcfhllgkpbld', 'https://soen-390-team-20.vercel.app/']
 };
 
-// Utils
-app.use(cors(corsOptions));
+// Utils //corsOptions
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
