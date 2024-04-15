@@ -705,16 +705,17 @@ class DBController implements IDBController {
     host_id,
     title,
     description,
-    date_and_time,
+    location,
+    date_and_time
   }: EventData): Promise<{ status: number; event_id: string } | NotFound> {
     return new Promise((resolve, reject) => {
       const event_id = uuid.v4(); // Generate a unique event_id using uuid
 
       this.db.run(
         `INSERT INTO events 
-              (event_id, host_id, title, description, date_and_time) 
-              VALUES (?, ?, ?, ?, ?)`,
-        [event_id, host_id, title, description, date_and_time],
+              (event_id, host_id, title, description, location, date_and_time) 
+              VALUES (?, ?, ?, ?, ?, ?)`,
+        [event_id, host_id, title, description, location, date_and_time],
         (err) => {
           if (err) {
             reject({
