@@ -1,0 +1,39 @@
+.events-page {
+  padding-left: 15px;
+  padding-top: 100px;
+}
+
+.events-table {
+  margin-top: 20px;
+}
+
+.events-table h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.events-table button {
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.events-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-table th,
+.events-table td {
+  text-align: left;
+  padding: 12px;
+}
+
+.table-headers {
+  font-size: 18px;
+  font-weight: bold;
+}

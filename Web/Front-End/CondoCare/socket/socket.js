@@ -18,6 +18,11 @@ const reducer = (action, setSocket) => {
       let { room_id, username } = action.payload;
       webSocket.emit("join_room", { room_id, username });
       break;
+    case "NEW_POST":
+      webSocket.emit("new_post", action.payload);
+      console.log("New post sent to server");
+
+      break;
     case "DISCONNECT":
       setSocket(webSocket.disconnect());
       console.log("Disconnected from server");

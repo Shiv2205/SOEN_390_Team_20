@@ -34,11 +34,14 @@ export const Navigation = ({ views, setView }) => {
               </a>
             </li>
             <li>
-              <a href="" onClick={(e) => {
-                e.preventDefault();
-                setView(views.REQUESTFORUM);
-              }}
-                 className="page-scroll">
+              <a
+                href=""
+                onClick={(e) => {
+                  e.preventDefault();
+                  setView(views.REQUESTFORUM);
+                }}
+                className="page-scroll"
+              >
                 request services
               </a>
             </li>
@@ -50,6 +53,11 @@ export const Navigation = ({ views, setView }) => {
             <li>
               <a href="" className="page-scroll">
                 facilities
+              </a>
+            </li>
+            <li>
+              <a href="/events" className="page-scroll">
+                events
               </a>
             </li>
           </ul>
