@@ -423,7 +423,8 @@ export default interface IDBController {
     host_id,
     title,
     description,
-    date_and_time,
+    location,
+    date_and_time
   }: EventData): Promise<{ status: number; event_id: string } | NotFound>;
 
   /**
