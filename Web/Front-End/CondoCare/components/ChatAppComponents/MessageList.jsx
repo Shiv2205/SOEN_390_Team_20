@@ -3,7 +3,7 @@ import Message from "./Message";
 import { useStore } from "../../store/store";
 import Threads from "./Threads";
 
-const MessageList = () => {
+const MessageList = ({ postData }) => {
   /**
    * posts: {
    *  post: PostData;
@@ -11,9 +11,6 @@ const MessageList = () => {
    * }[]
    */
   let posts = [];
-  const [state, dispatch] = useStore();
-
-  const { postData } = state;
   filterPostData(postData, posts);
 
   return (

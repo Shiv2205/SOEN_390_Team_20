@@ -1,17 +1,30 @@
 
 import React, { useState } from 'react';
+import { useStore } from '../../store/store';
+import { useSocket } from '../../socket/socket';
 
 const NewMessageForm = ({ onNewMessage, onCancel }) => {
   const [text, setText] = useState('');
+  const state = useStore()[0];
+  const [socket, dispatch] = useSocket();
 
+  /**
+   *  property_id,
+    creator_id,
+    content,
+    replied_to = "",
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNewMessage({
-      post_id: Date.now().toString(), // Unique ID for the post
-      content: text,
-      creator_id: 'ManualEntry', // Placeholder for creator_id
-      posted_at: new Date().toISOString(),
-    });
+    const { unitData } = state;
+    const postData = {
+      property_id: unitData.property_id,
+      creator_id: unitData.occupant_id,
+      content: text
+    };
+
+    submitNewPost(postData);
+    dispatch("NEW_POST", unitData.property_id)
     setText(''); // Clear the text area
   };
 
@@ -38,4 +51,19 @@ const NewMessageForm = ({ onNewMessage, onCancel }) => {
 
 export default NewMessageForm;
 
+
+const submitNewPost = (postData) => {
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  fetch(`${SERVER}/properties/posts/create`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(postData)
+  }).then(res => res.json()).then(data => {
+    console.log(data);
+  }).catch(err => {
+    console.log(err);
+  })
+}
 
