@@ -47,9 +47,9 @@ function Login({ setUserData }) {
   };
 
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div style={{ overflow: "hidden" }}>
       <Navigation />
-      <div className="login-container" style={{ marginTop: '110px' }}>
+      <div className="login-container" style={{ marginTop: "110px" }}>
         <h2>Login</h2>
         <div className="error-message">{errMessage}</div>
         <form onSubmit={(e) => handleLogin(e)}>
@@ -61,7 +61,13 @@ function Login({ setUserData }) {
         </form>
         <p>
           Don't have an account?{" "}
-          <a href="" onClick={(e) => { e.preventDefault(); navigate("/signup") }}>
+          <a
+            href=""
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/signup");
+            }}
+          >
             Sign up
           </a>
         </p>

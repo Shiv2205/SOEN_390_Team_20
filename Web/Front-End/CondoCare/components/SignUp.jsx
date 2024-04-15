@@ -132,8 +132,8 @@ function validateFormData(formData) {
 }
 
 function sendFormData(formData) {
-  console.log(formData);
-  fetch("http://localhost:3000/signup", {
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  fetch(`${SERVER}/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
