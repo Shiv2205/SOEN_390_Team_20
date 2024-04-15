@@ -722,30 +722,30 @@ class DBController implements IDBController {
     });
   }
 
-  async getHostEvents(host_id: string) {
-    let eventExists = await this.recordExists(
-      "events",
-      "host_id",
-      host_id
-    );
-    return new Promise(async (resolve, reject) => {
-      if (eventExists) {
-        this.db.all(
-          "SELECT * FROM events_details WHERE host_id = ?;",
-          host_id,
-          function (err, rows: EventDetails[]) {
-            if (err) reject(err);
-            if (rows.length > 0) resolve({ status: 200, data: rows });
+  async getHostEvents(host_id: string): Promise<{ status: number; data?: EventDetails[]; message?: string }> {
+    let eventExists = await this.recordExists("events", "host_id", host_id);
+
+    if (!eventExists) {
+      return { status: 204, message: "No events found for this host." };
+    }
+
+    try {
+      return new Promise((resolve, reject) => {
+        this.db.all("SELECT * FROM events_details WHERE host_id = ?;", host_id, (err, rows: EventDetails[]) => {
+          if (err) {
+            reject({ status: 500, message: err.message });
+          } else if (rows.length > 0) {
+            resolve({ status: 200, data: rows });
+          } else {
+            resolve({ status: 204, message: "No events found for this host." });
           }
-        );
-      } else {
-        resolve({
-          status: 204,
-          message: "Property has no posts in database.",
         });
-      }
-    });
+      });
+    } catch (error) {
+      return { status: 500, message: `Error retrieving events:` };
+    }
   }
+
 
   async registerNewAttendee(){}
 
