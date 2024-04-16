@@ -135,7 +135,8 @@ class DBController implements IDBController {
                     email,
                     phone_number,
                     profile_picture,
-                    account_type 
+                    account_type,
+                    address 
                     FROM account 
                     WHERE email = ? AND password = ?`,
           [email, password],

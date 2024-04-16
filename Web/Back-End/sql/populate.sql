@@ -40,11 +40,11 @@ INSERT INTO post (post_id, property_id, creator_id, content, replied_to) VALUES
 
 -- Dummy data for the "account" table
 INSERT INTO account (account_id, fullname, password, email, phone_number, profile_picture, registration_key, account_type) VALUES
-    ('f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'John Doe', 'password1', 'john@example.com', '+1234567890', 'https://example.com/john.jpg', NULL, 'Owner'),
-    ('2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Jane Smith', 'password2', 'jane@example.com', '+1987654321', 'https://example.com/jane.jpg', NULL, 'Renter'),
-    ('e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Alice Johnson', 'password3', 'alice@example.com', NULL, NULL, NULL, 'Public'),
-    ('d595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Bob Brown', 'password4', 'bob@example.com', NULL, NULL, NULL, 'Renter'),
-    ('6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'Emily Wilson', 'password5', 'emily@example.com', NULL, NULL, NULL, 'Employee');
+    ('f41f13cf-9434-47a0-b01e-4e4b8d4d746e', 'John Doe', 'password1', 'john@example.com', '+1234567890', 'https://example.com/john.jpg', NULL, 'Owner', '123 Main Street, Springfield, IL 62701, USA'),
+    ('2e7fbd21-9fd8-4c3f-b5a4-6e7736e29e30', 'Jane Smith', 'password2', 'jane@example.com', '+1987654321', 'https://example.com/jane.jpg', NULL, 'Renter', '456 Elm Street, Anytown, TX 12345, USA'),
+    ('e319c0b2-f4cd-4f58-a306-b0b0f8050713', 'Alice Johnson', 'password3', 'alice@example.com', NULL, NULL, NULL, 'Public', '789 Oak Avenue, Smallville, CA 98765, USA'),
+    ('d595b7eb-f5c2-4d30-a635-39b4d61c437b', 'Bob Brown', 'password4', 'bob@example.com', NULL, NULL, NULL, 'Renter', '321 Pine Road, Big City, NY 54321, USA'),
+    ('6c46f50a-4e6e-4d75-bd23-74c6ed7e0f52', 'Emily Wilson', 'password5', 'emily@example.com', NULL, NULL, NULL, 'Employee', '567 Maple Lane, Sunnydale, FL 13579, USA');
 
 -- Dummy data for the "employee" table
 INSERT INTO employee (employee_id, property_id, type) VALUES

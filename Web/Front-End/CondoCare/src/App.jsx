@@ -16,9 +16,9 @@ function App() {
       <Routes>
         <Route exact path="*" element={<LandingPage userData={userData}/>} />
         <Route path="/signup" element={<SignUp setUserData={setUserData} />} /> 
-        <Route path="/login" element={<Login setUserData={setUserData}/>} />
+        <Route path="/login" element={<Login setUserData={setUserData} userData={userData}/>} />
         <Route path="/userDashboard" element={<DashboardOwner userData={userData} setUserData={setUserData} />} />
-        <Route path="/unitPage" element={<UnitPage />} />
+        <Route path="/unitPage" element={<UnitPage userData={userData}/>} />
       </Routes>
     </Router>
   );

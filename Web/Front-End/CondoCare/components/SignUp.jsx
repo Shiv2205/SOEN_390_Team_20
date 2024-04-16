@@ -6,7 +6,6 @@ import { Navigation } from "./LandingPageComponents/navigation";
 function SignUp({setUserData}) {
   const [errMessage, setErrMessage] = useState("");
   const [profilePic, setProfilePic] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null);
 const navigate = useNavigate(); // Hook for navigation
 
   const handleSignUp = (event) => {
@@ -27,26 +26,16 @@ const navigate = useNavigate(); // Hook for navigation
       });
       setErrMessage(tempError);
     }
-
-    const boilerplateUserData = {
-      id: 12,
-      username: "example_user",
-      email: "example@example.com",
-      fullName: "cooco Doe",
-      age: 30,
-      phone: 5146010320,
-      address: "232 jjjd street"
-    };
     
     // Store user data in localStorage
-    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
-    setUserData(boilerplateUserData);
-    navigate("/userDashboard");
+    // localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
+    // setUserData(boilerplateUserData);
+    // navigate("/userDashboard");
   };
 
   return (
     <div style={{ overflow: 'hidden' }}>
-      <Navigation />
+      <Navigation userData={{}}/>
       <div className="signup-container" style={{ marginTop: '120px'}}>
         <h2>Create an Account</h2>
 
@@ -75,14 +64,8 @@ const navigate = useNavigate(); // Hook for navigation
 
           <div className="profile-picture-wrapper">
             <label htmlFor="profilePicture">Profile Picture:</label>
-            {!thumbnail ? (
-              <UploadWidget
-                setProfilePic={setProfilePic}
-                setThumbnail={setThumbnail}
-              />
-            ) : (
-              <img src={thumbnail} />
-            )}
+            <UploadWidget onFileUploaded={setProfilePic} />
+         
           </div>
 
           <br />

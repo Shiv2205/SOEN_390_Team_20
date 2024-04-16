@@ -1,29 +1,32 @@
-import { useEffect, useRef } from 'react'
+import React, { useState } from 'react';
 
-export default function UploadWidget({ setProfilePic, setThumbnail }) {
-    const cloudinaryRef = useRef();
-    const widgetRef = useRef();
-    useEffect(() => {
-        cloudinaryRef.current = window.cloudinary;
-        widgetRef.current = cloudinaryRef.current.createUploadWidget({
-            cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
-            uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
-        }, function(error, result) {
-            let pictureInfo = result.info.files;
-            if(!error && pictureInfo){
-                setProfilePic(pictureInfo[0].uploadInfo.secure_url);
-                setThumbnail(pictureInfo[0].uploadInfo.thumbnail_url);
-            }
-            console.log(error);
-        });
-    }, []);
+const UploadWidget = ({ onFileUploaded }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
 
-    const handleClick = (event) => {
-        event.preventDefault();
-        widgetRef.current.open();
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+    handleUpload();
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const blob = new Blob([reader.result], { type: selectedFile.type });
+        onFileUploaded(blob);
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    } else {
+      alert('Please select a file first.');
     }
-    
+  };
+
   return (
-    <button id="profilePicture" onClick={(e) => handleClick(e)}>Upload</button>
-  )
-}
+    <div>
+      <input type="file" onChange={handleFileChange} />
+    </div>
+  );
+};
+
+export default UploadWidget;

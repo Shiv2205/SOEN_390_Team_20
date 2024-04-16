@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 export function Navigation({ userData}){
   // const userData = localStorage.getItem("userData");
-    console.log(userData);
+
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -30,28 +30,28 @@ export function Navigation({ userData}){
           id="bs-example-navbar-collapse-1"
         >
           <ul className="nav navbar-nav navbar-right">
-            { userData != "" ? null:
+            { Object.keys(userData).length != 0 ? null:
               <li>
                 <a href="/#features" className="page-scroll">
                   Features
                 </a>
               </li>
             }
-            { userData != "" ? null:
+            { Object.keys(userData).length != 0 ? null:
               <li>
                 <a href="/#about" className="page-scroll">
                   About
                 </a>
               </li>
             }
-            { userData != "" ? null:
+            { Object.keys(userData).length != 0 ? null:
               <li>
                 <a href="/#portfolio" className="page-scroll">
                   Gallery
                 </a>
               </li>
             }
-            { userData != "" ? 
+            { Object.keys(userData).length != 0 ? 
               <li>
               <a href="/blog" className="page-scroll">
                 Forum
@@ -69,7 +69,7 @@ export function Navigation({ userData}){
                 Contact
               </a>
             </li>
-            { userData != "" ?  
+            { Object.keys(userData).length != 0 ?  
             <li>
               <a href="/" className="page-scroll"  onClick={() => localStorage.removeItem("userData")}>
                 Logout
@@ -83,7 +83,7 @@ export function Navigation({ userData}){
             </li>
             }
             <li>
-              { userData != "" ?  
+              { Object.keys(userData).length != 0 ?  
                   <a href="/userDashboard" className="page-scroll">
                     home
                   </a>

@@ -36,7 +36,7 @@ export const MiniProfile = ({ userData, setUserData }) => {
             <div className="row">
               <div className="miniProfile">
                 <div className="miniProfile-image">
-                  <img src="/img/testimonials/05.jpg" />
+                  <img src={userData.profile_picture} />
                   <button
                     type="button"
                     onClick={handleEdit}
@@ -52,7 +52,7 @@ export const MiniProfile = ({ userData, setUserData }) => {
                       <input
                         placeholder="Full Name"
                         name="fullName"
-                        value={editedUserData.fullName}
+                        value={editedUserData.fullname}
                         onChange={handleInputChange}
                       /><br />
                       <input
@@ -70,7 +70,7 @@ export const MiniProfile = ({ userData, setUserData }) => {
                       <input
                         placeholder="Phone Number"
                         name="phone"
-                        value={editedUserData.phone}
+                        value={editedUserData.phone_number}
                         onChange={handleInputChange}
                       /><br />
                       <button
@@ -84,10 +84,10 @@ export const MiniProfile = ({ userData, setUserData }) => {
                     </div>
                   ) : (
                     <div>
-                      <p>{userData.fullName}</p>
+                      <p>{userData.fullname}</p>
                       <p>{userData.email}</p>
                       <p>{userData.address}</p>
-                      <p>{userData.phone}</p>
+                      <p>{userData.phone_number}</p>
                     </div>
                   )}
                 </div>

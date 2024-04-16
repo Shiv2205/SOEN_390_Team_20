@@ -4,14 +4,14 @@ import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
 
-function UnitPage() {
+function UnitPage({userData}) {
     const { state } = useLocation();
     const propertyData = state && state.propertyData;
   
     console.log(propertyData);
   return (
     <div>
-      <Navigation />
+      <Navigation userData={userData}/>
       <Header property={propertyData}></Header>
       <ExampleWithProviders></ExampleWithProviders>
     </div>

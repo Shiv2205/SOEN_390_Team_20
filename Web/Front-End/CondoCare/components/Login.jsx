@@ -15,22 +15,8 @@ function Login({setUserData }) {
 
     let formErrors = validateFormData(loginFormData);
     let userData = getUserData(loginFormData, setUserData);
-
-    const boilerplateUserData = {
-      id: 1,
-      username: "example_user",
-      email: "example@example.com",
-      fullName: "John Doe",
-      age: 30,
-      phone: 5146010320,
-      address: "232 jjjd street"
-    };
     
-    // Store user data in localStorage
-    localStorage.setItem("userData", JSON.stringify(boilerplateUserData));
     
-    // Set the boilerplate user data using setUserData
-    setUserData(boilerplateUserData);
 
     if (!userData)formErrors.push("Email or password is incorrect");
 
@@ -49,7 +35,7 @@ function Login({setUserData }) {
   return (
 
     <div style={{ overflow: 'hidden' }}>
-      <Navigation />
+      <Navigation userData={{}}/>
       <div className="login-container" style={{ marginTop: '110px'}}>
         <h2>Login</h2>
 
@@ -93,7 +79,7 @@ function validateFormData(formData) {
 
 function getUserData(formData, setUserData) {
   let userData = {};
-  fetch("http://localhost:3000/login", {
+  fetch("https://condocare-backend-soen390team20.koyeb.app/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -103,9 +89,11 @@ function getUserData(formData, setUserData) {
   })
     .then((response) => response.json())
     .then((data) => {
-      // Handle the response from the server
-      setUserData(data.loginData); 
       if (data.response === "Email or password is incorrect") throw new Error(data.response);
+      // Handle the response from the server
+      setUserData(data.loginData);
+      // Store user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(data.loginData));
     })
     .catch((error) => {
       // Handle error

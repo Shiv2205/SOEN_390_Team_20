@@ -27,7 +27,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const Example = () => {
   const [validationErrors, setValidationErrors] = useState({});
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const columns = useMemo(
     () => [

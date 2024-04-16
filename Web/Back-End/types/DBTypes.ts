@@ -30,6 +30,7 @@ interface IUserData {
   email: string;
   phone_number?: string;
   profile_picture?: string;
+  address?: string;
 }
 
 export interface UserData extends IUserData {

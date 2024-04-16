@@ -35,7 +35,7 @@ router.post(
       else throw new Error("Invalid credentials");
     } catch (error) {
       const err: Error = error as Error;
-      res.status(500).send({ response: err.message });
+      res.status(500).send({ response: "error" });
     }
   }
 );

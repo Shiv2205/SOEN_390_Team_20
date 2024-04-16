@@ -60,10 +60,11 @@ CREATE TABLE IF NOT EXISTS account (
     password TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     phone_number TEXT,
-    profile_picture TEXT,
+    profile_picture BLOB,
     registration_key TEXT,
     account_type TEXT CHECK (account_type IN ("Public", "Owner", "Renter", "Employee", "Admin")) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    'address' TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 );--
 
 CREATE TABLE IF NOT EXISTS employee (
