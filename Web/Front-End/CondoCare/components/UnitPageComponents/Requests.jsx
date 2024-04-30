@@ -269,15 +269,15 @@ function useCreateUser() {
       }
     },
     //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(['users'], (prevUsers) => [
-        ...prevUsers,
-        {
-          ...newUserInfo,
-          id: (Math.random() + 1).toString(36).substring(7),
-        },
-      ]);
-    },
+    // onMutate: (newUserInfo) => {
+    //   queryClient.setQueryData(['users'], (prevUsers) => [
+    //     ...prevUsers,
+    //     {
+    //       ...newUserInfo,
+    //       id: (Math.random() + 1).toString(36).substring(7),
+    //     },
+    //   ]);
+    // },
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
   });
 }
