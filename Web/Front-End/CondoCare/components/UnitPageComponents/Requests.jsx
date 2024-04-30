@@ -104,7 +104,6 @@ const Example = ({id,isAdmin}) => {
     isLoading: isLoadingUsers,
   } = useGetRequests(id, isAdmin);
 
-  console.log(fetchedUsers);
   //call UPDATE hook
   const { mutateAsync: updateUser, isPending: isUpdatingUser } =
     useUpdateUser();
@@ -247,11 +246,27 @@ const Example = ({id,isAdmin}) => {
 //CREATE hook (post new user to api)
 function useCreateUser() {
   const queryClient = useQueryClient();
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  const url = `${SERVER}/request/new`;
   return useMutation({
     mutationFn: async (user) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json',},
+          body: JSON.stringify(user),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch request data');
+        }
+
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        // Handle errors gracefully
+        throw new Error('Error fetching user data: ' + error.message);
+      }
     },
     //client side optimistic update
     onMutate: (newUserInfo) => {
@@ -263,7 +278,7 @@ function useCreateUser() {
         },
       ]);
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
   });
 }
 
@@ -350,20 +365,10 @@ const ExampleWithProviders = ({id, isAdmin}) => (
 export default ExampleWithProviders;
 
 const validateRequired = (value) => !!value.length;
-const validateEmail = (email) =>
-  !!email.length &&
-  email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
 
 function validateUser(user) {
   return {
-    firstName: !validateRequired(user.firstName)
-      ? 'First Name is Required'
-      : '',
-    lastName: !validateRequired(user.lastName) ? 'Last Name is Required' : '',
-    email: !validateEmail(user.email) ? 'Incorrect Email Format' : '',
+    description: !validateRequired(user.description) ? 'description is Required' : '',
+    lastName: !validateRequired(user.type) ? 'type is Required' : '',
   };
 }
