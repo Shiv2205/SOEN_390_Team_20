@@ -29,6 +29,9 @@ function UnitPage({ userData, setUserData }) {
         setEventForm({ ...eventForm, [e.target.name]: e.target.value });
     };
 
+    const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { title, description, location, date, time } = eventForm;
@@ -38,7 +41,7 @@ function UnitPage({ userData, setUserData }) {
 
         const newEvent = { host_id, title, description, location, date_and_time: dateTime };
         try {
-            const response = await fetch('http://localhost:3000/api/events/newEvent', {
+            const response = await fetch(`${SERVER}/api/events/newEvent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newEvent)

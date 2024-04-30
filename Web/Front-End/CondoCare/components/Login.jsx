@@ -18,7 +18,9 @@ function Login({ setUserData }) {
     let formErrors = validateFormData(loginFormData);
 
     const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
-  fetch(`http://localhost:3000/login`, {
+
+    console.log(SERVER);
+  fetch(`${SERVER}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
