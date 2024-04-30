@@ -8,7 +8,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
+
+
 function UnitPage({ userData, setUserData }) {
+
+    console.log("Current User Data:", userData);
+
     const { state } = useLocation();
     const propertyData = state && state.propertyData;
     const [events, setEvents] = useState([]);
@@ -29,12 +34,11 @@ function UnitPage({ userData, setUserData }) {
         const { title, description, location, date, time } = eventForm;
         const dateTime = moment(`${date} ${time}`).toISOString();
 
-        // Assuming state.userData contains a property named `account_id` used as `host_id`
-        const host_id = state.userData.account_id;
+        const host_id = userData.account_id;
 
         const newEvent = { host_id, title, description, location, date_and_time: dateTime };
         try {
-            const response = await fetch('/newEvent', {
+            const response = await fetch('http://localhost:3000/api/events/newEvent', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newEvent)
