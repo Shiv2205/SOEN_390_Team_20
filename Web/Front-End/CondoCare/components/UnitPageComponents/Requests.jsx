@@ -114,6 +114,7 @@ const Example = ({id,isAdmin}) => {
 
   //CREATE action
   const handleCreateUser = async ({ values, table }) => {
+    values.unit_id = id;
     const newValidationErrors = validateUser(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);

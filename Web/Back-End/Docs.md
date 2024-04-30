@@ -524,6 +524,28 @@
 >>>```
 
 ---
+### 4. /new
+
+>>API route handler that registers a new request given unit id, description and type.
+>>
+>>- **Request:**
+>>>  - `req` - Request object 
+>>>  - `res` - Response object
+>>>  - `next` - Next function for error handling
+>>
+>>- **Response:**
+>>>  - A Promise that resolves to an object with the given request_id and status or rejects with an error.
+>>
+>>Returned object structure:
+>>
+>>>```json
+>>>{
+>>>  "status": number,
+>>>  "request_id": string,
+>>>}
+>>>```
+
+---
 
 ## Sign Up Route (/signup)
 

@@ -587,14 +587,14 @@ class DBController implements IDBController {
 
       this.db.run(
         `INSERT INTO request 
-              (request_id, employee_id, type, description, status) 
-              VALUES (?, ?, ?, ?, ?)`,
-        [request_id, "Unassigned", type, description, RequestStatus.Received],
+              (request_id, unit_id, employee_id, type, description, status) 
+              VALUES (?, ?, ?, ?, ?, ?)`,
+        [request_id, unit_id, "Unassigned", type, description, RequestStatus.Received],
         (err) => {
           if (err) {
             reject({
               status: 500,
-              message: "Error making request to database.",
+              message: err.message + "Error making request to database.",
             });
           } else {
             resolve({ status: 201, request_id });

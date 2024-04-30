@@ -137,4 +137,42 @@ router.post(
     }
 );
 
+/**
+ * API route handler that registers a new request given unit id, description and type.
+ * 
+ *  the request id is automatically generated
+ *  the employee id is set to unsassigned 
+ *  the status is set to recieved
+ * 
+ * @param req - Request object
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with the given request_id and status.
+ * 
+ * The returned object has the following structure:
+ * {
+ *   status: number;
+ *   request_id: string;
+ * }
+ */
+router.post(
+    '/new',
+    async function (
+        req: Request<{}, {}, RequestDetails>,
+        res: Response<{ status: number; request_id: string }> | { response: string },
+        next: NextFunction
+    ) {
+        try {
+            const result = await requestsMaster.submitNewRequest(req.body);
+            if (result instanceof (Error)) {
+                throw result as Error;
+             }
+             (res as Response<{ status: number; request_id: string }>).status(result.status).send(result);
+        } catch (error) {
+            console.error("Error occurred:", error); // Log the error message
+            (res as Response<{ status: number; request_id: string }>).status(500).send();
+        }
+  });
+
 export default router;
