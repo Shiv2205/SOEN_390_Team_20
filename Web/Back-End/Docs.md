@@ -294,19 +294,19 @@
 >>
 >>Returned object structure:
 >>
->>>```json
->>>{
+>>>```json                  
+>>>{                    
 >>>  "status": number,
->>>  "data": {
+>>>  "data": {              
 >>>    "unit_id": string,
 >>>    "property_id": string,
 >>>    "size": number,
 >>>    "monthly_rent": number,
 >>>    "condo_fee": number,
 >>>    "condo_balance": number
->>>  },
+>>>  },             
 >>>  "message": string
->>>}
+>>>}                
 >>>```
 
 ### 4. /property-assets
@@ -520,6 +520,51 @@
 >>>    }
 >>>  ],
 >>>  "message": string
+>>>}
+>>>```
+
+---
+### 4. /new
+
+>>API route handler that registers a new request given unit id, description and type.
+>>
+>>- **Request:**
+>>>  - `req` - Request object 
+>>>  - `res` - Response object
+>>>  - `next` - Next function for error handling
+>>
+>>- **Response:**
+>>>  - A Promise that resolves to an object with the given request_id and status or rejects with an error.
+>>
+>>Returned object structure:
+>>
+>>>```json
+>>>{
+>>>  "status": number,
+>>>  "message": string
+>>>}
+>>>```
+
+---
+
+### 4. /delete
+
+>>API route handler that deletes a request given request id.
+>>
+>>- **Request:**
+>>>  - `req` - Request object containting request id.
+>>>  - `res` - Response object
+>>>  - `next` - Next function for error handling
+>>
+>>- **Response:**
+>>>  - A Promise that resolves to an object status and message or rejects with an error.
+>>
+>>Returned object structure:
+>>
+>>>```json
+>>>{
+>>>  "status": number,
+>>>  "request_id": string,
 >>>}
 >>>```
 
