@@ -97,6 +97,29 @@ class RequestsMaster {
             return new Error((error as Error).message);
         }
     }
+
+    /**
+     * The function `updateRequest` asynchronously updates a request and returns the status and
+     * message or an error.
+     * @param {RequestDetails} requestDetails - RequestDetails is an object containing details of a new
+     * request to be submitted. It should include properties such as requester name, request description,
+     * request type, and other relevant information needed to update a request.
+     * @returns The `updateRequest` function returns a Promise that resolves to an object containing
+     * the `status` and `message` properties if the request is successfully submitted. If there is
+     * an error during the process, it returns an Error object with the error message.
+     */
+    async updateRequest(requestDetails: RequestDetails): Promise<{ status: number; message?: string } | Error> {
+        try {
+            const result = await this.dbController.updateRequest(requestDetails);
+            if (result.status !== 200) {
+                throw new Error("Failed to update request.");
+            }
+            return { status: result.status, message: result.message };
+        } catch (error) {
+            return new Error((error as Error).message);
+        }
+    }
+
     /**
      * This TypeScript function asynchronously retrieves all requests associated with a specific
      * employee ID from a database controller.

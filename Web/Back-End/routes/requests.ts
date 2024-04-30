@@ -211,4 +211,38 @@ router.post(
     }
 );
 
+/**
+ * API route handler that updates a request given request id, description, status, employee id, unit id and type.
+ * 
+ * @param req - Request object with new details
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with the given message and status.
+ * 
+ * The returned object has the following structure:
+ * {
+ *   status: number;
+ *   message: string;
+ * }
+ */
+router.post(
+    '/update',
+    async function (
+        req: Request<{}, {}, RequestDetails>,
+        res: Response<{ status: number; message: string }> | { response: string },
+        next: NextFunction
+    ) {
+        try {
+            const result = await requestsMaster.updateRequest(req.body);
+            if (result instanceof (Error)) {
+                throw result as Error;
+             }
+             (res as Response<{ status: number; message: string }>).status(result.status).send();
+        } catch (error) {
+            console.error("Error occurred:", error); // Log the error message
+            (res as Response<{ status: number; message: string }>).status(500).send();
+        }
+  });
+
 export default router;

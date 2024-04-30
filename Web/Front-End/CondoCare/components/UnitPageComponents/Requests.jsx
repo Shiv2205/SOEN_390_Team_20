@@ -316,17 +316,33 @@ function useGetRequests(id, isAdmin) {
 //UPDATE hook (put user in api)
 function useUpdateUser() {
   const queryClient = useQueryClient();
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  const url = `${SERVER}/request/update`;
   return useMutation({
-    mutationFn: async (user) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+    mutationFn: async (request) => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json',},
+          body: JSON.stringify(request),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update request data');
+        }
+
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        // Handle errors gracefully
+        throw new Error('Error updating request: ' + error.message);
+      }
     },
     //client side optimistic update
-    onMutate: (newUserInfo) => {
-      queryClient.setQueryData(['users'], (prevUsers) =>
-        prevUsers?.map((prevUser) =>
-          prevUser.id === newUserInfo.id ? newUserInfo : prevUser,
+    onMutate: (newRequestInfo) => {
+      queryClient.setQueryData(['users'], (prevRequests) =>
+        prevRequests?.map((prevRequest) =>
+          prevRequest.request_id === newRequestInfo.request_id ? newRequestInfo : prevRequest,
         ),
       );
     },
@@ -365,7 +381,7 @@ function useDeleteUser() {
         prevUsers?.filter((user) => user.request_id !== request_id),
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
   });
 }
 

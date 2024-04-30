@@ -731,6 +731,42 @@ class DBController implements IDBController {
     }
   }
 
+  async updateRequest({
+    unit_id,
+    type,
+    description,
+    status,
+    request_id,
+    employee_id,
+  }: RequestDetails): Promise<{ status: number; message?: string }> {
+    try {
+      await new Promise((resolve, reject) => {
+        this.db.run(
+          `UPDATE request 
+           SET unit_id = ?, employee_id = ?, type = ?, description = ?, status = ? 
+           WHERE request_id = ?`,
+          [unit_id, employee_id, type, description, status, request_id],
+          (err) => {
+            if (err) {
+              reject({
+                status: 500,
+                message: "Error updating request in database: " + err.message,
+              });
+            } else {
+              resolve({ status: 200, message: "Request updated successfully." });
+            }
+          }
+        );
+      });
+      return {
+        status: 200,
+        message: "Request updated successfully."
+      };
+    } catch (error) {
+      return { status: 500, message: (error as Error).message };
+    }
+  }
+
 
   async createNewEvent({
     host_id,

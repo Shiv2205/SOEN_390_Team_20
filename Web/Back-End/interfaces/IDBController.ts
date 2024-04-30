@@ -426,6 +426,26 @@ export default interface IDBController {
     request_id: string
   ): Promise<{ status: number; message?: string }>;
 
+   /**
+   * This TypeScript function updates a request in a database based on the id and returns the status and a message
+   * in a Promise.
+   * @param {RequestDetails}  - The `updateRequest` function is an asynchronous function that takes in
+   * an object `RequestDetails` as its parameter. The `RequestDetails` object should have properties
+   * `unit_id`, `type`, status, employee_id, request_id and `description`.
+   * @returns The `updateRequest` function is returning a Promise that resolves to an object with
+   * two properties: `status` and `message`. The `status` property indicates the status of the
+   * request update operation, and the message property contains the message generated
+   * for the new request.
+   */
+  updateRequest({
+      unit_id,
+      type,
+      description,
+      status,
+      request_id,
+      employee_id,
+    }: RequestDetails): Promise<{ status: number; message?: string }>;
+
   /**
    * Creates a new event in the database.
    *
