@@ -642,7 +642,7 @@ class DBController implements IDBController {
           this.db.all(
             `SELECT *
           FROM request
-          WHERE employee_id = ${employee_id};`,
+          WHERE employee_id = ?;`, employee_id,
             function (err, rows: RequestDetails[]) {
               if (err) {
                 reject({
@@ -676,16 +676,14 @@ class DBController implements IDBController {
           this.db.all(
             `SELECT *
           FROM request
-          WHERE unit_id = ${unit_id};`,
+          WHERE unit_id = ?;`, unit_id,
             function (err, rows: RequestDetails[]) {
-              if (err) {
+              if (rows) resolve(rows);
+              else
                 reject({
                   status: 500,
                   message: "Error fetching requests from database.",
                 });
-              } else {
-                resolve(rows);
-              }
             }
           );
         }
@@ -693,8 +691,7 @@ class DBController implements IDBController {
 
       return {
         status: 200,
-        data: requests,
-        message: "All requests retrieved successfully.",
+        data: requests
       };
     } catch (error) {
       return { status: 500, message: (error as Error).message };
