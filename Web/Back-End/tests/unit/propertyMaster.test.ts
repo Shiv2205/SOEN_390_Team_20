@@ -6,7 +6,7 @@ const createNewPropertyOutput = {
   status: 201,
   property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
 };
-const getPropertyOutput: {status: number, data?: PropertyData} = {
+const getPropertyOutput: { status: number, data?: PropertyData } = {
   status: 202,
   data: {
     property_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
@@ -18,7 +18,7 @@ const getPropertyOutput: {status: number, data?: PropertyData} = {
     picture: "main_street.jpg",
   },
 };
-const getAllPropertiesOutput: {status: number, data?: PropertyData[]} = {
+const getAllPropertiesOutput: { status: number, data?: PropertyData[] } = {
   status: 200,
   data: [
     {
@@ -68,6 +68,8 @@ const factoryMockSpy = jest
     getAttendeeEvents: jest.fn(),
     getAttendeeList: jest.fn(),
     close: jest.fn(),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
   }));
 
 describe("PropertyMaster", () => {

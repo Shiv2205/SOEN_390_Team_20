@@ -19,7 +19,7 @@ const getPublicUserOutput = {
     account_type: "Public"
   },
 };
-const getEmployeeOutput: {status: number; data: EmployeeDetails}  = {
+const getEmployeeOutput: { status: number; data: EmployeeDetails } = {
   status: 200,
   data: {
     employee_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
@@ -39,7 +39,7 @@ const createNewEmployeeOutput = {
   status: 201,
   employee_id: "1d2b6c84-2b4c-4893-8fb6-cf76f255d990",
 };
-const getAllEmployeesOutput: {status: number; data: EmployeeDetails[]} = {
+const getAllEmployeesOutput: { status: number; data: EmployeeDetails[] } = {
   status: 200,
   data: [
     {
@@ -87,6 +87,8 @@ const factoryMockSpy = jest
     getAttendeeEvents: jest.fn(),
     getAttendeeList: jest.fn(),
     close: jest.fn(() => true),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
   }));
 
 describe("AccountsMaster", () => {
@@ -127,7 +129,7 @@ describe("AccountsMaster", () => {
             .mockImplementationOnce(() => {
               throw testError;
             });
-          await expect(accountsController.registerUser( {
+          await expect(accountsController.registerUser({
             fullname: "John Doe",
             email: "john@example.com",
             password: "password123",

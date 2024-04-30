@@ -99,6 +99,8 @@ const factoryMockSpy = jest
     getAttendeeEvents: jest.fn(() => Promise.resolve(getAttendeeEventsOutput)),
     getAttendeeList: jest.fn(() => Promise.resolve(getAttendeeListOutput)),
     close: jest.fn(),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
   }));
 
 describe("EventsMaster", () => {
