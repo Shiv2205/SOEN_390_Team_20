@@ -68,6 +68,8 @@ const factoryMockSpy = jest
     getAttendeeEvents: jest.fn(),
     getAttendeeList: jest.fn(),
     close: jest.fn(),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
   }));
 
 describe("PostsMaster", () => {
@@ -85,7 +87,7 @@ describe("PostsMaster", () => {
             .mockImplementationOnce(() => {
               throw testError;
             });
-          await expect(postController.createPost(    {
+          await expect(postController.createPost({
             creator_id: "user_id",
             property_id: "Property id test",
             content: "Post Content",
