@@ -417,7 +417,7 @@ class DBController implements IDBController {
 
   async getOccupiedUnit(
     occupant_id: string
-  ): Promise<{ status: number; data?: UnitDetails; message?: string }> {
+  ): Promise<{ status: number; data?: UnitDetails[]; message?: string }> {
     let unitExists = await this.recordExists(
       "unit",
       "occupant_id",
@@ -425,7 +425,7 @@ class DBController implements IDBController {
     );
     return new Promise(async (resolve, reject) => {
       if (unitExists) {
-        this.db.get(
+        this.db.all(
           `SELECT 
                     unit_id,
                     property_id,
@@ -436,7 +436,7 @@ class DBController implements IDBController {
                     occupant_id
                     FROM unit WHERE occupant_id = ?;`,
           occupant_id,
-          function (err, row: UnitDetails) {
+          function (err, row: UnitDetails[]) {
             if (row) resolve({ status: 202, data: row });
             if (err) reject(err);
           }

@@ -250,7 +250,7 @@ export default interface IDBController {
    */
   getOccupiedUnit(
     occupant_id: string
-  ): Promise<{ status: number; data?: UnitDetails; message?: string }>;
+  ): Promise<{ status: number; data?: UnitDetails[]; message?: string }>;
   /**
    * This TypeScript function retrieves all units associated with a specific property ID from a
    * database, handling cases where no units are found.
