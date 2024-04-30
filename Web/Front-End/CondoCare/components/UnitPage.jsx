@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navigation from "./LandingPageComponents/navigation";
 import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
+import ExampleWithProviders from "./UnitPageComponents/Requests";
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
-import ExampleWithProviders from "./UnitPageComponents/Requests";
 
 
 
