@@ -35,12 +35,14 @@ const Example = ({id,isAdmin}) => {
         header: 'Request Id',
         enableEditing: false,
         size: 80,
+        Edit: () => null,
       },
       
       {
         accessorKey: 'unit_id',
         header: 'Unit ID',
         enableEditing: false,
+        Edit: () => null,
       },
       {
         accessorKey: 'description',
@@ -73,6 +75,7 @@ const Example = ({id,isAdmin}) => {
         editVariant: 'select',
         enableEditing: isAdmin,
         editSelectOptions: RequestStatuses,
+        Edit: !isAdmin ? () => null : () => true, // this line is what causes the employee table to hide the status on edit
         muiEditTextFieldProps: {
           type: 'status',
           select: true,
@@ -181,7 +184,7 @@ const Example = ({id,isAdmin}) => {
     //optionally customize modal content
     renderEditRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>
-        <DialogTitle variant="h3">Edit User</DialogTitle>
+        <DialogTitle variant="h3">Edit Request</DialogTitle>
         <DialogContent
           sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
         >
