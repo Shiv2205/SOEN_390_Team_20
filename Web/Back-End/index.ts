@@ -9,6 +9,7 @@ import signUpRouter from './routes/signup';
 import propertyHandler from './routes/properties';
 import accountsHandler from './routes/accounts';
 import eventsHandler from './routes/events';
+import requestHandler from './routes/requests';
 
 // Express app
 const app = express();
@@ -31,6 +32,7 @@ app.use('/signup', signUpRouter);
 app.use('/accounts', accountsHandler);
 app.use('/properties', propertyHandler);
 app.use('/events', eventsHandler);
+app.use('/request', requestHandler);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next: NextFunction) {

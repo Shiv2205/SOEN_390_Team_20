@@ -294,19 +294,19 @@
 >>
 >>Returned object structure:
 >>
->>>```json
->>>{
+>>>```json                  
+>>>{                    
 >>>  "status": number,
->>>  "data": {
+>>>  "data": {              
 >>>    "unit_id": string,
 >>>    "property_id": string,
 >>>    "size": number,
 >>>    "monthly_rent": number,
 >>>    "condo_fee": number,
 >>>    "condo_balance": number
->>>  },
+>>>  },             
 >>>  "message": string
->>>}
+>>>}                
 >>>```
 
 ### 4. /property-assets
