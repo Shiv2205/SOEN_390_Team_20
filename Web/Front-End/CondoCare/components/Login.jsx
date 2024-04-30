@@ -18,6 +18,8 @@ function Login({ setUserData }) {
     let formErrors = validateFormData(loginFormData);
 
     const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+
+    console.log(SERVER);
   fetch(`${SERVER}/login`, {
       method: "POST",
       headers: {

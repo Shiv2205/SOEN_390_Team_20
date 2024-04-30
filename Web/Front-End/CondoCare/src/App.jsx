@@ -4,7 +4,6 @@ import "./App.css";
 import SignUp from "../components/SignUp";
 import Login from "../components/Login";
 import Profile from "../components/Profile";
-import EventsPage from "../components/EventsPage";
 import PropertyView from "../components/PropertyView";
 import PropertyRegistration from "../components/PropertyRegistration";
 import LandingPage from "../components/LandingPage";
@@ -41,12 +40,8 @@ function App() {
           }
         />
         <Route path="/requestService" element={<RequestForm />} />
-        <Route path="/unitPage" element={<UnitPage />} />
+        <Route path="/unitPage" element={<UnitPage userData={userData} setUserData={setUserData} />} />
         <Route path="/blog" element={<ChatApp />} />
-        <Route
-          path="/events"
-          element={<EventsPage userData={userData} setUserData={setUserData} />}
-        />
       </Routes>
     </Router>
   );
