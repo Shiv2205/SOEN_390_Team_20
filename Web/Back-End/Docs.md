@@ -541,6 +541,29 @@
 >>>```json
 >>>{
 >>>  "status": number,
+>>>  "message": string
+>>>}
+>>>```
+
+---
+
+### 4. /delete
+
+>>API route handler that deletes a request given request id.
+>>
+>>- **Request:**
+>>>  - `req` - Request object containting request id.
+>>>  - `res` - Response object
+>>>  - `next` - Next function for error handling
+>>
+>>- **Response:**
+>>>  - A Promise that resolves to an object status and message or rejects with an error.
+>>
+>>Returned object structure:
+>>
+>>>```json
+>>>{
+>>>  "status": number,
 >>>  "request_id": string,
 >>>}
 >>>```

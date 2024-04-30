@@ -175,4 +175,40 @@ router.post(
         }
   });
 
+/**
+ * API route handler that deletes all requests associated with a specific request ID.
+ * 
+ * @param req - Request object with request ID in body
+ * @param res - Response object
+ * @param next - Next function for error handling
+ * 
+ * @returns A Promise that resolves to an object with status message or rejects with an error.
+ * The returned object has the following structure:
+ * 
+ * {
+ *   status: number;
+ *   message?: string;
+ * }
+ */
+router.post(
+    "/delete",
+    async function (
+        req: Request<{}, {}, { request_id: string }>,
+        res: Response<{ status: number; } | { response: string }>,
+        next: NextFunction
+    ) {
+        const { request_id } = req.body;
+
+        try {
+            const result = await requestsMaster.deleteRequest(request_id);
+            if (result instanceof (Error)) {
+                throw result as Error;
+            }
+            res.status(result.status).send(result);
+        } catch (error) {
+            res.status(500).send({ response: (error as Error).message });
+        }
+    }
+);
+
 export default router;

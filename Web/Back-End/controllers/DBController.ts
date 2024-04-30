@@ -698,6 +698,40 @@ class DBController implements IDBController {
     }
   }
 
+  async deleteRequest(
+    request_id: string
+  ): Promise<{ status: number; message?: string }> {
+    try {
+      await new Promise((resolve, reject) => {
+        this.db.run(
+          `DELETE FROM request WHERE request_id = ?;`,
+          request_id,
+          function (err) {
+            if (err) {
+              reject({
+                status: 500,
+                message: "Error deleting request from database.",
+              });
+            } else {
+              resolve({
+                status: 200,
+                message: "Request deleted successfully."
+              });
+            }
+          }
+        );
+      });
+
+      return {
+        status: 200,
+        message: "Request deleted successfully."
+      };
+    } catch (error) {
+      return { status: 500, message: (error as Error).message };
+    }
+  }
+
+
   async createNewEvent({
     host_id,
     title,

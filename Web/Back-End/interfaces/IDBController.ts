@@ -410,6 +410,23 @@ export default interface IDBController {
   ): Promise<{ status: number; data?: RequestDetails[]; message?: string }>;
 
   /**
+   * This TypeScript function deletes all requests based on a given request ID.
+   * @param {string} request_id - The `request_id` parameter is a string that represents the identifier of a
+   * specific request for which you want to delete.
+   * @returns The `deleteRequest` function returns a Promise that resolves to an object with the
+   * following structure:
+   * ```typescript
+   * {
+   *   status: number; // HTTP status code indicating the outcome of the operation
+   *   message?: string; // Optional message providing additional information about the operation
+   * }
+   * ```
+   */
+  deleteRequest(
+    request_id: string
+  ): Promise<{ status: number; message?: string }>;
+
+  /**
    * Creates a new event in the database.
    *
    * @param {EventData} - An object containing the event data.

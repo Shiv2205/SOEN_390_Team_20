@@ -74,6 +74,30 @@ class RequestsMaster {
     }
 
     /**
+   * This TypeScript function asynchronously deletes all requests based on a given request ID.
+   * @param {string} request_id - The `request_id` parameter is a string that represents the identifier of a
+   * specific request for which you want to delete.
+   * @returns The `deleteRequest` function returns a Promise that resolves to an object with the
+   * following structure:
+   * ```typescript
+   * {
+   *   status: number; // HTTP status code indicating the outcome of the operation
+   *   message?: string; // Optional message providing additional information about the operation
+   * }
+   * ```
+   */
+    async deleteRequest(request_id: string) : Promise<{ status: number; message?: string } | Error> {
+        try {
+            const result = await this.dbController.deleteRequest(request_id);
+            if (result.status !== 200) {
+                throw new Error("Failed to delete request.");
+            }
+            return { status: result.status, message: result.message };
+        } catch (error) {
+            return new Error((error as Error).message);
+        }
+    }
+    /**
      * This TypeScript function asynchronously retrieves all requests associated with a specific
      * employee ID from a database controller.
      * @param {string} employee_id - The `employee_id` parameter is a string that represents the unique

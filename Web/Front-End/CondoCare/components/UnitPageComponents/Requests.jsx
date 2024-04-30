@@ -139,7 +139,7 @@ const Example = ({id,isAdmin}) => {
   //DELETE action
   const openDeleteConfirmModal = (row) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
-      deleteUser(row.original.id);
+      deleteUser(row.original.request_id);
     }
   };
 
@@ -258,14 +258,14 @@ function useCreateUser() {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch request data');
+          throw new Error('Failed to create request data');
         }
 
         const data = await response.json();
         return data.data;
       } catch (error) {
         // Handle errors gracefully
-        throw new Error('Error fetching user data: ' + error.message);
+        throw new Error('Error creating request: ' + error.message);
       }
     },
     //client side optimistic update
@@ -305,7 +305,7 @@ function useGetRequests(id, isAdmin) {
         return data.data;
       } catch (error) {
         // Handle errors gracefully
-        throw new Error('Error fetching user data: ' + error.message);
+        throw new Error('Error fetching request data: ' + error.message);
       }
     },
     refetchOnWindowFocus: false,
@@ -337,16 +337,32 @@ function useUpdateUser() {
 //DELETE hook (delete user in api)
 function useDeleteUser() {
   const queryClient = useQueryClient();
+  const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
+  const url = `${SERVER}/request/delete`;
   return useMutation({
-    mutationFn: async (userId) => {
-      //send api update request here
-      await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-      return Promise.resolve();
+    mutationFn: async (request_id) => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json',},
+          body: JSON.stringify({request_id : request_id}),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete request');
+        }
+
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        // Handle errors gracefully
+        throw new Error('Error deleting request: ' + error.message);
+      }
     },
     //client side optimistic update
-    onMutate: (userId) => {
+    onMutate: (request_id) => {
       queryClient.setQueryData(['users'], (prevUsers) =>
-        prevUsers?.filter((user) => user.id !== userId),
+        prevUsers?.filter((user) => user.request_id !== request_id),
       );
     },
     // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
