@@ -108,10 +108,10 @@ class RequestsMaster {
      * the `status` and `message` properties if the request is successfully submitted. If there is
      * an error during the process, it returns an Error object with the error message.
      */
-    async updateRequest(requestDetails: RequestDetails): Promise<{ status: number; message?: string } | Error> {
+    async updateRequest(requestDetails: RequestDetails): Promise<{ status: number; message: string } | Error> {
         try {
             const result = await this.dbController.updateRequest(requestDetails);
-            if (result.status !== 200) {
+            if (result.status !== 200 || result.message == undefined) {
                 throw new Error("Failed to update request.");
             }
             return { status: result.status, message: result.message };

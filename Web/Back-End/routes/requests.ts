@@ -238,7 +238,7 @@ router.post(
             if (result instanceof (Error)) {
                 throw result as Error;
              }
-             (res as Response<{ status: number; message: string }>).status(result.status).send();
+             (res as Response<{ status: number; message: string }>).status(result.status).send(result);
         } catch (error) {
             console.error("Error occurred:", error); // Log the error message
             (res as Response<{ status: number; message: string }>).status(500).send();
