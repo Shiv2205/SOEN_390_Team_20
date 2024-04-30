@@ -5,6 +5,7 @@ import { PropertiesInfo } from "./DashboardComponents/propertiesInfo.jsx";
 import JsonData from "./LandingPageComponents/data.json";
 import { MiniProfile } from "./DashboardComponents/miniProfile.jsx";
 import { useStore } from "../store/store.js";
+import ExampleWithProviders from "./UnitPageComponents/Requests";
 
 const DashboardOwner = ({ userData, setUserData }) => {
   const [landingPageData, setLandingPageData] = useState({});
@@ -97,18 +98,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
     }
   }, [state.userData]);
 
-  // // Placeholder data - replace with actual data
-  // const properties = [
-  //     { id: 1, name: 'Property 1', address: '123 Main St', imageUrl: 'https://via.placeholder.com/100' },
-  //     { id: 2, name: 'Property 2', address: '456 Oak St', imageUrl: 'https://via.placeholder.com/100' },
-  //     // More properties...
-  // ];
-  //
-  // // Placeholder for user data
-  // const user = {
-  //     name: 'John Doe',
-  //     imageUrl: 'https://via.placeholder.com/50'
-  // };
   console.log(state.userData)
 
   return (
@@ -116,29 +105,28 @@ const DashboardOwner = ({ userData, setUserData }) => {
       <Navigation />
       {state.userData ? (
         <>
-          <MiniProfile userData={state.userData} setUserData={setUserData} />
-          <PropertiesInfo
-            properties={properties}
-            setProperties={setProperties}
-          />
+            <MiniProfile userData={state.userData} setUserData={setUserData} />
+          {(() => {
+            switch (state.userData.account_type) {
+              case "Owner":
+              case "Renter":
+              case "Public":
+                return (
+                  <>
+                    <PropertiesInfo properties={properties} setProperties={setProperties} />
+                  </>
+                );
+              default:
+                return <ExampleWithProviders id={state.userData.account_id} isAdmin={true}/>;
+            }
+          })()}
         </>
       ) : (
         "Loading..."
       )}
-
-      {/*<div className="property-list">*/}
-      {/*    {properties.map(property => (*/}
-      {/*        <div key={property.id} className="property-item">*/}
-      {/*            <div className="property-info">*/}
-      {/*                <h3>{property.name}</h3>*/}
-      {/*                <p>{property.address}</p>*/}
-      {/*            </div>*/}
-      {/*            <img src={property.imageUrl} alt="Property" />*/}
-      {/*        </div>*/}
-      {/*    ))}*/}
-      {/*</div>*/}
     </div>
   );
+  
 };
 
 export default DashboardOwner;

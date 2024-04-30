@@ -77,6 +77,8 @@ const factoryMockSpy = jest
     getAttendeeEvents: jest.fn(),
     getAttendeeList: jest.fn(),
     close: jest.fn(),
+    updateRequest: jest.fn(),
+    deleteRequest: jest.fn(),
   }));
 
 describe("UnitMaster", () => {
