@@ -4,8 +4,6 @@ import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
 
-const localizer = momentLocalizer(moment);
-
 function UnitPage({ userData, setUserData }) {
     const { state } = useLocation();
     const propertyData = state && state.propertyData;
