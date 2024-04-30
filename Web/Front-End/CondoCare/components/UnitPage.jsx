@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navigation from "./LandingPageComponents/navigation";
 import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
 
-function UnitPage() {
+function UnitPage({ userData, setUserData }) {
     const { state } = useLocation();
     const propertyData = state && state.propertyData;
   
