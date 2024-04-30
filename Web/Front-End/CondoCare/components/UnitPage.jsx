@@ -42,7 +42,7 @@ function UnitPage({ userData, setUserData }) {
 
         const newEvent = { host_id, title, description, location, date_and_time: dateTime };
         try {
-            const response = await fetch(`${SERVER}/api/events/newEvent`, {
+            const response = await fetch(`${SERVER}/events/newEvent`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newEvent)
@@ -63,7 +63,10 @@ function UnitPage({ userData, setUserData }) {
         <div>
             <Navigation/>
             <Header property={propertyData}></Header>
-            <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>            <div className="calendar-container">
+
+            <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
+
+            <div className="calendar-container">
                 <Calendar
                     localizer={localizer}
                     events={events.map(event => ({
@@ -91,7 +94,6 @@ function UnitPage({ userData, setUserData }) {
             </form>
         </div>
     );
-    console.log(propertyData);
 }
 // employee/admin id: cb29c3c8-936d-4a67-9c0a-2902349c07f7
 // tenant id: 43cc3d25-5297-4a5e-8b23-7dc246042cb2
