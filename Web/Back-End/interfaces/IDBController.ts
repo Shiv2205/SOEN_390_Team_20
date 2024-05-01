@@ -582,6 +582,10 @@ export default interface IDBController {
   /**
    * The close function closes the database connection and logs an error message if there is an error.
    */
+
+  getUnitsAndPropertiesByAccount(account_id: string): Promise<{status: number; data: any[]} | Error>;
+
+
   close(): void;
 }
 
