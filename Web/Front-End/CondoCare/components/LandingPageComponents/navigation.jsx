@@ -4,7 +4,6 @@ import { useSocket } from "../../socket/socket";
 
 export function Navigation() {
   const storedUserData = localStorage.getItem("userData");
-  const [socket, dispatch] = useSocket();
   return (
     <nav id="menu" className="navbar navbar-default navbar-fixed-top">
       <div className="container">
@@ -77,7 +76,7 @@ export function Navigation() {
                 <a
                   href="/"
                   className="page-scroll"
-                  onClick={() => logout(dispatch)}
+                  onClick={() => logout()}
                 >
                   Logout
                 </a>
@@ -115,7 +114,6 @@ export function Navigation() {
 
 export default Navigation;
 
-function logout(dispatch) {
-    dispatch("DISCONNECT", "");
+function logout() {
     localStorage.removeItem("userData");
 }

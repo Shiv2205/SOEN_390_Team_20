@@ -1,3 +1,4 @@
+import { resourceLimits } from "worker_threads";
 import DBControllerFactory from "../Factory/DBControllerFactory";
 import IDBController from "../interfaces/IDBController";
 import { RequestDetails } from "../types/DBTypes";
@@ -112,7 +113,7 @@ class RequestsMaster {
         try {
             const result = await this.dbController.updateRequest(requestDetails);
             if (result.status !== 200 || result.message == undefined) {
-                throw new Error("Failed to update request.");
+                throw new Error("Failed to update request." + result.message);
             }
             return { status: result.status, message: result.message };
         } catch (error) {

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Header = ({ property }) => {
+export const Header = ({ property: propertyUnitsTuple }) => {
   return (
     <header id="mediumProfile">
       <div className="intro">
@@ -9,12 +9,16 @@ export const Header = ({ property }) => {
             <div className="row">
               <div className="mediumProfile">
                 <div className="mediumProfile-image">
-                  <img src={property.imageUrl} />
+                  <img src={propertyUnitsTuple.property.picture} />
                 </div>
                 <div className="mediumProfile-content">
                     <div>
-                      <h2>{property.name}</h2>
-                      <h2>Unit #{property.unit}</h2>
+                      <h2>{propertyUnitsTuple.property.address}</h2>
+                      {propertyUnitsTuple.units.map((unit) => (
+                        <div>
+                          <h2>Unit #{unit.monthly_rent}</h2>
+                        </div>
+                      ))}
                     </div>
                 </div>
               </div>

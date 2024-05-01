@@ -6,7 +6,6 @@ import { useStore } from "../store/store";
 function Login({ setUserData }) {
   const [errMessage, setErrMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-  const [state, dispatch] = useStore();
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -35,9 +34,6 @@ function Login({ setUserData }) {
         return response.json();
       })
       .then((data) => {
-        // Handle the response from the server
-        console.log(data);
-        dispatch("CREATE", { userData: { ...data.loginData } });
         localStorage.setItem("userData", JSON.stringify(data.loginData));
         setUserData(data.loginData);
         navigate("/userDashboard");
