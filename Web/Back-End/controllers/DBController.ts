@@ -4,22 +4,22 @@ import * as uuid from "uuid";
 import * as path from "path";
 import IDBController from "../interfaces/IDBController";
 import {
-  EmployeeData,
-  EmployeeDetails,
-  PostData,
-  PostDetails,
-  PropertyData,
-  PublicUserData,
-  UnitData,
-  UnitDetails,
-  UserData,
-  RequestDetails,
-  RequestStatus,
-  RequestData,
-  EventData,
-  EventDetails,
-  EventAttendee,
-  NotFound,
+    EmployeeData,
+    EmployeeDetails,
+    PostData,
+    PostDetails,
+    PropertyData,
+    PublicUserData,
+    UnitData,
+    UnitDetails,
+    UserData,
+    RequestDetails,
+    RequestStatus,
+    RequestData,
+    EventData,
+    EventDetails,
+    EventAttendee,
+    NotFound, AdminDetails, PropertyOpsDetails,
 } from "../types/DBTypes";
 
 const currentDB = "test_data.sqlite3"; // test_data.txt
@@ -901,6 +901,66 @@ class DBController implements IDBController {
         );
       } else {
         resolve({ status: 404, message: "No attendees found." });
+      }
+    });
+  }
+
+  async getAdminDetails(admin_id: string): Promise<{status: number, data?: AdminDetails, message?: string} | Error>{
+      let adminExists = await this.recordExists("CMC_Admin", "admin_id", admin_id);
+      return new Promise((resolve, reject) => {
+          if(adminExists){
+              this.db.get(
+                  `SELECT *
+            FROM CMC_Admin 
+            WHERE admin_id = ?;`,
+                  admin_id,
+                  function (err, row: AdminDetails) {
+                      if (row) resolve({ status: 200, data: row });
+                      if (err) reject(err);
+                  }
+              );
+          } else {
+              reject({
+                  status: 400,
+                  message: "Admin does not exist in database.",
+              });
+          }
+      });
+  }
+
+  async createPropertyOps(property_id: string, operation_name: string, operation_cost: number): Promise<{ status: number; operation_id: string; }> {
+      return new Promise((resolve, reject) => {
+          const operation_id = uuid.v4(); // Generate a unique event_id using uuid
+
+          this.db.run(
+              `INSERT INTO property_operations 
+              (operation_id, property_id, operation_name, operation_cost) 
+              VALUES (?, ?, ?, ?)`,
+              [operation_id, property_id, operation_name, operation_cost]
+          );
+
+          resolve({ status: 201, operation_id });
+      });
+  }
+  async getPropertyOps(property_id: string): Promise<{status: number, data?: PropertyOpsDetails, message?: string} | Error> {
+    let operationExists = await this.recordExists("property_operations", "property_id", property_id);
+    return new Promise((resolve, reject) => {
+      if(operationExists){
+        this.db.get(
+            `SELECT *
+            FROM property_operations 
+            WHERE property_id = ?;`,
+            property_id,
+            function (err, row: PropertyOpsDetails) {
+              if (row) resolve({ status: 200, data: row });
+              if (err) reject(err);
+            }
+        );
+      } else {
+        reject({
+          status: 400,
+          message: "Operation does not exist in database.",
+        });
       }
     });
   }

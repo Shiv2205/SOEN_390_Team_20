@@ -1,20 +1,21 @@
 import {
+  AdminDetails,
   EmployeeData,
   EmployeeDetails,
-  PostData,
-  PostDetails,
-  PropertyData,
-  PublicUserData,
-  UnitData,
-  UnitDetails,
-  UserData,
-  RequestDetails,
-  RequestStatus,
-  RequestData,
   EventData,
   EventDetails,
   EventAttendee,
   NotFound,
+  PostData,
+  PostDetails,
+  PropertyData,
+  PublicUserData,
+  RequestDetails,
+  RequestStatus,
+  RequestData,
+  UnitData,
+  UnitDetails,
+  UserData,
 } from "../types/DBTypes";
 
 export default interface IDBController {
@@ -226,13 +227,13 @@ export default interface IDBController {
    * @returns This `getUnit` function returns a Promise that resolves to an object with the following
    * structure: `{ status: number, data?: UnitDetails, message?: string }`. The `status` property
    * indicates the status of the operation, `data` contains details of the unit if it exists, and
-   * `message` provides additional information if needed.
+   * `message` provides additional information in case of errors.
    */
   getUnit(
     unit_id: string
   ): Promise<{ status: number; data?: UnitDetails; message?: string }>;
   /**
-   * This TypeScript function retrieves details of an occupied unit based on the occupant ID provided.
+   * This TypeScript function retrieves details of an occupied unit(s) based on the occupant ID provided.
    * @param {string} occupant_id - The `getOccupiedUnit` function is an asynchronous function that
    * retrieves details of an occupied unit based on the occupant's ID. Here's a breakdown of the
    * function:
@@ -240,7 +241,7 @@ export default interface IDBController {
    * ```typescript
    * {
    *   status: number,
-   *   data?: UnitDetails,
+   *   data?: UnitDetails[],
    *   message?: string
    * }
    * ```
@@ -511,6 +512,20 @@ export default interface IDBController {
    * @returns {Promise<{ status: number; data: EventDetails[] }>} - A promise that resolves with the status and an array of event details.
    */
     getAllEvents(): Promise<{ status: number; data: EventDetails[] } | NotFound>;
+
+  /**
+   * This TypeScript function retrieves admin details based on a provided admin ID, handling cases where
+   * the admin exists or does not exist in the database.
+   * @param {string} admin_id - The ID of the admin whose details are to be retrieved.
+   * @returns This function returns a Promise that resolves to an object with the following
+   * structure: `{ status: number, data?: AdminDetails, message?: string }`. The `status` property
+   * indicates the status of the operation, where 200 represents success and 400 represents failure.
+   * The `data` property contains details of the admin if it exists, and `message` provides additional
+   * information in case of errors.
+   * @throws This function can throw an Error if there are issues with database operations or if the
+   * provided admin ID does not exist.
+   */
+  getAdminDetails(admin_id: string): Promise<{ status: number, data?: AdminDetails, message?: string } | Error>
 
   /**
    * The close function closes the database connection and logs an error message if there is an error.
