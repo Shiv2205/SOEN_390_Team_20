@@ -1,7 +1,7 @@
 import express from "express";
 import request from "supertest";
-import router from "../../routes/properties"; // Update this with your router file name
-import PropertyMaster from "../../repo/propertyMaster";
+import router from "../../../routes/properties"; // Update this with your router file name
+import PropertyMaster from "../../../repo/propertyMaster";
 
 const app = express();
 app.use(express.json());

@@ -1,6 +1,6 @@
-import PropertyMaster from "../../repo/propertyMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { PropertyData } from "../../types/DBTypes";
+import PropertyMaster from "../../../repo/propertyMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { PropertyData } from "../../../types/DBTypes";
 
 const createNewPropertyOutput = {
   status: 201,
@@ -75,6 +75,10 @@ const factoryMockSpy = jest
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
     getAdminDetails: jest.fn(),
+      createPropertyOps: jest.fn(),
+      getPropertyOps: jest.fn(),
+      updatePropertyOps: jest.fn(),
+      deletePropertyOps: jest.fn()
   }));
 
 describe("PropertyMaster", () => {

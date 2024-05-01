@@ -1,6 +1,6 @@
-import PostsMaster from "../../repo/postsMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { PostDetails } from "../../types/DBTypes";
+import PostsMaster from "../../../repo/postsMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { PostDetails } from "../../../types/DBTypes";
 
 const createPostOutput = {
   status: 201,
@@ -70,6 +70,10 @@ const factoryMockSpy = jest
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
     getAdminDetails: jest.fn(),
+      createPropertyOps: jest.fn(),
+      getPropertyOps: jest.fn(),
+      updatePropertyOps: jest.fn(),
+      deletePropertyOps: jest.fn(),
     close: jest.fn(),
   }));
 

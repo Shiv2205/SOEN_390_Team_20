@@ -5,7 +5,7 @@ import {PropertyData, UnitData, UnitDetails} from "../types/DBTypes";
 
 class UnitMaster {
   readonly dbController: IDBController;
-  private pm: PropertyMaster;
+  readonly pm: PropertyMaster;
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();

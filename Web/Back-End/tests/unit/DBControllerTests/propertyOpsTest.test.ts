@@ -138,6 +138,101 @@ describe("Property Operations Test", () => {
             });
         });
     });
+
+
+    describe("updatePropertyOps", () => {
+        let spy;
+        let testRecord =
+            {
+            operation_id: 'test-operation-id',
+            property_id: 'test-property-id',
+            operation_name: "test-name",
+            operation_cost: 123.45
+            };
+
+        it("should resolve to indicate successful update", async () => {
+            spy = jest
+                .spyOn(dbController, "recordExists")
+                .mockResolvedValueOnce(true);
+
+            let updateOperationSPy = jest.spyOn(dbController, "updatePropertyOps");
+
+            await expect(
+                dbController.updatePropertyOps(testRecord.operation_id, testRecord.property_id, testRecord.operation_name,testRecord.operation_cost)
+            ).resolves.toBeTruthy();
+            expect(dbController.db.run).toHaveBeenCalled();
+            expect(dbController.db.run).toHaveBeenCalledWith(
+                `UPDATE property_operations 
+              SET property_id = ?, operation_name = ?, operation_cost = ?
+              WHERE operation_id = ?`,
+                [testRecord.property_id, testRecord.operation_name,testRecord.operation_cost, testRecord.operation_id],
+            );
+            expect(updateOperationSPy).toHaveBeenCalledWith(
+                testRecord.operation_id, testRecord.property_id, testRecord.operation_name,testRecord.operation_cost
+            );
+
+            recordExistsTest(spy, {
+                tableName: "property_operations",
+                fieldName: "operation_id",
+                value: testRecord.operation_id,
+            });
+        });
+
+        it("should return { status: 400, message: 'Operation does not exist in database.'}", async () => {
+            spy = jest
+                .spyOn(dbController, "recordExists")
+                .mockResolvedValueOnce(false);
+
+            await expect(
+                dbController.updatePropertyOps(testRecord.operation_id, testRecord.property_id, testRecord.operation_name,testRecord.operation_cost)
+            ).rejects.toEqual({
+                status: 400,
+                message: "Operation does not exist in database.",
+            });
+        });
+    });
+
+    describe("deletePropertyOps", () => {
+        let spy;
+        let testRecord = {operation_id: 'test-operation-id'};
+
+        it("should resolve to indicate successful deletion", async () => {
+            spy = jest
+                .spyOn(dbController, "recordExists")
+                .mockResolvedValueOnce(true);
+
+            let deleteOperationSPy = jest.spyOn(dbController, "deletePropertyOps");
+
+            await expect(
+                dbController.deletePropertyOps(testRecord.operation_id)
+            ).resolves.toBeTruthy();
+            expect(dbController.db.run).toHaveBeenCalled();
+            expect(dbController.db.run).toHaveBeenCalledWith(
+                `DELETE FROM property_operations WHERE operation_id = ?`,
+                testRecord.operation_id,
+            );
+            expect(deleteOperationSPy).toHaveBeenCalledWith(testRecord.operation_id);
+
+            recordExistsTest(spy, {
+                tableName: "property_operations",
+                fieldName: "operation_id",
+                value: testRecord.operation_id,
+            });
+        });
+
+        it("should return { status: 400, message: 'Operation does not exist in database.'}", async () => {
+            spy = jest
+                .spyOn(dbController, "recordExists")
+                .mockResolvedValueOnce(false);
+
+            await expect(
+                dbController.deletePropertyOps(testRecord.operation_id)
+            ).rejects.toEqual({
+                status: 400,
+                message: "Operation does not exist in database.",
+            });
+        });
+    });
 })
 
 

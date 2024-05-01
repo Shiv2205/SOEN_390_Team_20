@@ -1,6 +1,6 @@
-import EventsMaster from "../../repo/eventsMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { EventAttendee } from "../../types/DBTypes";
+import EventsMaster from "../../../repo/eventsMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { EventAttendee } from "../../../types/DBTypes";
 
 const createEventOutput = {
   status: 201,
@@ -101,7 +101,11 @@ const factoryMockSpy = jest
     close: jest.fn(),
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
-      getAdminDetails: jest.fn()
+      getAdminDetails: jest.fn(),
+      createPropertyOps: jest.fn(),
+      getPropertyOps: jest.fn(),
+      updatePropertyOps: jest.fn(),
+      deletePropertyOps: jest.fn()
   }));
 
 describe("EventsMaster", () => {

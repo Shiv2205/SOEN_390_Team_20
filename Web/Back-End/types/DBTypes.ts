@@ -79,11 +79,13 @@ export interface PropertyData {
   picture?: string;
 }
 
-export interface PropertyOpsDetails {
-  readonly operation_id: string;
-  readonly property_id: string;
+export interface PropertyOpsData {
+  property_id: string;
   operation_name: string;
   operation_cost: number
+}
+export interface PropertyOpsDetails extends PropertyOpsData{
+  readonly operation_id: string;
 }
 
 export interface UserCredentials {

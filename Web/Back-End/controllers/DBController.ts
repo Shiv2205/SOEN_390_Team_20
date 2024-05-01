@@ -965,6 +965,44 @@ class DBController implements IDBController {
     });
   }
 
+  async updatePropertyOps(operation_id: string, property_id: string, operation_name: string, operation_cost: number): Promise<{ status: number; operation_id: string; }> {
+      let operationExists = await this.recordExists("property_operations", "operation_id", operation_id);
+      return new Promise((resolve, reject) => {
+          if(operationExists){
+              this.db.run(
+                  `UPDATE property_operations 
+              SET property_id = ?, operation_name = ?, operation_cost = ?
+              WHERE operation_id = ?`,
+                  [property_id, operation_name, operation_cost, operation_id]
+              );
+              resolve({ status: 201, operation_id });
+          } else {
+              reject({
+                  status: 400,
+                  message: "Operation does not exist in database.",
+              });
+          }
+      });
+  }
+
+  async deletePropertyOps(operation_id: string): Promise<{ status: number; operation_id: string; }>{
+      let operationExists = await this.recordExists("property_operations", "operation_id", operation_id);
+      return new Promise((resolve, reject) => {
+          if(operationExists){
+              this.db.run(
+                  `DELETE FROM property_operations WHERE operation_id = ?`,
+                  operation_id
+              );
+              resolve({ status: 200, operation_id });
+          } else {
+              reject({
+                  status: 400,
+                  message: "Operation does not exist in database.",
+              });
+          }
+      });
+  }
+
   close(): void {
     this.db.close((err) => {
       if (err) {

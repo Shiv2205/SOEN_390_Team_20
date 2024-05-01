@@ -9,6 +9,7 @@ import {
   PostData,
   PostDetails,
   PropertyData,
+  PropertyOpsDetails,
   PublicUserData,
   RequestDetails,
   RequestStatus,
@@ -526,6 +527,57 @@ export default interface IDBController {
    * provided admin ID does not exist.
    */
   getAdminDetails(admin_id: string): Promise<{ status: number, data?: AdminDetails, message?: string } | Error>
+
+  /**
+   * This TypeScript function creates a property operation entry in the database with the provided details.
+   * @param {string} property_id - The ID of the property for which the operation is being created.
+   * @param {string} operation_name - The name of the operation being performed on the property.
+   * @param {number} operation_cost - The cost associated with the operation.
+   * @returns This function returns a Promise that resolves to an object with the following structure:
+   * `{ status: number; operation_id: string; }`. The `status` property indicates the status of the operation,
+   * where 201 represents success, and `operation_id` contains the ID of the created operation.
+   * @throws This function can throw an Error if there are issues with database operations.
+   */
+  createPropertyOps(property_id: string, operation_name: string, operation_cost: number): Promise<{ status: number; operation_id: string; }>
+
+  /**
+   * This TypeScript function retrieves property operation details based on a provided property ID,
+   * handling cases where the operation exists or does not exist in the database.
+   * @param {string} property_id - The ID of the property for which operation details are to be retrieved.
+   * @returns This function returns a Promise that resolves to an object with the following structure:
+   * `{ status: number, data?: PropertyOpsDetails, message?: string }`. The `status` property indicates
+   * the status of the operation, where 200 represents success and 400 represents failure. The `data`
+   * property contains details of the property operation if it exists, and `message` provides additional
+   * information in case of errors.
+   * @throws This function can throw an Error if there are issues with database operations or if the
+   * provided property ID does not exist.
+   */
+  getPropertyOps(property_id: string): Promise<{ status: number, data?: PropertyOpsDetails, message?: string } | Error>
+
+  /**
+   * This TypeScript function updates property operation details in the database based on the provided operation ID.
+   * @param {string} operation_id - The ID of the operation to be updated.
+   * @param {string} property_id - The updated ID of the property associated with the operation.
+   * @param {string} operation_name - The updated name of the operation.
+   * @param {number} operation_cost - The updated cost associated with the operation.
+   * @returns This function returns a Promise that resolves to an object with the following structure:
+   * `{ status: number; operation_id: string; }`. The `status` property indicates the status of the operation,
+   * where 201 represents success, and `operation_id` contains the ID of the updated operation.
+   * @throws This function can throw an Error if there are issues with database operations or if the provided
+   * operation ID does not exist.
+   */
+  updatePropertyOps(operation_id: string, property_id: string, operation_name: string, operation_cost: number): Promise<{ status: number; operation_id: string; }>
+
+  /**
+   * This TypeScript function deletes a property operation entry from the database based on the provided operation ID.
+   * @param {string} operation_id - The ID of the operation to be deleted.
+   * @returns This function returns a Promise that resolves to an object with the following structure:
+   * `{ status: number; operation_id: string; }`. The `status` property indicates the status of the operation,
+   * where 200 represents success, and `operation_id` contains the ID of the deleted operation.
+   * @throws This function can throw an Error if there are issues with database operations or if the provided
+   * operation ID does not exist.
+   */
+  deletePropertyOps(operation_id: string): Promise<{ status: number; operation_id: string; }>
 
   /**
    * The close function closes the database connection and logs an error message if there is an error.
