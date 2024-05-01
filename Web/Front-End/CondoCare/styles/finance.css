@@ -1,0 +1,19 @@
+/* finance.css */
+.finance-container {
+    margin: 30px;
+    padding: 50px;
+
+}
+
+.finance-header {
+    text-align: center;
+}
+
+.finance-unit {
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}

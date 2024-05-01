@@ -6,6 +6,8 @@ import JsonData from "./LandingPageComponents/data.json";
 import { MiniProfile } from "./DashboardComponents/miniProfile.jsx";
 import { useStore } from "../store/store.js";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
+import FinanceComponent from './DashboardComponents/FinanceComponent';
+
 
 const DashboardOwner = ({ userData, setUserData }) => {
   const [propertyData, setPropertyData] = useState([]);
@@ -113,6 +115,7 @@ const DashboardOwner = ({ userData, setUserData }) => {
                     // Render PropertiesInfo component with fetched property data
                     <PropertiesInfo properties={propertyData} />
                   )}
+              <FinanceComponent accountId={userData.account_id} />
                 </>
               );
             default:
