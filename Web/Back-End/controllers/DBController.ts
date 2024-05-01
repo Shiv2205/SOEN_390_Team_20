@@ -1003,6 +1003,45 @@ class DBController implements IDBController {
       });
   }
 
+  async getUnitsAndPropertiesByAccount(account_id: string): Promise<{ status: number; data?: any; message?: string }> {
+    return new Promise((resolve, reject) => {
+      const sql = `
+            SELECT 
+                u.unit_id, 
+                u.property_id, 
+                u.size, 
+                u.monthly_rent, 
+                u.condo_fee, 
+                u.condo_balance, 
+                u.parking_spot, 
+                p.admin_id, 
+                p.unit_count, 
+                p.locker_count, 
+                p.parking_count, 
+                p.parking_spot_fee, 
+                p.fee_per_square_foot, 
+                p.address, 
+                p.picture 
+            FROM unit u
+            JOIN property p ON u.property_id = p.property_id
+            WHERE u.occupant_id = ?;
+        `;
+
+      this.db.all(sql, [account_id], (err, rows) => {
+        if (err) {
+          reject({ status: 500, message: "Failed to retrieve data: " + err.message });
+        } else {
+          if (rows.length > 0) {
+            resolve({ status: 200, data: rows });
+          } else {
+            resolve({ status: 404, message: "No units found for the given account." });
+          }
+        }
+      });
+    });
+  }
+
+
   close(): void {
     this.db.close((err) => {
       if (err) {

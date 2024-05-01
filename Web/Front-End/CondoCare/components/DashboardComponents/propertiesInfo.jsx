@@ -25,14 +25,6 @@ export const PropertiesInfo = ({properties, setProperties}) => {
                 <p>{property.address}</p>
                 <p>Apartment: {property.unit}</p>
                 <p>Parking Spot: {property.parkingSpot}</p>
-                <h3>Finances</h3>
-                <div className="list-style">
-                  <div className="col-lg-6 col-sm-6 col-xs-12">
-                    <ul>
-                      <li>{property.finances.fees}</li>
-                    </ul>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
