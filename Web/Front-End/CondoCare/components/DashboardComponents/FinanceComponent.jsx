@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import '../../styles/finance.css'; // Import the style sheet
+
 
 function FinanceComponent({ accountId }) {
     const [properties, setProperties] = useState([]);
@@ -9,7 +11,7 @@ function FinanceComponent({ accountId }) {
 
     useEffect(() => {
         async function fetchUnits() {
-            const response = await fetch(`${SERVER}/properties/units/get-user-unit`, {
+            const response = await fetch(`${SERVER}/properties/get-units-by-account`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ account_id: accountId })
@@ -31,33 +33,30 @@ function FinanceComponent({ accountId }) {
     }
 
     return (
-        <div>
-            {properties.map((property, index) => (
-                <div key={index}>
-                    <h2>Property: {property.property.address}</h2>
-                    {property.units.map((unit, idx) => (
-                        <div key={idx}>
-                            <h3>Unit {unit.unit_id}</h3>
-                            <p>Total Condo Fee: ${calculateCondoFee(unit, property.property)}</p>
-                            <p>Paid: ${unit.condo_fee}</p>
-                            <p>Remaining Balance: ${calculateRemainingBalance(unit, property.property)}</p>
-                        </div>
-                    ))}
+        <div className="finance-container">
+            <h1 className="finance-header">Finances</h1>
+            {properties.map((unit, index) => (
+                <div key={index} className="finance-unit">
+                    <h3>Property: {unit.address}</h3>
+                    <h4>Unit {unit.unit_id}</h4>
+                    <p>Total Condo Fee: ${calculateCondoFee(unit)}</p>
+                    <p>Remaining Balance: ${calculateRemainingBalance(unit)}</p>
                 </div>
             ))}
         </div>
     );
 
-    function calculateCondoFee(unit,  property) {
-        const baseFee = unit.size * property.fee_per_square_foot;
-        const parkingFee = unit.parking_spot ? property.parking_spot_fee : 0;
+    function calculateCondoFee(unit) {
+        const baseFee = unit.size * unit.fee_per_square_foot/100;
+        const parkingFee = unit.parking_spot ? unit.parking_spot_fee : 0;
         return baseFee + parkingFee;
     }
 
-    function calculateRemainingBalance(unit, property) {
-        const totalFee = calculateCondoFee(unit, property);
-        return totalFee - unit.condo_balance; // condo_balance is the amount paid
+    function calculateRemainingBalance(unit) {
+        return  unit.condo_balance; // condo_balance is the amount paid
     }
 }
+
+
 
 export default FinanceComponent;
