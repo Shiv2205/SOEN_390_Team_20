@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction, Router } from "express";
 import PropertyMaster from "../repo/propertyMaster";
 import unitsHandler from "./nested_routes/units";
 import postsHandler from "./nested_routes/posts";
+import operationsHandler from "./nested_routes/operations";
 import { PropertyData } from '../types/DBTypes';
 
 const router: Router = express.Router();
@@ -9,6 +10,7 @@ const property = new PropertyMaster();
 
 router.use("/units", unitsHandler);
 router.use("/posts", postsHandler);
+router.use("/operations", operationsHandler);
 
 // Define the error format explicitly for clarity and maintainability
 interface Error {

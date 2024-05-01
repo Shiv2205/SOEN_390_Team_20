@@ -1,8 +1,8 @@
 import express from "express";
-import AccountsMaster from "../../repo/accountsMaster";
+import AccountsMaster from "../../../repo/accountsMaster";
 import request from "supertest";
-import router from "../../routes/accounts";
-import { EmployeeDetails, PublicUserData } from "../../types/DBTypes";
+import router from "../../../routes/accounts";
+import { EmployeeDetails, PublicUserData } from "../../../types/DBTypes";
 
 const app = express();
 app.use(express.json());

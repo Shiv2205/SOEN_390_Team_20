@@ -1,6 +1,6 @@
-import PropertyMaster from "../../repo/propertyMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { PropertyData } from "../../types/DBTypes";
+import PropertyMaster from "../../../repo/propertyMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { PropertyData } from "../../../types/DBTypes";
 
 const createNewPropertyOutput = {
   status: 201,

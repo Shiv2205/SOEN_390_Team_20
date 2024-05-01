@@ -1,6 +1,6 @@
-import EventsMaster from "../../repo/eventsMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { EventAttendee } from "../../types/DBTypes";
+import EventsMaster from "../../../repo/eventsMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { EventAttendee } from "../../../types/DBTypes";
 
 const createEventOutput = {
   status: 201,

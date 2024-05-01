@@ -1,6 +1,6 @@
-import PostsMaster from "../../repo/postsMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { PostDetails } from "../../types/DBTypes";
+import PostsMaster from "../../../repo/postsMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { PostDetails } from "../../../types/DBTypes";
 
 const createPostOutput = {
   status: 201,

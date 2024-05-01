@@ -1,6 +1,6 @@
-import AccountsMaster from "../../repo/accountsMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { EmployeeData, EmployeeDetails } from "../../types/DBTypes";
+import AccountsMaster from "../../../repo/accountsMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { EmployeeData, EmployeeDetails } from "../../../types/DBTypes";
 
 jest.mock("bcryptjs", () => ({
   hash: jest.fn(() => "password456"),
