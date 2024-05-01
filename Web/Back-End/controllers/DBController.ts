@@ -985,7 +985,7 @@ class DBController implements IDBController {
       });
   }
 
-  async deletePropertyOps(operation_id: string){
+  async deletePropertyOps(operation_id: string): Promise<{ status: number; operation_id: string; }>{
       let operationExists = await this.recordExists("property_operations", "operation_id", operation_id);
       return new Promise((resolve, reject) => {
           if(operationExists){
