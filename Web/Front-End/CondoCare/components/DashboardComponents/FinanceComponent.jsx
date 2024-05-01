@@ -35,12 +35,16 @@ function FinanceComponent({ accountId }) {
     return (
         <div className="finance-container">
             <h1 className="finance-header">Finances</h1>
-            {properties.map((unit, index) => (
+            {properties.map((property, index) => (
                 <div key={index} className="finance-unit">
-                    <h3>Property: {unit.address}</h3>
-                    <h4>Unit {unit.unit_id}</h4>
-                    <p>Total Condo Fee: ${calculateCondoFee(unit)}</p>
-                    <p>Remaining Balance: ${calculateRemainingBalance(unit)}</p>
+                    <h3>Property: {property.address}</h3>
+                    <p>Size (sq ft): {property.size}</p>
+                    <p>Base Condo Fee (per sq ft): ${property.fee_per_square_foot.toFixed(2)}</p>
+                    <p>Parking Spot: {property.parking_spot ? "Yes" : "No"}</p>
+                    <p>Parking Spot Fee: ${property.parking_spot ? property.parking_spot_fee.toFixed(2) : "0.00"}</p>
+                    <p>Total Condo Fee: ${calculateCondoFee(property).toFixed(2)}</p>
+                    <p>Paid Condo Fee: ${property.condo_fee.toFixed(2)}</p>
+                    <p>Remaining Balance: ${calculateRemainingBalance(property).toFixed(2)}</p>
                 </div>
             ))}
         </div>
