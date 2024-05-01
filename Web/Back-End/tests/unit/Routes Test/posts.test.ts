@@ -1,8 +1,8 @@
 import express from "express";
 import request from "supertest";
-import router from "../../routes/nested_routes/posts";
-import PostsMaster from "../../repo/postsMaster";
-import { PostDetails, UnitDetails } from "../../types/DBTypes";
+import router from "../../../routes/nested_routes/posts";
+import PostsMaster from "../../../repo/postsMaster";
+import { PostDetails, UnitDetails } from "../../../types/DBTypes";
 
 const app = express();
 app.use(express.json());

@@ -62,14 +62,30 @@ export interface EmployeeDetails extends IEmployeeData {
   profile_picture: string;
 }
 
+export interface AdminDetails {
+  readonly admin_id: string;
+  company_name: string;
+}
+
 export interface PropertyData {
   property_id?: string;
   admin_id: string;
   unit_count: number;
   parking_count: number;
   locker_count: number;
+  parking_spot_fee: number;
+  fee_per_square_foot: number;
   address: string;
   picture?: string;
+}
+
+export interface PropertyOpsData {
+  property_id: string;
+  operation_name: string;
+  operation_cost: number
+}
+export interface PropertyOpsDetails extends PropertyOpsData{
+  readonly operation_id: string;
 }
 
 export interface UserCredentials {

@@ -1,6 +1,6 @@
-import PropertyMaster from "../../repo/propertyMaster";
-import DBControllerFactory from "../../Factory/DBControllerFactory";
-import { PropertyData } from "../../types/DBTypes";
+import PropertyMaster from "../../../repo/propertyMaster";
+import DBControllerFactory from "../../../Factory/DBControllerFactory";
+import { PropertyData } from "../../../types/DBTypes";
 
 const createNewPropertyOutput = {
   status: 201,
@@ -14,6 +14,8 @@ const getPropertyOutput: { status: number, data?: PropertyData } = {
     unit_count: 20,
     locker_count: 10,
     parking_count: 50,
+    parking_spot_fee: 50.3,
+    fee_per_square_foot: 120.45,
     address: "123 Main St",
     picture: "main_street.jpg",
   },
@@ -27,6 +29,8 @@ const getAllPropertiesOutput: { status: number, data?: PropertyData[] } = {
       unit_count: 20,
       locker_count: 10,
       parking_count: 50,
+      parking_spot_fee: 50.3,
+      fee_per_square_foot: 120.45,
       address: "123 Main St",
       picture: "main_street.jpg",
     },
@@ -70,6 +74,11 @@ const factoryMockSpy = jest
     close: jest.fn(),
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
+    getAdminDetails: jest.fn(),
+      createPropertyOps: jest.fn(),
+      getPropertyOps: jest.fn(),
+      updatePropertyOps: jest.fn(),
+      deletePropertyOps: jest.fn()
   }));
 
 describe("PropertyMaster", () => {
@@ -93,6 +102,8 @@ describe("PropertyMaster", () => {
               unit_count: 20,
               locker_count: 10,
               parking_count: 50,
+                parking_spot_fee: 50.3,
+                fee_per_square_foot: 120.45,
               address: "123 Main St",
               picture: "main_street.jpg",
             })
@@ -139,6 +150,8 @@ describe("PropertyMaster", () => {
         unit_count: 20,
         locker_count: 10,
         parking_count: 50,
+          parking_spot_fee: 50.3,
+          fee_per_square_foot: 120.45,
         address: "123 Main St",
         picture: "main_street.jpg",
       };

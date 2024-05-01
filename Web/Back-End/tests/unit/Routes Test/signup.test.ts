@@ -1,7 +1,7 @@
 import express from "express";
 import request from "supertest";
-import router from "../../routes/signup"; // Update this with your router file name
-import AccountsMaster from "../../repo/accountsMaster";
+import router from "../../../routes/signup"; // Update this with your router file name
+import AccountsMaster from "../../../repo/accountsMaster";
 
 const app = express();
 app.use(express.json());
