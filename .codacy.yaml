@@ -1,2 +1,4 @@
 exclude_paths:
   - "Web/Back-End/*.md"
+  - "Web/Front-End/CondoCare/public/*"
+  - "Web/Front-End/CondoCare/styles/*.css"

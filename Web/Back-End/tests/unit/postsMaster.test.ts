@@ -67,9 +67,10 @@ const factoryMockSpy = jest
     registerNewAttendee: jest.fn(),
     getAttendeeEvents: jest.fn(),
     getAttendeeList: jest.fn(),
-    close: jest.fn(),
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
+    getAdminDetails: jest.fn(),
+    close: jest.fn(),
   }));
 
 describe("PostsMaster", () => {

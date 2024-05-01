@@ -7,12 +7,12 @@ INSERT INTO request (request_id, unit_id, employee_id, type, description, status
     ('12d4fe96-7556-49cc-848f-b8cf0c8f1402', '9cf98c1d-6766-4d5c-80a7-d0f601460e61', 'cb29c3c8-936d-4a67-9c0a-2902349c07f7', 'question', 'Inquiry about parking allocation', 'Received');
 
 -- Dummy data for the "property" table
-INSERT INTO property (property_id, admin_id, unit_count, locker_count, parking_count, address, picture) VALUES
-    ('25e44531-6e47-4c70-a488-8f0c08e48c50', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 50, 20, 100, '123 Main St', 'https://example.com/picture1.jpg'),
-    ('61d0c979-8e84-4c71-8b7a-bd306f261fe5', '8767b2cc-951f-4329-89af-fbb062d5e6a2', 30, 10, 50, '456 Elm St', 'https://example.com/picture2.jpg'),
-    ('5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 40, 15, 75, '789 Oak St', 'https://example.com/picture3.jpg'),
-    ('91df8580-912d-48d3-9e42-2b238aee3b22', '8767b2cc-951f-4329-89af-fbb062d5e6a2', 60, 25, 120, '101 Pine St', 'https://example.com/picture4.jpg'),
-    ('2faa684a-bf1c-4b92-a56d-77a4a5a4b278', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 35, 12, 60, '222 Cedar St', 'https://example.com/picture5.jpg');
+INSERT INTO property (property_id, admin_id, unit_count, locker_count, parking_count, parking_spot_fee, fee_per_square_foot, address, picture) VALUES
+    ('25e44531-6e47-4c70-a488-8f0c08e48c50', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 50, 20, 100, 50.00, 120.45, '123 Main St', 'https://example.com/picture1.jpg'),
+    ('61d0c979-8e84-4c71-8b7a-bd306f261fe5', '8767b2cc-951f-4329-89af-fbb062d5e6a2', 30, 10, 50, 50.00, 120.45, '456 Elm St', 'https://example.com/picture2.jpg'),
+    ('5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 40, 15, 75, 50.00, 120.45, '789 Oak St', 'https://example.com/picture3.jpg'),
+    ('91df8580-912d-48d3-9e42-2b238aee3b22', '8767b2cc-951f-4329-89af-fbb062d5e6a2', 60, 25, 120, 50.00, 120.45, '101 Pine St', 'https://example.com/picture4.jpg'),
+    ('2faa684a-bf1c-4b92-a56d-77a4a5a4b278', '782d35a7-c31f-4d42-8e39-5cc2c774f9e7', 35, 12, 60, 50.00, 120.45, '222 Cedar St', 'https://example.com/picture5.jpg');
 
 -- Dummy data for the "file" table
 INSERT INTO file (file_id, title, content, property_id) VALUES
@@ -23,12 +23,12 @@ INSERT INTO file (file_id, title, content, property_id) VALUES
     ('e1a8f20c-1c81-466b-9211-bc6b1cc19253', 'Community Events Calendar', 'Stay updated on upcoming events and activities in the community!', '2faa684a-bf1c-4b92-a56d-77a4a5a4b278');
 
 -- Dummy data for the "unit" table
-INSERT INTO unit (unit_id, property_id, occupant_id, occupant_registration_key, occupant_type, size, monthly_rent, condo_fee, condo_balance) VALUES
-    ('43cc3d25-5297-4a5e-8b23-7dc246042cb2', '25e44531-6e47-4c70-a488-8f0c08e48c50', "f41f13cf-9434-47a0-b01e-4e4b8d4d746e", NULL, 'owner', 1000, 1200.00, 300.00, 0.00),
-    ('9f401f02-89da-47a3-b79d-9534d7c36b90', '61d0c979-8e84-4c71-8b7a-bd306f261fe5', NULL, NULL, 'renter', 800, 900.00, 200.00, 0.00),
-    ('fe524cd1-1ad3-47de-929d-8a49b20033a2', '5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', NULL, NULL, 'owner', 1200, 1500.00, 350.00, 0.00),
-    ('9cf98c1d-6766-4d5c-80a7-d0f601460e61', '91df8580-912d-48d3-9e42-2b238aee3b22', NULL, NULL, 'renter', 900, 1000.00, 250.00, 0.00),
-    ('851ae35e-648b-4487-bdc3-d2ec8333bc40', '25e44531-6e47-4c70-a488-8f0c08e48c50', "e319c0b2-f4cd-4f58-a306-b0b0f8050713", NULL, 'owner', 950, 1300.00, 320.00, 0.00);
+INSERT INTO unit (unit_id, property_id, occupant_id, occupant_registration_key, occupant_type, size, monthly_rent, condo_fee, condo_balance, parking_spot) VALUES
+    ('43cc3d25-5297-4a5e-8b23-7dc246042cb2', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'f41f13cf-9434-47a0-b01e-4e4b8d4d746e', NULL, 'owner', 1000, 1200.00, 300.00, 0.00, 1),
+    ('9f401f02-89da-47a3-b79d-9534d7c36b90', '61d0c979-8e84-4c71-8b7a-bd306f261fe5', NULL, NULL, 'renter', 800, 900.00, 200.00, 0.00, 1),
+    ('fe524cd1-1ad3-47de-929d-8a49b20033a2', '5b12f7f4-29e1-4e3c-92b7-45ee7b61d784', NULL, NULL, 'owner', 1200, 1500.00, 350.00, 0.00, 0),
+    ('9cf98c1d-6766-4d5c-80a7-d0f601460e61', '91df8580-912d-48d3-9e42-2b238aee3b22', NULL, NULL, 'renter', 900, 1000.00, 250.00, 0.00, 0),
+    ('851ae35e-648b-4487-bdc3-d2ec8333bc40', '25e44531-6e47-4c70-a488-8f0c08e48c50', 'e319c0b2-f4cd-4f58-a306-b0b0f8050713', NULL, 'owner', 950, 1300.00, 320.00, 0.00, 1);
 
 -- Dummy data for the "post" table
 INSERT INTO post (post_id, property_id, creator_id, content, replied_to, posted_at) VALUES

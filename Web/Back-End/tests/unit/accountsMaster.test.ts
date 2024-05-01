@@ -89,6 +89,7 @@ const factoryMockSpy = jest
     close: jest.fn(() => true),
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
+    getAdminDetails: jest.fn()
   }));
 
 describe("AccountsMaster", () => {

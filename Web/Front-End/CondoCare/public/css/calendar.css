@@ -1,0 +1,92 @@
+/* Calendar Page Styles */
+.calendar-container {
+    padding: 20px;
+    background-color: #2c2f33;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 10%);
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1000px;
+}
+
+/* Custom styles for the react-big-calendar */
+.rbc-calendar {
+    font-family: "Open Sans", sans-serif;
+    border: 1px solid #ddd;
+}
+
+.rbc-btn {
+    color: #333;
+    background: none;
+    outline: none;
+    padding: 5px 10px;
+}
+
+.rbc-toolbar {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rbc-toolbar button {
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.rbc-toolbar button:hover {
+    background-color: #e6e6f2;
+}
+
+.rbc-active {
+    background-color: #608dfd;
+    color: white;
+}
+
+.rbc-today {
+    background-color: #eaf6ff;
+}
+
+.rbc-event {
+    background-color: #5ca9fb;
+    color: #fff;
+    border-radius: 3px;
+    padding: 2px 5px;
+    border: none;
+}
+
+.rbc-show-more {
+    color: #333;
+    background: #f4f4f4;
+}
+
+.rbc-off-range-bg {
+    background-color: #fafafa;
+}
+
+.rbc-off-range {
+    color: #bbb;
+}
+
+.rbc-header {
+    background: #f5f5f5;
+    text-align: center;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Responsive adjustments */
+@media (width <= 768px) {
+    .calendar-container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .rbc-toolbar button {
+        padding: 3px 7px;
+        font-size: 14px;
+    }
+}

@@ -1,12 +1,15 @@
 import DBControllerFactory from "../Factory/DBControllerFactory";
 import IDBController from "../interfaces/IDBController";
-import { UnitData, UnitDetails } from "../types/DBTypes";
+import PropertyMaster from "./propertyMaster";
+import {PropertyData, UnitData, UnitDetails} from "../types/DBTypes";
 
 class UnitMaster {
   readonly dbController: IDBController;
+  private pm: PropertyMaster;
 
   constructor() {
     this.dbController = DBControllerFactory.createInstance();
+    this.pm = new PropertyMaster();
   }
 
   /**
@@ -50,10 +53,31 @@ class UnitMaster {
    * information. If an error occurs during the execution of the function, an `Error` object is
    * returned.
    */
-  async getUserUnit(occupant_id: string): Promise<{ status: number; data?: UnitDetails; message?: string } | Error> {
+  async getUserUnit(occupant_id: string): Promise<{ status: number; data?: { property: PropertyData, units: UnitDetails[] }[]; message?: string } | Error> {
     let result = await this.dbController.getOccupiedUnit(occupant_id);
     if (result instanceof Error) return result as Error;
-    return result;
+
+    let units = result.data as UnitDetails[];
+    let unit_details: { property: PropertyData, units: UnitDetails[] }[] = [];
+    let temp_pm = this.pm;
+
+    for(let i = 0; i < units.length; i++){
+      let unit_inserted = false;
+      unit_details.map( tuple => {
+        if(tuple.property.property_id === units[i].property_id){
+          tuple.units.push(units[i]);
+          unit_inserted = true;
+        }
+      } )
+
+      if(!unit_inserted || unit_details.length === 0)
+        unit_details.push({
+          property: (await temp_pm.getProperty(units[i].property_id) as { status: number; data: PropertyData; }).data,
+          units: [units[i]]
+        });
+    }
+
+    return { status: result.status, data: unit_details};
   }
 
   /**
@@ -72,6 +96,7 @@ class UnitMaster {
   > {
     let result = await this.dbController.getAllUnits(property_id);
     if (result instanceof Error) return result as Error;
+
     return result;
   }
 }

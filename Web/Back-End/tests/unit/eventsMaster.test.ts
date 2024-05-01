@@ -101,6 +101,7 @@ const factoryMockSpy = jest
     close: jest.fn(),
     updateRequest: jest.fn(),
     deleteRequest: jest.fn(),
+      getAdminDetails: jest.fn()
   }));
 
 describe("EventsMaster", () => {

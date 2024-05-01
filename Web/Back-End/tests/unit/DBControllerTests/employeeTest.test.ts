@@ -235,4 +235,50 @@ describe("employee tests", () => {
         });
     });
   });
+
+  describe("getAdminDetails", () => {
+    let spy;
+    let testRecord = {admin_id: 'test-admin'};
+
+    it("should resolve to indicate succesful fetch", async () => {
+      spy = jest
+          .spyOn(dbController, "recordExists")
+          .mockResolvedValueOnce(true);
+
+      let getAdminSPy = jest.spyOn(dbController, "getAdminDetails");
+
+      await expect(
+          dbController.getAdminDetails(testRecord.admin_id)
+      ).resolves.toBeTruthy();
+      expect(dbController.db.get).toHaveBeenCalled();
+      expect(dbController.db.get).toHaveBeenCalledWith(
+          (dbController.db.get as jest.Mock).mock.calls[0][0],
+          testRecord.admin_id,
+          (dbController.db.get as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
+      );
+      expect(getAdminSPy).toHaveBeenCalledWith(
+          testRecord.admin_id
+      );
+
+      recordExistsTest(spy, {
+        tableName: "CMC_Admin",
+        fieldName: "admin_id",
+        value: testRecord.admin_id,
+      });
+    });
+
+    it("should return { status: 400, message: 'Admin does not exist in database.'}", async () => {
+      spy = jest
+          .spyOn(dbController, "recordExists")
+          .mockResolvedValueOnce(false);
+
+      await expect(
+          dbController.getAdminDetails(testRecord.admin_id)
+      ).rejects.toEqual({
+        status: 400,
+        message: "Admin does not exist in database.",
+      });
+    });
+  });
+
 });
