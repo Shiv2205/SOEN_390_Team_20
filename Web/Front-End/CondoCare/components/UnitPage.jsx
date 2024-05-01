@@ -3,7 +3,7 @@ import Navigation from "./LandingPageComponents/navigation";
 import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
-import Operations from "./UnitPageComponents/Operations";
+import PropertyOperationsWithProviders from "./UnitPageComponents/PropertyOperations";
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -67,6 +67,7 @@ function UnitPage({ userData, setUserData }) {
             <Header property={propertyData}></Header>
 
             <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
+            <PropertyOperationsWithProviders id={'25e44531-6e47-4c70-a488-8f0c08e48c50'} isAdmin={false}/>
 
             <div className="calendar-container">
                 <Calendar
