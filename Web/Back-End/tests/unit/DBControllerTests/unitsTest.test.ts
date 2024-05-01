@@ -161,6 +161,52 @@ describe("units tests", () => {
     });
   });
 
+  describe("getOccupiedUnits", () => {
+    let testOccupantID = "test-occupant_id";
+    let spy;
+    it("should resolve to a status 400 if no units were found", async () => {
+      spy = jest
+          .spyOn(dbController, "recordExists")
+          .mockResolvedValueOnce(false);
+
+      await expect(dbController.getOccupiedUnit(testOccupantID)).rejects.toEqual({
+        status: 400,
+        message: "Unit does not exist in database.",
+      });
+
+      recordExistsTest(spy, {
+        tableName: "unit",
+        fieldName: "occupant_id",
+        value: testOccupantID,
+      });
+    });
+
+    it("should return all units for an occupant if found", async () => {
+      spy = jest
+          .spyOn(dbController, "recordExists")
+          .mockResolvedValueOnce(true);
+
+      let getOccupiedUnitSpy = jest.spyOn(dbController, "getOccupiedUnit");
+
+      await expect(
+          dbController.getOccupiedUnit(testOccupantID)
+      ).resolves.toBeTruthy();
+      expect(dbController.db.all).toHaveBeenCalled();
+      expect(dbController.db.all).toHaveBeenCalledWith(
+          (dbController.db.all as jest.Mock).mock.calls[0][0],
+          testOccupantID,
+          (dbController.db.all as jest.Mock).mock.calls[0][2] // callback function is the last argument in this call
+      );
+      expect(getOccupiedUnitSpy).toHaveBeenCalledWith(testOccupantID);
+
+      recordExistsTest(spy, {
+        tableName: "unit",
+        fieldName: "occupant_id",
+        value: testOccupantID,
+      });
+    });
+  });
+
   describe("getAllUnits", () => {
     let testPropertyID = "test-property-id";
     let spy;

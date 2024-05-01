@@ -70,6 +70,8 @@ describe("property tests", () => {
       unit_count: 10,
       parking_count: 10,
       locker_count: 10,
+      parking_spot_fee: 20.5,
+      fee_per_square_foot: 200.15,
       address: "Somewhere",
       picture: "",
     };
