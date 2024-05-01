@@ -6,11 +6,17 @@ import JsonData from "./LandingPageComponents/data.json";
 import { MiniProfile } from "./DashboardComponents/miniProfile.jsx";
 import { useStore } from "../store/store.js";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
+import FinanceComponent from './DashboardComponents/FinanceComponent';
+
 
 const DashboardOwner = ({ userData, setUserData }) => {
   const [landingPageData, setLandingPageData] = useState({});
   const [properties, setProperties] = useState([]);
   const [state, dispatch] = useStore();
+
+  const accountId = userData.account_id;
+
+
 
   // Store user data in localStorage
   localStorage.setItem("userData", JSON.stringify(state.userData));
@@ -23,9 +29,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
       address: "1234 Saint Joseph Boulevard East, Montreal, QC",
       unit: "345",
       parkingSpot: "6B",
-      finances: {
-        fees: "Mars 2024 fees: 345/345$",
-      },
       imageUrl: "img/prop1.jpg",
     },
     {
@@ -34,9 +37,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
       address: "5678 Garden Street, Montreal, QC",
       unit: "101",
       parkingSpot: "2A",
-      finances: {
-        fees: "Mars 2024 fees: 300/345$",
-      },
       imageUrl: "img/portfolio/p2_small.jpg",
     },
     {
@@ -45,9 +45,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
       address: "91011 Sunset Avenue, Montreal, QC",
       unit: "25",
       parkingSpot: "9C",
-      finances: {
-        fees: "Mars 2024 fees: 250/345$",
-      },
       imageUrl: "img/portfolio/p8_small.jpg",
     },
     {
@@ -56,9 +53,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
       address: "121314 Lakeside Road, Montreal, QC",
       unit: "10",
       parkingSpot: "N/A",
-      finances: {
-        fees: "Mars 2024 fees: 400/345$",
-      },
       imageUrl: "img/portfolio/p4_small.jpg",
     },
     {
@@ -67,9 +61,6 @@ const DashboardOwner = ({ userData, setUserData }) => {
       address: "151617 Urban Street, Montreal, QC",
       unit: "3",
       parkingSpot: "4D",
-      finances: {
-        fees: "Mars 2024 fees: 280/345$",
-      },
       imageUrl: "img/portfolio/p5_small.jpg",
     },
   ];
@@ -120,6 +111,7 @@ const DashboardOwner = ({ userData, setUserData }) => {
                 return <ExampleWithProviders id={state.userData.account_id} isAdmin={true}/>;
             }
           })()}
+          <FinanceComponent accountId={accountId} />
         </>
       ) : (
         "Loading..."
