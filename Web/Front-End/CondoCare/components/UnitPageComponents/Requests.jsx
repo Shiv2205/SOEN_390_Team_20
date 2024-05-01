@@ -24,6 +24,7 @@ import {
 import { fakeData, RequestStatuses, RequestTypes } from './makeData';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { json } from 'react-router-dom';
 
 const Example = ({id,isAdmin}) => {
   const [validationErrors, setValidationErrors] = useState({});
@@ -37,7 +38,13 @@ const Example = ({id,isAdmin}) => {
         size: 80,
         Edit: () => null,
       },
-      
+      {
+        accessorKey: 'employee_id',
+        header: 'Employee Id',
+        enableEditing: false,
+        size: 80,
+        Edit: () => null,
+      },
       {
         accessorKey: 'unit_id',
         header: 'Unit ID',
@@ -75,7 +82,6 @@ const Example = ({id,isAdmin}) => {
         editVariant: 'select',
         enableEditing: isAdmin,
         editSelectOptions: RequestStatuses,
-        Edit: !isAdmin ? () => null : () => true, // this line is what causes the employee table to hide the status on edit
         muiEditTextFieldProps: {
           type: 'status',
           select: true,
@@ -126,6 +132,7 @@ const Example = ({id,isAdmin}) => {
 
   //UPDATE action
   const handleSaveUser = async ({ values, table }) => {
+    console.log(JSON.stringify(values));
     const newValidationErrors = validateUser(values);
     if (Object.values(newValidationErrors).some((error) => error)) {
       setValidationErrors(newValidationErrors);
@@ -149,7 +156,7 @@ const Example = ({id,isAdmin}) => {
     enableFullScreenToggle: false,
     data: fetchedUsers,
     createDisplayMode: 'modal', //default ('row', and 'custom' are also available)
-    editDisplayMode: isAdmin ? 'row' : 'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
+    editDisplayMode:  'modal', //default ('row', 'cell', 'table', and 'custom' are also available)
     enableEditing: true,
     getRowId: (row) => row.id,
     muiToolbarAlertBannerProps: isLoadingUsersError
@@ -236,7 +243,7 @@ const Example = ({id,isAdmin}) => {
       isSaving: isCreatingUser || isUpdatingUser || isDeletingUser,
       showAlertBanner: isLoadingUsersError,
       showProgressBars: isFetchingUsers,
-      columnVisibility: { unit_id : isAdmin}
+      columnVisibility: { unit_id : isAdmin, employee_id: false}
     },
   });
 
@@ -294,7 +301,7 @@ function useGetRequests(id, isAdmin) {
         const response = await fetch(url, {
           method: 'POST',
           headers: {'Content-Type': 'application/json',},
-          body: JSON.stringify({unit_id : id}),
+          body: JSON.stringify(isAdmin ? {employee_id : id} : {unit_id : id}),
         });
 
         if (!response.ok) {
@@ -321,6 +328,7 @@ function useUpdateUser() {
   return useMutation({
     mutationFn: async (request) => {
       try {
+        console.log(JSON.stringify(request));
         const response = await fetch(url, {
           method: 'POST',
           headers: {'Content-Type': 'application/json',},
@@ -346,7 +354,7 @@ function useUpdateUser() {
         ),
       );
     },
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['users'] }), //refetch users after mutation, disabled for demo
   });
 }
 

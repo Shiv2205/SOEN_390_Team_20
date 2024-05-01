@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Navigation from "./LandingPageComponents/navigation";
 import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
@@ -13,10 +13,16 @@ const localizer = momentLocalizer(moment);
 
 function UnitPage({ userData, setUserData }) {
 
-    console.log("Current User Data:", userData);
+    useEffect(() => {
+        const storedUserData = localStorage.getItem("userData");
+        if (storedUserData) {
+          const parsedUserData = JSON.parse(storedUserData);
+          setUserData(parsedUserData);
+        }
+      }, []);
 
     const { state } = useLocation();
-    const propertyData = state && state.propertyData;
+    const propertyUnitsTuple = state && state.propertyData;
     const [events, setEvents] = useState([]);
     const [eventForm, setEventForm] = useState({
         title: '',
@@ -62,9 +68,13 @@ function UnitPage({ userData, setUserData }) {
     return (
         <div>
             <Navigation/>
-            <Header property={propertyData}></Header>
-
-            <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
+            <Header property={propertyUnitsTuple}></Header>
+            {propertyUnitsTuple.units.map((unit) => (
+                    <div>
+                        <h1>Unit {unit.monthly_rent} Requests</h1>
+                        <ExampleWithProviders id={unit.unit_id} isAdmin={false}/>
+                    </div>
+                  ))}
 
             <div className="calendar-container">
                 <Calendar
