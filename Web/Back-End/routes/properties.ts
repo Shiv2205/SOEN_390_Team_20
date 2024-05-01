@@ -149,7 +149,7 @@ router.post(
 );
 
 // Route to fetch unit and property data by account ID
-router.post('/units/get-user-unit', async (req, res, next) => {
+router.post('/get-units-by-account', async (req, res, next) => {
   const { account_id } = req.body;
   if (!account_id) {
     return res.status(400).json({ error: 'Account ID is required' });
