@@ -41,7 +41,7 @@ const PropertyOperations = ({ propertyId, isAdmin }) => {
         type: 'number',
       },
     ],
-    [isAdmin],
+    [validationErrors],
   );
 
   const {
@@ -50,6 +50,8 @@ const PropertyOperations = ({ propertyId, isAdmin }) => {
     isFetching: isFetchingOperations,
     isLoading: isLoadingOperations,
   } = useGetOperations(propertyId);
+
+  // console.log(useGetOperations(propertyId).data);
 
   const { mutateAsync: createOperation } = useCreateOperation();
   const { mutateAsync: updateOperation } = useUpdateOperation();
@@ -144,9 +146,9 @@ const PropertyOperations = ({ propertyId, isAdmin }) => {
 function useGetOperations(propertyId) {
   const SERVER = import.meta.env.VITE_SERVER_BASE_URL;
   const url = `${SERVER}/properties/operations/get`;
-
+  console.log(propertyId);
   return useQuery({
-    queryKey: ['operations', propertyId],
+    queryKey: ['operations'],
     queryFn: async () => {
       const response = await fetch(url, {
         method: 'POST',
@@ -157,8 +159,8 @@ function useGetOperations(propertyId) {
       if (!response.ok) {
         throw new Error('Failed to fetch operations');
       }
-
       const data = await response.json();
+      console.log(data.data);
       return data.data;
     },
     refetchOnWindowFocus: false,

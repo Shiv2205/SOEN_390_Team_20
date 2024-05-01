@@ -67,7 +67,7 @@ function UnitPage({ userData, setUserData }) {
             <Header property={propertyData}></Header>
 
             <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
-            <PropertyOperationsWithProviders id={'25e44531-6e47-4c70-a488-8f0c08e48c50'} isAdmin={false}/>
+            <PropertyOperationsWithProviders propertyId={'25e44531-6e47-4c70-a488-8f0c08e48c50'} isAdmin={false}/>
 
             <div className="calendar-container">
                 <Calendar
