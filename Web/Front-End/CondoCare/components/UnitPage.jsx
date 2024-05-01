@@ -3,6 +3,8 @@ import Navigation from "./LandingPageComponents/navigation";
 import { useLocation } from "react-router-dom";
 import { Header } from "./UnitPageComponents/header";
 import ExampleWithProviders from "./UnitPageComponents/Requests";
+import Operations from "./UnitPageComponents/Operations";
+
 
 function UnitPage() {
     const { state } = useLocation();
@@ -14,6 +16,7 @@ function UnitPage() {
       <Navigation />
       <Header property={propertyData}></Header>
       <ExampleWithProviders id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
+      <Operations id={'43cc3d25-5297-4a5e-8b23-7dc246042cb2'} isAdmin={false}/>
     </div>
   );
 }
