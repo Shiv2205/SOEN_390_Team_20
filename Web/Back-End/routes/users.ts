@@ -1,19 +1,12 @@
-import express, { Request, Response, NextFunction, Router } from "express";
 import DBControllerFactory from "../Factory/DBControllerFactory";
 
-const router: Router = express.Router();
-
 /* GET users listing. */
-router.get("/", async function (req, res, next) {
+async function init() {
   let dbInstance = DBControllerFactory.createInstance();
-  let initDB = await dbInstance.initialize();//.populate();
+  let initDB = await dbInstance.initialize();
   let popDB = await dbInstance.populate();
-  res.json({ status: "Server listening on port 3000",  dbStatus: "Database initialized and populated" });
 
-  /* FOR TESTING  PURPOSES ONLY! REMOVE LATER!!!!!111 
-  let initDB = await DBControllerFactory.createInstance().initialize();//.populate();
-  let populateDB = await DBControllerFactory.createInstance().populate();
-  res.send({ populateDB});*/
-});
+  return "Database initialized"
+}
 
-export default router;
+init().then(res => console.log(res));

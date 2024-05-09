@@ -3,8 +3,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
-import loginRouter from './routes/login'; 
-import usersRouter from './routes/users';
+import loginRouter from './routes/login';
 import signUpRouter from './routes/signup';
 import propertyHandler from './routes/properties';
 import accountsHandler from './routes/accounts';
@@ -26,7 +25,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Routes
-app.use('/', usersRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signUpRouter);
 app.use('/accounts', accountsHandler);
