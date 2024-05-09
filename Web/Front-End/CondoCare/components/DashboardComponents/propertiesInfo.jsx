@@ -1,16 +1,17 @@
 import React from "react"; 
 import { useNavigate } from "react-router-dom";
 
-export const PropertiesInfo = ({properties, setProperties}) => {
+export const PropertiesInfo = ({properties}) => {
   const navigate = useNavigate();
-    return (
-        <div id="about">
+  console.log(properties[0].property.picture);
+  return (
+    <div id="about">
       <div className="container">
-        {properties.map((property) => (
-          <div key={property.id} className="row">
+        {properties.map((propertyUnitsTuple) => (
+          <div key={propertyUnitsTuple.units.unit_id} className="row">
             <div className="col-xs-12 col-md-6">
               <img
-                src={property.imageUrl}
+                src={propertyUnitsTuple.property.picture}
                 className="img-responsive"
                 alt=""
               />
@@ -18,21 +19,25 @@ export const PropertiesInfo = ({properties, setProperties}) => {
             <div className="col-xs-12 col-md-6">
               <div className="about-text">
               <h2>
-                <a onClick={() => navigate("/unitpage", { state: { propertyData: property } })}>
-                  {property.name}
+                <a onClick={() => navigate("/unitpage", { state: { propertyData: propertyUnitsTuple } })}>
+                  {propertyUnitsTuple.property.address}
                 </a>
               </h2>
-                <p>{property.address}</p>
-                <p>Apartment: {property.unit}</p>
-                <p>Parking Spot: {property.parkingSpot}</p>
-                <h3>Finances</h3>
-                <div className="list-style">
-                  <div className="col-lg-6 col-sm-6 col-xs-12">
-                    <ul>
-                      <li>{property.finances.fees}</li>
-                    </ul>
-                  </div>
-                </div>
+              <div>
+                  {propertyUnitsTuple.units.map((unit) => (
+                    <div>
+                      <p>Apartment: {unit.monthly_rent}</p>
+                      <h3>Finances</h3>
+                      <div className="list-style">
+                        <div className="col-lg-6 col-sm-6 col-xs-12">
+                          <ul>
+                            <li>Balance : {unit.condo_balance}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
               </div>
             </div>
           </div>

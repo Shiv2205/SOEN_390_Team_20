@@ -17,9 +17,9 @@ export type Request = {
 ];
 
 export const RequestStatuses = [
-  'Recieved',
-  'In Progress',
-  'Completed'
+  "Received",
+  "In progress",
+  "Completed"
 ];
 
 export const fakeData: Request[] = [

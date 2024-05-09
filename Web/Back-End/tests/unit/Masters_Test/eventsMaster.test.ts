@@ -65,6 +65,12 @@ const getAttendeeListOutput: { status: number; data: EventAttendee[]; } = {
     },
   ],
 };
+const getUnitsAndPropertiesByAccountOutput = {
+    status: 200,
+    data: {
+    },
+    message: "Success"
+};
 
 const factoryMockSpy = jest
   .spyOn(DBControllerFactory, "createInstance")
@@ -105,7 +111,9 @@ const factoryMockSpy = jest
       createPropertyOps: jest.fn(),
       getPropertyOps: jest.fn(),
       updatePropertyOps: jest.fn(),
-      deletePropertyOps: jest.fn()
+      deletePropertyOps: jest.fn(),
+      getUnitsAndPropertiesByAccount: jest.fn(() => Promise.resolve(getUnitsAndPropertiesByAccountOutput))
+
   }));
 
 describe("EventsMaster", () => {
